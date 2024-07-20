@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano di Accumulo Capitale vs Fondo Pensione</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Piano di Accumulo Capitale vs Fondo Pensione</h1>
+        <form id="pac-form">
+            <label for="ageStart">Età Inizio:</label>
+            <input type="number" id="ageStart" name="ageStart" value="26" required>
+            <p></p>
+
+            <label for="ageStart">Durata:</label>
+            <input type="number" id="duration" name="duration" value="30" required>
+            <p></p>
+
+            <label for="firstRAL">Prima RAL:</label>
+            <input type="number" id="firstRAL" name="firstRAL" value="35000" required>
+            <p></p>
+
+            <label for="increaseRAL">Aumento RAL (ogni 5 Anni):</label>
+            <input type="number" id="increaseRAL" name="increaseRAL" value="5000" required>
+            <p></p>
+
+            <label for="investmentAnnual">Investimento Annuo:</label>
+            <input type="number" id="investmentAnnual" name="investmentAnnual" value="4000" required>
+            <p></p>
+
+            <label for="contributionEmployer">Contributo datoriale FPN:</label>
+            <input type="number" id="contributionEmployer" name="contributionEmployer" step="0.01" value="1.00"
+                required>
+            <p></p>
+
+            <label for="taxBaseFPN">Tassazione Base Versamenti FPN:</label>
+            <input type="number" id="taxBaseFPN" name="taxBaseFPN" step="0.01" value="15.00" required>
+            <p></p>
+
+            <label for="taxAnticipationFPN">Tassazione Anticipata Versamenti FPN:</label>
+            <input type="number" id="taxAnticipationFPN" name="taxAnticipationFPN" step="0.01" value="23.00" required>
+            <p></p>
+
+            <label for="annualReturnFPN">Rendimento Annuo FPN (Amundi SP):</label>
+            <input type="number" id="annualReturnFPN" name="annualReturnFPN" step="0.01" value="4.81" required>
+            <p></p>
+
+            <label for="annualReturnPAC">Rendimento Annuo PAC (MSCI ACWI):</label>
+            <input type="number" id="annualReturnPAC" name="annualReturnPAC" step="0.01" value="8.23" required>
+            <p></p>
+
+            <label for="taxCapitalGainsPAC">Tassazione Plusvalenze PAC:</label>
+            <input type="number" id="taxCapitalGainsPAC" name="taxCapitalGainsPAC" step="0.01" value="26.00" required>
+            <p></p>
+
+            <label for="tfr">TFR:</label>
+            <input type="number" id="tfr" name="tfr" value="1300" required>
+            <p></p>
+
+            <label for="increaseTFR">Aumento TFR (ogni 5 Anni):</label>
+            <input type="number" id="increaseTFR" name="increaseTFR" value="130" required>
+            <p></p>
+
+            <button type="submit">Calcola</button>
+        </form>
+        <div id="results">
+            <h2>Risultati:</h2>
+            <div id="result-output"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
