@@ -11,44 +11,45 @@
 <body>
     <div class="container">
         <h1>Piano di Accumulo Capitale vs Fondo Pensione</h1>
-        <form id="pac-form">
+        <form id="input-form">
             <label for="etaInizio">Età Inizio:</label>
-            <input type="number" id="etaInizio" name="etaInizio" value="26" required>
+            <input type="number" id="etaInizio" name="etaInizio" required>
             <p></p>
 
             <label for="durata">Durata:</label>
-            <input type="number" id="durata" name="durata" value="30" required>
+            <input type="number" id="durata" name="durata" required>
             <p></p>
 
-            <label for="primaRal">Prima RAL:</label>
-            <input type="number" id="primaRal" name="primaRal" value="35000" required>
+            <label for="primaRal">Prima Ral:</label>
+            <input type="number" id="primaRal" name="primaRal" required>
             <p></p>
 
-            <label for="aumentoRal">Aumento RAL (ogni 5 Anni):</label>
-            <input type="number" id="aumentoRal" name="aumentoRal" value="5000" required>
+            <label for="aumentoRal">Aumento Ral (ogni 5 Anni):</label>
+            <input type="number" id="aumentoRal" name="aumentoRal" required>
             <p></p>
 
-            <label for="investimentoAnnuale">Investimento Annuo:</label>
-            <input type="number" id="investimentoAnnuale" name="investimentoAnnuale" value="4000" required>
+            <label for="investimentoAnnuale">Investimento Annuale:</label>
+            <input type="number" id="investimentoAnnuale" name="investimentoAnnuale" required>
             <p></p>
 
-            <label for="contribuzioneDatoreFpnPerc">Contributo datoriale FPN:</label>
-            <input type="number" id="contribuzioneDatoreFpnPerc" name="contribuzioneDatoreFpnPerc" step="0.01" value="1.00"
-                required>
+            <label for="investimentoAnnualePerc">Investimento Annuale %:</label>
+            <input type="number" id="investimentoAnnualePerc" name="investimentoAnnualePerc" required>
             <p></p>
 
-            <label for="rendimentoAnnualeFpn">Rendimento Annuo FPN (Amundi SP):</label>
-            <input type="number" id="rendimentoAnnualeFpn" name="rendimentoAnnualeFpn" step="0.01" value="4.81" required>
+            <label for="contribuzioneDatoreFpnPerc">Contributo datoriale Fpn %:</label>
+            <input type="number" id="contribuzioneDatoreFpnPerc" name="contribuzioneDatoreFpnPerc" step="0.01" required>
             <p></p>
 
-            <label for="rendimentoAnnualePac">Rendimento Annuo PAC (MSCI ACWI):</label>
-            <input type="number" id="rendimentoAnnualePac" name="rendimentoAnnualePac" step="0.01" value="8.23" required>
+            <label for="rendimentoAnnualeFpnPerc">Rendimento Annuo Fpn %:</label>
+            <input type="number" id="rendimentoAnnualeFpnPerc" name="rendimentoAnnualeFpnPerc" step="0.01" required>
             <p></p>
 
-            <button type="submit">Calcola</button>
+            <label for="rendimentoAnnualePacPerc">Rendimento Annuo Pac %:</label>
+            <input type="number" id="rendimentoAnnualePacPerc" name="rendimentoAnnualePacPerc" step="0.01" required>
+            <p></p>
         </form>
         <div id="results">
-            <h2>Risultati:</h2>
+            <h2>Proiezione:</h2>
             <div id="result-output"></div>
         </div>
     </div>

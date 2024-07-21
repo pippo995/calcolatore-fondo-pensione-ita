@@ -1,4 +1,14 @@
 {
+    "Valori Default":{
+        "etaInizio":25,
+        "durata": 40,
+        "primaRal": 30000,
+        "aumentoRal": 5000,
+        "investimentoAnnuale": 5000,
+        "contribuzioneDatoreFpnPerc": 0.01,
+        "rendimentoAnnualeFpnPerc": 0.04,
+        "rendimentoAnnualePacPerc": 0.08
+    },
     "Aliquote Irpef": {
         "Fino a 8.500": 0.00,
         "Fino a 28.000": 0.23,
