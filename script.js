@@ -15,67 +15,58 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.floor(imposta)
     }
 
-    function calcolaDetrazione(RAL) {
-        let detrazione;
-        if (RAL <= 15000) {
-            detrazione = 1955;
-        } else if (RAL > 1500 && RAL <= 28000) {
-            detrazione = 1910 + (1195 * ((28000 - RAL) / 13000));
-        } else if (RAL > 28000 && RAL <= 50000) {
-            detrazione = 950 + ((50000 - RAL) / 22000);
-        } else {
-            detrazione = 0;
-        }
-
-        return Math.floor(detrazione)
-    }
-
-
-    // Function to perform calculations and update results
     function updateResults() {
-        // Retrieve input values
-        const ageStart = parseInt(document.getElementById('ageStart').value);
-        const duration = parseInt(document.getElementById('duration').value);
-        const firstRal = parseFloat(document.getElementById('firstRAL').value);
-        const increaseRal = parseFloat(document.getElementById('increaseRAL').value);
-        const investmentAnnual = parseFloat(document.getElementById('investmentAnnual').value);
-        const contributionEmployer_perc = parseFloat(document.getElementById('contributionEmployer').value) / 100;
-        const taxBaseFPN = parseFloat(document.getElementById('taxBaseFPN').value) / 100;
-        const taxAnticipationFPN = parseFloat(document.getElementById('taxAnticipationFPN').value) / 100;
-        const annualReturnFPN = parseFloat(document.getElementById('annualReturnFPN').value) / 100;
-        const annualReturnPAC = parseFloat(document.getElementById('annualReturnPAC').value) / 100;
-        const taxCapitalGainsPAC = parseFloat(document.getElementById('taxCapitalGainsPAC').value) / 100;
-        const tfr = parseFloat(document.getElementById('tfr').value);
-        const increaseTFR = parseFloat(document.getElementById('increaseTFR').value);
 
+        fetch('configurations.json')
+            .then(response => response.json())
+            .then(data => {
+                const aliquoteIrpef = data["Aliquote Irpef"];
+                const tassazioneVersamentiFpn = data["Tassazione Versamenti Fpn"];
+                const stimaRendimentoAnnuoFpn = data["Stima Rendimento Annuo Fpn"];
+                const stimaRendimentoAnnuoPac = data["Stima Rendimento Annuo Pac"];
+                const tassazionePlusvalenzePac = data["Tassazione Pluvalenze Pac"];
+            })
+            .catch(error => console.error('Error fetching JSON:', error));
 
-        // Calculate values for each year
+        const etaInizio = parseInt(document.getElementById('etaInizio').value);
+        const durata = parseInt(document.getElementById('durata').value);
+        const primaRal = parseFloat(document.getElementById('primaRal').value);
+        const aumentoRal = parseFloat(document.getElementById('aumentoRal').value);
+        const investimentoAnnuale = parseFloat(document.getElementById('investimentoAnnuale').value);
+        const contribuzioneDatoreFpnPerc = parseFloat(document.getElementById('contribuzioneDatoreFpnPerc').value) / 100;
+
         const rows = [];
-        for (let i = 1; i < duration; i++) {
-            const age = ageStart + i
-            const ral = firstRal + increaseRal * Math.floor(i / 5);
-            const ralDeducted = Math.max(ral - Math.max(investmentAnnual, 5164), 0);
+        for (let i = 1; i < durata; i++) {
+            const eta = etaInizio + i
+            const ral = primaRal + aumentoRal * Math.floor(i / 5);
+            const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, 5164), 0);
             const imposta = calcolaImposta(ral);
-            const impostaRidotta = calcolaImposta(ralDeducted);
+            const impostaRidotta = calcolaImposta(ralDedotta);
             const deduzione = imposta - impostaRidotta;
-            const contributionEmployer = ral * contributionEmployer_perc;
+            const contribuzioneDatoreFpn = Math.floor(ral * contribuzioneDatoreFpnPerc);
+            const tassazioneVersamentiFpn = 0;
 
-            const row = { age: age, ral: ral, ralDeducted, imposta: imposta, impostaRidotta: impostaRidotta, deduzione: deduzione, contributionEmployer: contributionEmployer }
+            const row = { 
+                "Età": eta,
+                "Ral": ral, 
+                "Ral Dedotta": ralDedotta, 
+                "imposta": imposta, 
+                "impostaRidotta": impostaRidotta, 
+                "deduzione": deduzione, 
+                "contribuzioneDatoreFpn": contribuzioneDatoreFpn 
+            }
             rows.push(row);
         }
 
-        // Create the table element
         const table = document.createElement('table');
         table.id = 'result-table';
 
-        // Create table header row dynamically
         const headerRow = table.insertRow();
         for (const key in rows[0]) {
             const headerCell = headerRow.insertCell();
             headerCell.textContent = key;
         }
 
-        // Populate the table with data
         rows.forEach(row => {
             const newRow = table.insertRow();
             for (const key in row) {
@@ -84,18 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Append the table to the result-output div
         while (resultOutput.firstChild) {
             resultOutput.removeChild(resultOutput.firstChild);
         }
         resultOutput.appendChild(table);
     }
 
-    // Attach input event listeners to all input elements
     form.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', updateResults);
     });
 
-    // Initial calculation
     updateResults();
 });
