@@ -39,37 +39,65 @@ document.addEventListener('DOMContentLoaded', () => {
         const rendimentoAnnualePacPerc = parseFloat(document.getElementById('rendimentoAnnualePacPerc').value) / 100;
 
         const rows = [];
+        let deduzione_1 = 0;
+        let fpnVersamenti = 0;
+        let fpnMontante = 0;
+        let pacVersamenti_1 = 0;
+        let pacMontante_1 = 0;
         let pacVersamenti = 0;
         let pacMontante = 0;
-        for (let i = 1; i < durata; i++) {
-            const eta = etaInizio + i - 1;
+        for (let i = 0; i < durata; i++) {
+            const eta = etaInizio + i;
             const ral = primaRal + aumentoRal * Math.floor(i / 5);
-            const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, 5164), 0);
             const imposta = calcolaImposta(ral);
+            const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, 5164), 0);
+            const ralDedotta_1 = Math.max(ral - Math.min(investimentoAnnuale + deduzione_1, 5164), 0);
             const impostaRidotta = calcolaImposta(ralDedotta);
-            const deduzione = imposta - impostaRidotta;
+            const impostaRidotta_1 = calcolaImposta(ralDedotta_1);
+            const deduzione = imposta - impostaRidotta;            
             const investimentoEntroDeduzione = Math.min(investimentoAnnuale, 5164)
-            const investimentoOltreDeduzione = investimentoAnnuale - investimentoEntroDeduzione
+            const investimentoOltreDeduzione = investimentoAnnuale - investimentoEntroDeduzione 
+            const investimentoAnnuale_1 = investimentoAnnuale + deduzione_1;  
+            const investimentoEntroDeduzione_1 = Math.min(investimentoAnnuale_1, 5164)
+            const investimentoOltreDeduzione_1 = investimentoAnnuale_1 - investimentoEntroDeduzione_1
+            deduzione_1 = imposta - impostaRidotta_1;
             const contribuzioneDatoreFpn = Math.floor(ral * contribuzioneDatoreFpnPerc);
-            const tassazioneVersamentiFpn = Math.max((15 - Math.max(i - 15, 0) * 0.3), 9).toFixed(2)
+            const tassazioneVersamentiFpn = Math.max((15 - Math.max(i + 1 - 15, 0) * 0.3), 9).toFixed(2)
+            fpnVersamenti = fpnVersamenti + investimentoEntroDeduzione_1 + contribuzioneDatoreFpn;
+            fpnMontante = fpnMontante + Math.floor(fpnMontante * rendimentoAnnualeFpnPerc) + investimentoEntroDeduzione_1 + contribuzioneDatoreFpn;
+            pacVersamenti_1 = pacVersamenti_1 + investimentoOltreDeduzione_1;
+            pacMontante_1 = pacMontante_1 + Math.floor(pacMontante_1 * rendimentoAnnualePacPerc) + investimentoOltreDeduzione_1;
+            const fpnPacExit = (fpnMontante - Math.floor(fpnVersamenti * tassazioneVersamentiFpn / 100)) + (pacMontante_1 - Math.floor((pacMontante_1 - pacVersamenti_1) * configurations["Tassazione Pluvalenze Pac"]));
             pacVersamenti = pacVersamenti + investimentoAnnuale;
             pacMontante = pacMontante + Math.floor(pacMontante * rendimentoAnnualePacPerc) + investimentoAnnuale;
-            const pacExit = pacMontante - Math.floor(pacMontante * configurations["Tassazione Pluvalenze Pac"]);
+            const pacExit = pacMontante - Math.floor((pacMontante - pacVersamenti) * configurations["Tassazione Pluvalenze Pac"]);
 
             const row = {
                 "Età": eta,
-                "Durata": i,
+                "Durata": i + 1,
                 "Ral": ral,
-                "Ral Dedotta": ralDedotta,
-                "Imposta": imposta,
-                "Imposta Ridotta": impostaRidotta,
-                "Deduzione": deduzione,
-                "Contribuzione Datore Fpn": contribuzioneDatoreFpn,
-                "Tassazione Versamenti Fpn": tassazioneVersamentiFpn,
-                "Entro Deduzione": investimentoEntroDeduzione,
-                "Oltre Deduzione": investimentoOltreDeduzione,
-                "Pac Versamenti": pacVersamenti,
-                "Pac Montante": pacMontante,
+                //"Imposta": imposta,
+                //"Ral Dedotta": ralDedotta,
+                //"Imposta Ridotta": impostaRidotta,
+                //"Deduzione": deduzione,
+                //"Ral Dedotta +1": ralDedotta_1,
+                //"Imposta Ridotta +1": impostaRidotta_1,
+                //"Deduzione +1": deduzione_1,
+                //"Contribuzione Datore Fpn": contribuzioneDatoreFpn,
+                //"Tassazione Versamenti Fpn": tassazioneVersamentiFpn,
+                //"Investimento Annuale": investimentoAnnuale,
+                //"Entro Deduzione": investimentoEntroDeduzione,
+                //"Oltre Deduzione": investimentoOltreDeduzione,
+                //"Investimento Annuale +1": investimentoAnnuale_1,
+                //"Entro Deduzione +1": investimentoEntroDeduzione_1,
+                //"Oltre Deduzione +1": investimentoOltreDeduzione_1,
+                //"Fpn Versamenti": fpnVersamenti,
+                //"Fpn Montante": fpnMontante,
+                //"Pac Versamenti +1": pacVersamenti_1,
+                //"Pac Montante +1": pacMontante_1,
+                "FpnPac Exit": fpnPacExit,
+                //"Pac Versamenti": pacVersamenti,
+                //"Pac Montante": pacMontante,
                 "Pac Exit": pacExit
             }
             rows.push(row);
