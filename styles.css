@@ -1,0 +1,50 @@
+/* Style the table */
+#result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    table-layout: fixed; /* Ensures equal column width */
+}
+
+/* Style the table header */
+#result-table thead th {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Style the table rows */
+#result-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#result-table tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+/* Style the table cells */
+#result-table tbody td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Add hover effect on table rows */
+#result-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Ensure columns are the same width */
+#result-table th, #result-table td {
+    width: auto; /* Or set a specific width, e.g., width: 100px; */
+    word-wrap: break-word; /* Prevent overflow */
+}
+
+/* Style for better readability on smaller screens */
+@media screen and (max-width: 600px) {
+    #result-table {
+        font-size: 14px;
+    }
+}
