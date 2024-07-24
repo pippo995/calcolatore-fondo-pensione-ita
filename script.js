@@ -15,7 +15,8 @@ function updateResults() {
     const durata = parseInt(document.getElementById('durata').value);
     const primaRal = parseFloat(document.getElementById('primaRal').value);
     const aumentoRal = parseFloat(document.getElementById('aumentoRal').value);
-    const investimentoAnnuale = parseFloat(document.getElementById('investimentoAnnuale').value);
+    const primoInvestimentoAnnuale = parseFloat(document.getElementById('primoInvestimentoAnnuale').value);
+    const aumentoInvestimentoAnnuale = parseFloat(document.getElementById('aumentoInvestimentoAnnuale').value);
     const contribuzioneDatoreFpnPerc = parseFloat(document.getElementById('contribuzioneDatoreFpnPerc').value) / 100;
     const rendimentoAnnualeFpnPerc = parseFloat(document.getElementById('rendimentoAnnualeFpnPerc').value) / 100;
     const rendimentoAnnualePacPerc = parseFloat(document.getElementById('rendimentoAnnualePacPerc').value) / 100;
@@ -29,7 +30,8 @@ function updateResults() {
     let pacMontante = 0;
     for (let i = 0; i < durata; i++) {
         const eta = etaInizio + i;
-        const ral = primaRal + aumentoRal * Math.floor(i / 5);
+        const ral = primaRal + aumentoRal * Math.floor((i + 1) / 5);
+        const investimentoAnnuale = primoInvestimentoAnnuale + aumentoInvestimentoAnnuale * Math.floor((i + 1) / 5);
         const imposta = calcolaImposta(ral);
         const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, 5164), 0);
         const ralDedotta_1 = Math.max(ral - Math.min(investimentoAnnuale + deduzione_1, 5164), 0);
@@ -65,7 +67,7 @@ function updateResults() {
             //"Deduzione +1": deduzione_1,
             "Contribuzione Datore Fpn": contribuzioneDatoreFpn,
             "Tassazione Versamenti Fpn": tassazioneVersamentiFpn,
-            //"Investimento Annuale": investimentoAnnuale,
+            "Investimento Annuale": investimentoAnnuale,
             //"Entro Deduzione": investimentoEntroDeduzione,
             //"Oltre Deduzione": investimentoOltreDeduzione,
             //"Investimento Annuale +1": investimentoAnnuale_1,
