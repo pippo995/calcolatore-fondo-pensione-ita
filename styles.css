@@ -1,3 +1,58 @@
+body {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+#input-form {
+    width: 100%;
+    max-width: 400px;
+    margin-right: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-collapse: collapse; /* Makes borders look like a table */
+}
+
+#input-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+#input-form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+
+#input-form input[type="number"]:focus {
+    outline: none;
+    border-color: #999;
+    background-color: #fff;
+}
+
+#input-form p {
+    margin: 0;
+    padding: 0;
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+
+
 /* Style the table */
 #result-table {
     width: 100%;
