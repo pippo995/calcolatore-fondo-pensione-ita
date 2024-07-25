@@ -1,116 +1,133 @@
 const inputForm = document.getElementById('input-form');
-const resultOutput = document.getElementById('result-output');
-
-var configurations;
-fetch('configurations.json')
-    .then(response => response.json())
-    .then(data => {
-        configurations = data;
-        updateResults();
-    })
-    .catch(error => console.error('Error fetching JSON:', error));
+const outputDiv = document.getElementById('output-div');
 
 function updateResults() {
+
     const etaInizio = parseInt(document.getElementById('etaInizio').value);
     const durata = parseInt(document.getElementById('durata').value);
     const primaRal = parseFloat(document.getElementById('primaRal').value);
     const aumentoRal = parseFloat(document.getElementById('aumentoRal').value);
     const primoInvestimentoAnnuale = parseFloat(document.getElementById('primoInvestimentoAnnuale').value);
     const aumentoInvestimentoAnnuale = parseFloat(document.getElementById('aumentoInvestimentoAnnuale').value);
-    const contribuzioneDatoreFpnPerc = parseFloat(document.getElementById('contribuzioneDatoreFpnPerc').value) / 100;
-    const rendimentoAnnualeFpnPerc = parseFloat(document.getElementById('rendimentoAnnualeFpnPerc').value) / 100;
+    const contribuzioneDatoreFpPerc = parseFloat(document.getElementById('contribuzioneDatoreFpPerc').value) / 100;
+    const rendimentoAnnualeFpPerc = parseFloat(document.getElementById('rendimentoAnnualeFpPerc').value) / 100;
     const rendimentoAnnualePacPerc = parseFloat(document.getElementById('rendimentoAnnualePacPerc').value) / 100;
-    const rows = [];
+
+    const mapFattoreMesiInvestiti = {
+        'Mensile': 11/24,
+        'Bimensile': 10/24,
+        'Trimestrale': 9/24,
+        'Quadrimestrale': 8/24,
+        'Semestrale': 6/24,
+        'Annuale': 0
+    };
+    console.log(document.getElementById('frequenzaDiCarico').value)
+    const fattoreMesiInvestiti = mapFattoreMesiInvestiti[document.getElementById('frequenzaDiCarico').value]
+
+    const limiteDeduzione = 5164;
+
     let deduzione_1 = 0;
-    let fpnVersamenti = 0;
-    let fpnMontante = 0;
-    let pacVersamenti_1 = 0;
-    let pacMontante_1 = 0;
+    let fpVersamenti = 0;
+    let fpMontante = 0
+    let fpVersamentiEd = 0;
+    let fpMontanteEd = 0;
+    let pacVersamentiOd = 0;
+    let pacMontanteOd = 0;
     let pacVersamenti = 0;
     let pacMontante = 0;
+
+    const rows = [];    
+
     for (let i = 0; i < durata; i++) {
+        
         const eta = etaInizio + i;
         const ral = primaRal + aumentoRal * Math.floor((i + 1) / 5);
         const investimentoAnnuale = primoInvestimentoAnnuale + aumentoInvestimentoAnnuale * Math.floor((i + 1) / 5);
         const imposta = calcolaImposta(ral);
-        const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, 5164), 0);
-        const ralDedotta_1 = Math.max(ral - Math.min(investimentoAnnuale + deduzione_1, 5164), 0);
+        const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, limiteDeduzione), 0);
+        const ralDedotta_1 = Math.max(ral - Math.min(investimentoAnnuale + deduzione_1, limiteDeduzione), 0);
         const impostaRidotta = calcolaImposta(ralDedotta);
         const impostaRidotta_1 = calcolaImposta(ralDedotta_1);
-        const deduzione = imposta - impostaRidotta;            
-        const investimentoEntroDeduzione = Math.min(investimentoAnnuale, 5164)
-        const investimentoOltreDeduzione = investimentoAnnuale - investimentoEntroDeduzione 
-        const investimentoAnnuale_1 = investimentoAnnuale + deduzione_1;  
-        const investimentoEntroDeduzione_1 = Math.min(investimentoAnnuale_1, 5164)
+        const deduzione = imposta - impostaRidotta;
+        const investimentoEntroDeduzione = Math.min(investimentoAnnuale, limiteDeduzione)
+        const investimentoOltreDeduzione = investimentoAnnuale - investimentoEntroDeduzione
+        const investimentoAnnuale_1 = investimentoAnnuale + deduzione_1;
+        const investimentoEntroDeduzione_1 = Math.min(investimentoAnnuale_1, limiteDeduzione)
         const investimentoOltreDeduzione_1 = investimentoAnnuale_1 - investimentoEntroDeduzione_1
         deduzione_1 = imposta - impostaRidotta_1;
-        const contribuzioneDatoreFpn = Math.floor(ral * contribuzioneDatoreFpnPerc);
-        const tassazioneVersamentiFpn = Math.max((15 - Math.max(i + 1 - 15, 0) * 0.3), 9).toFixed(2)
-        fpnVersamenti = fpnVersamenti + investimentoEntroDeduzione_1 + contribuzioneDatoreFpn;
-        fpnMontante = fpnMontante + Math.floor(fpnMontante * rendimentoAnnualeFpnPerc) + investimentoEntroDeduzione_1 + contribuzioneDatoreFpn;
-        pacVersamenti_1 = pacVersamenti_1 + investimentoOltreDeduzione_1;
-        pacMontante_1 = pacMontante_1 + Math.floor(pacMontante_1 * rendimentoAnnualePacPerc) + investimentoOltreDeduzione_1;
-        const fpnPacExit = (fpnMontante - Math.floor(fpnVersamenti * tassazioneVersamentiFpn / 100)) + (pacMontante_1 - Math.floor((pacMontante_1 - pacVersamenti_1) * configurations["Tassazione Pluvalenze Pac"]));
+        const contribuzioneDatoreFp = Math.floor(ral * contribuzioneDatoreFpPerc);
+        const tassazioneVersamentiFp = Math.max((15 - Math.max(i + 1 - 15, 0) * 0.3), 9).toFixed(2)
+        fpVersamenti = fpVersamenti + investimentoAnnuale_1 + contribuzioneDatoreFp;
+        fpMontante = fpMontante + Math.floor(fpMontante * rendimentoAnnualeFpPerc) + investimentoAnnuale_1 + contribuzioneDatoreFp + Math.floor((investimentoAnnuale_1 + contribuzioneDatoreFp) * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
+        const fpExit = (fpMontante - Math.floor(fpVersamenti * tassazioneVersamentiFp / 100));
+        fpVersamentiEd = fpVersamentiEd + investimentoEntroDeduzione_1 + contribuzioneDatoreFp;
+        fpMontanteEd = fpMontanteEd + Math.floor(fpMontanteEd * rendimentoAnnualeFpPerc) + investimentoEntroDeduzione_1 + contribuzioneDatoreFp + Math.floor((investimentoEntroDeduzione_1 + contribuzioneDatoreFp) * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
+        pacVersamentiOd = pacVersamentiOd + investimentoOltreDeduzione_1;
+        pacMontanteOd = pacMontanteOd + Math.floor(pacMontanteOd * rendimentoAnnualePacPerc) + investimentoOltreDeduzione_1 + Math.floor(investimentoOltreDeduzione_1 * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
+        const fpPacExit = (fpMontanteEd - Math.floor(fpVersamentiEd * tassazioneVersamentiFp / 100)) + (pacMontanteOd - Math.floor((pacMontanteOd - pacVersamentiOd) * 0.26));
         pacVersamenti = pacVersamenti + investimentoAnnuale;
-        pacMontante = pacMontante + Math.floor(pacMontante * rendimentoAnnualePacPerc) + investimentoAnnuale;
-        const pacExit = pacMontante - Math.floor((pacMontante - pacVersamenti) * configurations["Tassazione Pluvalenze Pac"]);
+        pacMontante = pacMontante + Math.floor(pacMontante * rendimentoAnnualePacPerc) + investimentoAnnuale + Math.floor(investimentoAnnuale * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
+        const pacExit = pacMontante - Math.floor((pacMontante - pacVersamenti) * 0.26);
+        
         const row = {
             "Età": eta + 1,
             "Durata": i + 1,
-            "Ral": ral,
-            //"Imposta": imposta,
-            //"Ral Dedotta": ralDedotta,
-            //"Imposta Ridotta": impostaRidotta,
-            //"Deduzione": deduzione,
-            //"Ral Dedotta +1": ralDedotta_1,
-            //"Imposta Ridotta +1": impostaRidotta_1,
-            //"Deduzione +1": deduzione_1,
-            "Contribuzione Datore Fpn": contribuzioneDatoreFpn,
-            "Tassazione Versamenti Fpn": tassazioneVersamentiFpn,
-            "Investimento Annuale": investimentoAnnuale,
-            //"Entro Deduzione": investimentoEntroDeduzione,
-            //"Oltre Deduzione": investimentoOltreDeduzione,
-            //"Investimento Annuale +1": investimentoAnnuale_1,
-            //"Entro Deduzione +1": investimentoEntroDeduzione_1,
-            //"Oltre Deduzione +1": investimentoOltreDeduzione_1,
-            //"Fpn Versamenti": fpnVersamenti,
-            //"Fpn Montante": fpnMontante,
-            //"Pac Versamenti +1": pacVersamenti_1,
-            //"Pac Montante +1": pacMontante_1,
-            "Fpn + Pac Exit": fpnPacExit,
-            //"Pac Versamenti": pacVersamenti,
-            //"Pac Montante": pacMontante,
-            "Pac Exit": pacExit
+            "Ral": formatNumberWithCommas(ral) + " €",
+            "Contribuzione Datore Fp": formatNumberWithCommas(contribuzioneDatoreFp) + " €",
+            "Tassazione Fp": tassazioneVersamentiFp + " %",
+            "Investimento Annuale": formatNumberWithCommas(investimentoAnnuale) + " €",
+            "Fp Exit": formatNumberWithCommas(fpExit) + " €",
+            "Fp + Pac Exit": formatNumberWithCommas(fpPacExit) + " €",
+            "Pac Exit": formatNumberWithCommas(pacExit) + " €"
         }
         rows.push(row);
     }
 
+
     const table = document.createElement('table');
-    table.id = 'result-table';
-    const headerRow = table.insertRow();
+    table.id = 'output-table';
+    
+    // Create thead element
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    
+    // Create header cells
     for (const key in rows[0]) {
-        const headerCell = headerRow.insertCell();
+        const headerCell = document.createElement('th');
         headerCell.textContent = key;
+        headerRow.appendChild(headerCell);
     }
+    
+    // Append header row to thead
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    
+    // Create tbody element
+    const tbody = document.createElement('tbody');
+    
+    // Populate table rows
     rows.forEach(row => {
-        const newRow = table.insertRow();
+        const newRow = document.createElement('tr');
         for (const key in row) {
-            const cell = newRow.insertCell();
+            const cell = document.createElement('td');
             cell.textContent = row[key];
+            newRow.appendChild(cell);
         }
+        tbody.appendChild(newRow);
     });
-    while (resultOutput.firstChild) {
-        resultOutput.removeChild(resultOutput.firstChild);
+    
+    // Append tbody to table
+    table.appendChild(tbody);
+    
+    // Clear any existing content in outputDiv and append the new table
+    while (outputDiv.firstChild) {
+        outputDiv.removeChild(outputDiv.firstChild);
     }
-    resultOutput.appendChild(table);
+    outputDiv.appendChild(table);    
 }
 
-inputForm.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', updateResults);
-});
-
-//document.addEventListener('DOMContentLoaded', () => {
-//});
+document.addEventListener('DOMContentLoaded', updateResults);
+inputForm.addEventListener('input', updateResults);
 
 function calcolaImposta(RAL) {
     let imposta;
@@ -121,8 +138,11 @@ function calcolaImposta(RAL) {
     } else {
         imposta = 28000 * 0.23 + 22000 * 0.35 + (RAL - 50000) * 0.43;
     }
-
     return Math.floor(imposta)
+}
+
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
 
