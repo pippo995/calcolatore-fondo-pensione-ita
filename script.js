@@ -73,7 +73,7 @@ function updateResults() {
             "Età": eta + 1,
             "Durata": i + 1,
             "Ral": formatNumberWithCommas(ral) + " €",
-            "Contribuzione Datore Fp": formatNumberWithCommas(contribuzioneDatoreFp) + " €",
+            "Contrib. Datore Fp": formatNumberWithCommas(contribuzioneDatoreFp) + " €",
             "Tassazione Fp": tassazioneVersamentiFp + " %",
             "Investimento Annuale": formatNumberWithCommas(investimentoAnnuale) + " €",
             "Fp Exit": formatNumberWithCommas(fpExit) + " €",
