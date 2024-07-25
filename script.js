@@ -12,6 +12,7 @@ function updateResults() {
     const contribuzioneDatoreFpPerc = parseFloat(document.getElementById('contribuzioneDatoreFpPerc').value) / 100;
     const rendimentoAnnualeFpPerc = parseFloat(document.getElementById('rendimentoAnnualeFpPerc').value) / 100;
     const rendimentoAnnualePacPerc = parseFloat(document.getElementById('rendimentoAnnualePacPerc').value) / 100;
+    const limiteDeduzioneFp = 5164;
 
     const mapFattoreMesiInvestiti = {
         'Mensile': 11/24,
@@ -24,7 +25,6 @@ function updateResults() {
     console.log(document.getElementById('frequenzaDiCarico').value)
     const fattoreMesiInvestiti = mapFattoreMesiInvestiti[document.getElementById('frequenzaDiCarico').value]
 
-    const limiteDeduzione = 5164;
 
     let deduzione_1 = 0;
     let fpVersamenti = 0;
@@ -44,15 +44,15 @@ function updateResults() {
         const ral = primaRal + aumentoRal * Math.floor((i + 1) / 5);
         const investimentoAnnuale = primoInvestimentoAnnuale + aumentoInvestimentoAnnuale * Math.floor((i + 1) / 5);
         const imposta = calcolaImposta(ral);
-        const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, limiteDeduzione), 0);
-        const ralDedotta_1 = Math.max(ral - Math.min(investimentoAnnuale + deduzione_1, limiteDeduzione), 0);
+        const ralDedotta = Math.max(ral - Math.min(investimentoAnnuale, limiteDeduzioneFp), 0);
+        const ralDedotta_1 = Math.max(ral - Math.min(investimentoAnnuale + deduzione_1, limiteDeduzioneFp), 0);
         const impostaRidotta = calcolaImposta(ralDedotta);
         const impostaRidotta_1 = calcolaImposta(ralDedotta_1);
         const deduzione = imposta - impostaRidotta;
-        const investimentoEntroDeduzione = Math.min(investimentoAnnuale, limiteDeduzione)
+        const investimentoEntroDeduzione = Math.min(investimentoAnnuale, limiteDeduzioneFp)
         const investimentoOltreDeduzione = investimentoAnnuale - investimentoEntroDeduzione
         const investimentoAnnuale_1 = investimentoAnnuale + deduzione_1;
-        const investimentoEntroDeduzione_1 = Math.min(investimentoAnnuale_1, limiteDeduzione)
+        const investimentoEntroDeduzione_1 = Math.min(investimentoAnnuale_1, limiteDeduzioneFp)
         const investimentoOltreDeduzione_1 = investimentoAnnuale_1 - investimentoEntroDeduzione_1
         deduzione_1 = imposta - impostaRidotta_1;
         const contribuzioneDatoreFp = Math.floor(ral * contribuzioneDatoreFpPerc);
