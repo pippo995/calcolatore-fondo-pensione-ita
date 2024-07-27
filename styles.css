@@ -5,21 +5,17 @@ body {
 
 .container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
+    gap:20px;
 }
 
-@media (max-width: 600px) {
-    .container {
-        flex-direction: column; /* Stack elements vertically */
-    }
+#input-div {
+    max-width: 600px;
 }
 
 #input-form {
-    width: 100%;
-    min-width: 400px;
     padding: 20px;
     border: 1px solid #ddd;
 }
@@ -45,19 +41,30 @@ body {
     background-color: #f9f9f9;
 }
 
-#input-form input[type="number"]:focus {
-    border-color: #999;
-    background-color: #fff;
+.radio-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.radio-group label {
+    margin: 5px;
+}
+
+.radio-group input[type="radio"] {
+    margin: 5px;
 }
 
 /* Style the table */
+#output-div {
+    width: 100%;
+    overflow-x: auto;
+}
+
 #output-table {
     width: 100%;
-    min-width: 1200px;
-    border-collapse: collapse;
-    text-align: left;
+    min-width: 1000px;
     table-layout: fixed;
-    overflow: auto;
 }
 
 #output-table thead th {
@@ -82,9 +89,5 @@ body {
 }
 
 #output-table tbody tr:hover {
-    background-color: #f1f1f1;
-}
-
-#output-table th, #output-table td {
-    width: auto;
+    background-color: #f2f2f2;
 }

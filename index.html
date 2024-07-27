@@ -10,63 +10,94 @@
 
 <body>
     <div class="container">
-        <form id="input-form">
-            <h2>Parametri: </h2>
-            <label for="etaInizio">Età Inizio:</label>
-            <p>L'età alla quale si inizia il calcolo, serve solo come riferimento in tabella.</p>
-            <input type="number" id="etaInizio" name="etaInizio" value=25 min="0" required>
-            <label for="durata">Durata:</label>
-            <p>Durata dell'investimento. Per questo tipo d'investimento a lungo termine si consiglia un minimo di dieci
-                anni.</p>
-            <input type="number" id="durata" name="durata" value=40 min="0" required>
-            <label for="primaRal">Ral di Partenza:</label>
-            <p>La retribuzione annua lorda ovvero il reddito sogettabile a Irpef. Necessario per calcolare l'imposta e
-                le deduzioni. ATTENZIONE: se il proprio reddito non è soggettabile a Irpef, come nel caso di partita Iva forfettaria, indicare zero.</p>
-            <input type="number" id="primaRal" name="primaRal" value=30000 step=100 min="0" required>
-            <label for="aumentoRal">Aumento Ral (ogni cinque anni):</label>
-            <p>Ipotesi di aumento di Ral quinquennale. Con l'aumentare del reddito variano l'imposta e la deduzione.</p>
-            <input type="number" id="aumentoRal" name="aumentoRal" value="5000" step=100 min="0" required>
-            <label for="primoInvestimentoAnnuale">Investimento Annuale di Partenza:</label>
-            <p>La cifra che viene investita su base annuale al momento in cui inizia l'investimento.</p>
-            <input type="number" id="primoInvestimentoAnnuale" name="primoInvestimentoAnnuale" value=5000 step=100 min="0"
-                required>
-            <label for="aumentoInvestimentoAnnuale">Aumento Investimento Annuale (ogni cinque anni):</label>
-            <p>Ipotesi di aumento dell'investimento quinquennale. Se si desidera simulare un investimento fisso per
-                tutta la sua durata mettere 0.</p>
-            <input type="number" id="aumentoInvestimentoAnnuale" name="aumentoInvestimentoAnnuale" value=500 step=100 min="0"
-                required>
-            <label for="frequenzaDiCarico">Frequenza di Carico</label>
-            <p>La frequenza di carico incide sul calcolo dei rendimenti relativo ai versamenti dell'anno in corso.
-                Indicare "Mensile" se il carico avviene l'ultimo giorno di ogni mese dell'anno (in questo caso su un
-                dodicesimo dell'investimento si applicano undici dodicesimi del tasso annuale, su un altro dodicesimo i
-                dieci dodicesemi del tasso annuale etc.), nel caso
-                venga indicato "Annuale" non sarà calcolato nessun interesse sui versamenti per l'anno in cui vengono
-                effettuati.</p>
-            <select id="frequenzaDiCarico" name="frequenzaDiCarico">
-                <option selected>Mensile</option>
-                <option>Bimestrale</option>
-                <option>Trimestrale</option>
-                <option>Trimestrale</option>
-                <option>Semestrale</option>
-                <option>Annuale</option>
-            </select>
-            <label for="contribuzioneDatoreFpPerc">Contributo Datore Fp %:</label>
-            <p>In alcuni casi il datore di lavoro eroga direttamente sul fondo pensione un contributo pari a una
-                percentuale della Ral. Indicare se presente, altrimenti mettere 0.</p>
-            <input type="number" id="contribuzioneDatoreFpPerc" name="contribuzioneDatoreFpPerc" value=1 step=0.01
-                min="0" required>
-            <label for="rendimentoAnnualeFpPerc">Rendimento Annuo Fp %:</label>
-            <p>Rendimento annuo storico del proprio fondo pensione, deve essere recuperato dalle tabelle presenti sul
-                sito COVIP ed è già al netto della tassazione sulle plusvalenze che nel caso dei fondi pensione avviene
-                con cadenza annua.</p>
-            <input type="number" id="rendimentoAnnualeFpPerc" name="rendimentoAnnualeFpPerc" value=4 step=0.01 min="0"
-                required>
-            <label for="rendimentoAnnualePacPerc">Rendimento Annuo Pac %:</label>
-            <p>Rendimento annuo storico di un ETF di riferimento. Un ottimo benchmark è l'MSCI ALL WORLD INDEX il quale
-                negli ultimi 30 anni ha performato un rendimento medio annuo dell'8.23%. ATTENZIONE: può variare molto in base alla vostra strategia d'invesimento.</p>
-            <input type="number" id="rendimentoAnnualePacPerc" name="rendimentoAnnualePacPerc" value=8 step=0.01
-                min="0" required>
-        </form>
+        <h1>Fondo Pensione vs Piano di Accumulo</h1>
+        <div id="input-div">
+            <form id="input-form">
+                <h2>Parametri: </h2>
+                <label for="etaInizio">Età Inizio:</label>
+                <p>L'età alla quale si inizia il calcolo, serve solo come riferimento in tabella.</p>
+                <input type="number" id="etaInizio" value=25 min="0" required>
+                <label for="durata">Durata:</label>
+                <p>Durata dell'investimento. Per questo tipo d'investimento a lungo termine si consiglia un minimo di
+                    dieci
+                    anni.</p>
+                <input type="number" id="durata" name="durata" value=40 min="0" required>
+                <label>Utilizza Deduzioni:</label>
+                <p>Se si utilizzano le deduzioni fiscali disponibili.</p>
+                <div class="radio-group">
+                    <input type="radio" id="utilizzaDeduzioniSi" name="utilizzaDeduzioni" value="Si" checked>
+                    <label for="utilizzaDeduzioniSi">Si</label>
+                    <input type="radio" id="utilizzaDeduzioniNo" name="utilizzaDeduzioni" value="No">
+                    <label for="utilizzaDeduzioniNo">No</label>
+                </div>
+                <label>Utilizza Tfr:</label>
+                <p>Se si utilizza il Trattamento di Fine Rapporto.</p>
+                <div class="radio-group">
+                    <input type="radio" id="utilizzaTfrSi" name="utilizzaTfr" value="Si" checked>
+                    <label for="utilizzaTfrSi">Si</label>
+                    <input type="radio" id="utilizzaTfrNo" name="utilizzaTfr" value="No">
+                    <label for="utilizzaTfrNo">No</label>
+                </div>
+                <label for="primaRal">Ral di Partenza:</label>
+                <p>La retribuzione annua lorda ovvero il reddito sogettabile a Irpef. Necessario per calcolare l'imposta
+                    e
+                    le deduzioni. ATTENZIONE: se il proprio reddito non è soggettabile a Irpef, come nel caso di partita
+                    Iva
+                    forfettaria, indicare zero.</p>
+                <input type="number" id="primaRal" name="primaRal" value=30000 step=100 min="0" required>
+                <label for="aumentoRal">Aumento Ral (ogni cinque anni):</label>
+                <p>Ipotesi di aumento di Ral quinquennale. Con l'aumentare del reddito variano l'imposta e la deduzione.
+                </p>
+                <input type="number" id="aumentoRal" name="aumentoRal" value="5000" step=100 min="0" required>
+                <label for="primoInvestimentoAnnuale">Investimento Annuale di Partenza:</label>
+                <p>La cifra che viene investita su base annuale al momento in cui inizia l'investimento.</p>
+                <input type="number" id="primoInvestimentoAnnuale" name="primoInvestimentoAnnuale" value=5000 step=100
+                    min="0" required>
+                <label for="aumentoInvestimentoAnnuale">Aumento Investimento Annuale (ogni cinque anni):</label>
+                <p>Ipotesi di aumento dell'investimento quinquennale. Se si desidera simulare un investimento fisso per
+                    tutta la sua durata mettere 0.</p>
+                <input type="number" id="aumentoInvestimentoAnnuale" name="aumentoInvestimentoAnnuale" value=500
+                    step=100 min="0" required>
+                <label for="frequenzaDiCarico">Frequenza di Carico</label>
+                <p>La frequenza di carico incide sul calcolo dei rendimenti relativo ai versamenti dell'anno in corso.
+                    Indicare "Mensile" se il carico avviene l'ultimo giorno di ogni mese dell'anno (in questo caso su un
+                    dodicesimo dell'investimento si applicano undici dodicesimi del tasso annuale, su un altro
+                    dodicesimo i
+                    dieci dodicesimi del tasso annuale etc.), nel caso
+                    venga indicato "Annuale" non sarà calcolato nessun interesse sui versamenti per l'anno in cui
+                    vengono
+                    effettuati.</p>
+                <select id="frequenzaDiCarico" name="frequenzaDiCarico">
+                    <option selected>Mensile</option>
+                    <option>Bimestrale</option>
+                    <option>Trimestrale</option>
+                    <option>Trimestrale</option>
+                    <option>Semestrale</option>
+                    <option>Annuale</option>
+                </select>
+                <label for="contribuzioneDatoreFpPerc">Contributo Datore Fp %:</label>
+                <p>In alcuni casi il datore di lavoro eroga direttamente sul fondo pensione un contributo pari a una
+                    percentuale della Ral. Indicare se presente, altrimenti indicare zero.</p>
+                <input type="number" id="contribuzioneDatoreFpPerc" name="contribuzioneDatoreFpPerc" value=1 step=0.01
+                    min="0" required>
+                <label for="rendimentoAnnualeFpPerc">Rendimento Annuo Fp %:</label>
+                <p>Rendimento annuo storico del proprio fondo pensione, deve essere recuperato dalle tabelle presenti
+                    sul
+                    sito COVIP ed è già al netto della tassazione sulle plusvalenze che nel caso dei fondi pensione
+                    avviene
+                    con cadenza annua.</p>
+                <input type="number" id="rendimentoAnnualeFpPerc" name="rendimentoAnnualeFpPerc" value=4 step=0.01
+                    min="0" required>
+                <label for="rendimentoAnnualePacPerc">Rendimento Annuo Pac %:</label>
+                <p>Rendimento annuo storico di un ETF di riferimento. Un ottimo benchmark è l'MSCI ALL WORLD INDEX il
+                    quale
+                    negli ultimi 30 anni ha performato un rendimento medio annuo dell'8.23%. ATTENZIONE: può variare
+                    molto
+                    in base alla vostra strategia d'invesimento.</p>
+                <input type="number" id="rendimentoAnnualePacPerc" name="rendimentoAnnualePacPerc" value=8 step=0.01
+                    min="0" required>
+            </form>
+        </div>
         <div id="output-div">
         </div>
     </div>
