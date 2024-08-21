@@ -50,6 +50,7 @@ select {
 #input-form input[type="button"] {
     width: 100%;
     padding: 10px;
+
 }
 
 .radio-group {
@@ -79,12 +80,22 @@ select {
     margin-bottom: 25px;
 }
 
-/* Style the table */
 #output-div {
     width: 100%;
-    max-width: 1500px;
+    max-width: 1400px;
     overflow-x: scroll;
 }
+
+#chart-div {
+    width: 100%;
+    max-width: 1400px;
+}
+
+#myChart {
+    min-height: 650px;
+}
+
+/* Style the table */
 
 #output-table {
     width: 100%;

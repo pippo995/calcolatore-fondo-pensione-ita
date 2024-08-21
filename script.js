@@ -2,6 +2,7 @@ const inputForm = document.getElementById('input-form');
 const outputDiv = document.getElementById('output-div');
 
 let csvContent = "data:text/csv;charset=utf-8,";
+let myChart;
 
 function updateResults() {
 
@@ -22,11 +23,11 @@ function updateResults() {
     const limiteDeduzioneFp = 5164;
 
     const mapFattoreMesiInvestiti = {
-        'Mensile': 11/24,
-        'Bimestrale': 10/24,
-        'Trimestrale': 9/24,
-        'Quadrimestrale': 8/24,
-        'Semestrale': 6/24,
+        'Mensile': 11 / 24,
+        'Bimestrale': 10 / 24,
+        'Trimestrale': 9 / 24,
+        'Quadrimestrale': 8 / 24,
+        'Semestrale': 6 / 24,
         'Annuale': 0
     };
 
@@ -44,17 +45,17 @@ function updateResults() {
     let pacVersamenti = 0;
     let pacMontante = 0;
 
-    const rows = [];    
+    const rows = [];
 
     for (let i = 0; i < durata; i++) {
-        
+
         const eta = etaInizio + i;
 
         if ((i + 1) % freqAumentoRal == 0 && i != 0) {
             if (tipoAumentoRal) {
                 ral = ral + Math.floor(ral * aumentoRal / 100)
-            } 
-            else{
+            }
+            else {
                 ral = ral + aumentoRal
             }
         }
@@ -66,8 +67,8 @@ function updateResults() {
         if ((i + 1) % freqAumentoInvestimento == 0 && i != 0) {
             if (tipoAumentoInvestimento) {
                 investimentoAnnuale = investimentoAnnuale + Math.floor(investimentoAnnuale * aumentoInvestimento / 100)
-            } 
-            else{
+            }
+            else {
                 investimentoAnnuale = investimentoAnnuale + aumentoInvestimento
             }
         }
@@ -92,47 +93,48 @@ function updateResults() {
         pacVersamentiOd = pacVersamentiOd + investimentoOltreDeduzione_1;
         pacMontanteOd = pacMontanteOd + Math.floor(pacMontanteOd * rendimentoAnnualePacPerc) + investimentoOltreDeduzione_1 + Math.floor(investimentoOltreDeduzione_1 * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
         const fpPacExit = (fpMontanteEd - Math.floor(fpVersamentiEd * tassazioneVersamentiFp / 100)) + (pacMontanteOd - Math.floor((pacMontanteOd - pacVersamentiOd) * 0.26));
-        
+
         pacVersamenti = pacVersamenti + investimentoAnnuale;
         pacMontante = pacMontante + Math.floor(pacMontante * rendimentoAnnualePacPerc) + investimentoAnnuale + Math.floor(investimentoAnnuale * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
         const pacExit = pacMontante - Math.floor((pacMontante - pacVersamenti) * 0.26);
-        
+
         const row = {
             "Età": eta + 1,
             "Durata": i + 1,
             "Reddito Ded.": formatNumberWithCommas(ral),
             "Investimento": formatNumberWithCommas(investimentoAnnuale),
-            "Deduzione" :formatNumberWithCommas(deduzione),
+            "Deduzione": formatNumberWithCommas(deduzione),
             "FP: Exit": formatNumberWithCommas(fpExit),
             "FP Mix PAC: Exit": formatNumberWithCommas(fpPacExit),
             "PAC: Exit": formatNumberWithCommas(pacExit)
         }
-        rows.push(row);   
+        rows.push(row);
     }
 
     csvContent = convertToCSV(rows);
+    createChart(rows);
 
     const table = document.createElement('table');
     table.id = 'output-table';
-    
+
     // Create thead element
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    
+
     // Create header cells
     for (const key in rows[0]) {
         const headerCell = document.createElement('th');
         headerCell.textContent = key;
         headerRow.appendChild(headerCell);
     }
-    
+
     // Append header row to thead
     thead.appendChild(headerRow);
     table.appendChild(thead);
-    
+
     // Create tbody element
     const tbody = document.createElement('tbody');
-    
+
     // Populate table rows
     rows.forEach(row => {
         const newRow = document.createElement('tr');
@@ -143,15 +145,84 @@ function updateResults() {
         }
         tbody.appendChild(newRow);
     });
-    
+
     // Append tbody to table
     table.appendChild(tbody);
-    
+
     // Clear any existing content in outputDiv and append the new table
     while (outputDiv.firstChild) {
         outputDiv.removeChild(outputDiv.firstChild);
     }
-    outputDiv.appendChild(table);    
+    outputDiv.appendChild(table);
+
+
+}
+
+
+function createChart(rows) {
+
+    // Extract data for plotting
+    const durata = rows.map(row => row["Durata"]);
+    const fpExit = rows.map(row => parseFloat(row["FP: Exit"].replace(/,/g, '')));
+    const fpMixPacExit = rows.map(row => parseFloat(row["FP Mix PAC: Exit"].replace(/,/g, '')));
+    const pacExit = rows.map(row => parseFloat(row["PAC: Exit"].replace(/,/g, '')));
+
+    // Create the chart
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    if (myChart){
+        myChart.destroy();
+    }
+
+    myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: durata,
+            datasets: [
+                {
+                    label: 'FP: Exit',
+                    data: fpExit,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'FP Mix PAC: Exit',
+                    data: fpMixPacExit,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: false,
+                },
+                {
+                    label: 'PAC: Exit',
+                    data: pacExit,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: false,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Durata'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: '€€€'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
 }
 
 function downloadCsv() {
