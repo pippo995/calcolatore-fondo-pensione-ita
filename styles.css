@@ -71,7 +71,7 @@ select {
     padding: 20px;
     border: 1px solid #ddd;
     width:65%;
-    text-align: justify;
+    overflow-y: scroll;
 }
 
 .input-aumento{
@@ -95,6 +95,7 @@ select {
 
 #myChart {
     width: 768px;
+    height: 600px;
 }
 
 

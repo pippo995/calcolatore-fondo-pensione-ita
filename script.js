@@ -45,6 +45,7 @@ function updateResults() {
     let pacVersamenti = 0;
     let pacMontante = 0;
 
+    const results = [];
     const rows = [];
 
     for (let i = 0; i < durata; i++) {
@@ -97,11 +98,23 @@ function updateResults() {
         pacVersamenti = pacVersamenti + investimentoAnnuale;
         pacMontante = pacMontante + Math.floor(pacMontante * rendimentoAnnualePacPerc) + investimentoAnnuale + Math.floor(investimentoAnnuale * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
         const pacExit = pacMontante - Math.floor((pacMontante - pacVersamenti) * 0.26);
+        
+        const result =  {
+            "Età": eta + 1,
+            "Durata": i + 1,
+            "Reddito": ral,
+            "Investimento": investimentoAnnuale,
+            "Deduzione": deduzione,
+            "FP: Exit": fpExit,
+            "FP Mix PAC: Exit": fpPacExit,
+            "PAC: Exit": pacExit
+        }
+        results.push(result);
 
         const row = {
             "Età": eta + 1,
             "Durata": i + 1,
-            "Reddito Ded.": formatNumberWithCommas(ral),
+            "Reddito": formatNumberWithCommas(ral),
             "Investimento": formatNumberWithCommas(investimentoAnnuale),
             "Deduzione": formatNumberWithCommas(deduzione),
             "FP: Exit": formatNumberWithCommas(fpExit),
@@ -111,8 +124,8 @@ function updateResults() {
         rows.push(row);
     }
 
-    csvContent = convertToCSV(rows);
-    createChart(rows);
+    csvContent = convertToCSV(results);
+    createChart(results);
 
     const table = document.createElement('table');
     table.id = 'output-table';
@@ -163,9 +176,9 @@ function createChart(rows) {
 
     // Extract data for plotting
     const durata = rows.map(row => row["Durata"]);
-    const fpExit = rows.map(row => parseFloat(row["FP: Exit"].replace(/,/g, '')));
-    const fpMixPacExit = rows.map(row => parseFloat(row["FP Mix PAC: Exit"].replace(/,/g, '')));
-    const pacExit = rows.map(row => parseFloat(row["PAC: Exit"].replace(/,/g, '')));
+    const fpExit = rows.map(row => row["FP: Exit"]);
+    const fpMixPacExit = rows.map(row => row["FP Mix PAC: Exit"]);
+    const pacExit = rows.map(row => row["PAC: Exit"]);
 
     // Create the chart
     const ctx = document.getElementById('myChart').getContext('2d');
