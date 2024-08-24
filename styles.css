@@ -1,62 +1,87 @@
 body {
-    font-family: Arial, sans-serif;
     font-size: 13px;
 }
 
-.container {
+#container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
-    gap:20px;
+}
+
+#top-div {
+    display: flex;
+    flex-direction:row;
+    justify-content: center;
+
+    max-width: 1600px;
+    padding: 20px;
+    gap: 20px;
 }
 
 #input-div {
     display: flex;
-    flex-direction:row;
-    gap:20px;
-    max-width: 1400px;
+    flex-direction: column;
+    align-items: center;
+
+    width:25%;
+    padding: 20px;
+    gap: 20px;
+    border: 1px solid #ddd;
 }
 
-#input-form {
+#output-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width:75%;
     padding: 20px;
+    gap: 20px;
     border: 1px solid #ddd;
-    width:35%;
+}
+
+#input-form{
+    width: 100%;
+}
+
+.input-form-div{
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 #input-form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #333;
-}
-
-#input-form p {
-    margin-top: 5px;
-    margin-bottom: 5px;
 }
 
 #input-form input[type="number"],
 select {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 25px;
-    border: 1px solid #ddd;
     box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ddd;
     background-color: #f9f9f9;
 }
 
-
 #input-form input[type="button"] {
     width: 100%;
+    box-sizing: border-box;
     padding: 10px;
+}
 
+.input-aumento{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
 }
 
 .radio-group {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 }
 
 .radio-group label {
@@ -67,30 +92,9 @@ select {
     margin: 5px;
 }
 
-#explain-div{
-    padding: 20px;
-    border: 1px solid #ddd;
-    width:65%;
-    overflow-y: scroll;
-}
-
-.input-aumento{
-    padding: 20px;
-    padding-bottom: 0px;
-    border: 1px solid #ddd;
-    margin-bottom: 25px;
-}
-
-#output-div {
-    width: 100%;
-    max-width: 1400px;
-    overflow-x: scroll;
-}
-
 #chart-div {
     width: 100%;
     max-width: 1400px;
-    overflow-x: scroll;
 }
 
 #myChart {
@@ -99,27 +103,33 @@ select {
 }
 
 
+#explain-div{
+    padding: 20px;
+    border: 1px solid #ddd;
+    width:80%;
+}
+
 @media (max-width: 768px) {
-    #input-div {
+    #top-div {
+        display: flex;
         flex-direction: column;
         align-items: center;
-        padding:10px;
     }
 
-    #input-form {
-        width: 95%;
+    #input-div{
+        width: 100%;
     }
 
-    #explain-div{
-        width: 95%;
+    #output-div{
+        width: 100%;
     }
 }
+
 
 /* Style the table */
 
 #output-table {
     width: 100%;
-    min-width: 768px;
     table-layout: fixed;
 }
 

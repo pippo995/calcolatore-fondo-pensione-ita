@@ -1,50 +1,60 @@
-const inputForm = document.getElementById('input-form');
-const outputDiv = document.getElementById('output-div');
 
 let csvContent = "data:text/csv;charset=utf-8,";
 let myChart;
+
+document.addEventListener('DOMContentLoaded', updateResults);
+document.getElementById('input-form').addEventListener('input', updateResults);
+document.getElementById("downloadCsv").addEventListener("click", downloadCsv)
+
+const limiteDeduzioneFp = 5164;
+const mapFattoreMesiInvestiti = {
+    'Mensile': 11 / 24,
+    'Bimestrale': 10 / 24,
+    'Trimestrale': 9 / 24,
+    'Quadrimestrale': 8 / 24,
+    'Semestrale': 6 / 24,
+    'Annuale': 0
+};
 
 function updateResults() {
 
     const etaInizio = parseInt(document.getElementById('etaInizio').value);
     const durata = parseInt(document.getElementById('durata').value);
     const investireDeduzioni = (document.querySelector('input[name="investireDeduzioni"]:checked').value === "Si")
-    const primaRal = parseFloat(document.getElementById('primaRal').value);
-    const tipoAumentoRal = (document.querySelector('input[name="tipoAumentoRal"]:checked').value === "%")
-    const freqAumentoRal = parseFloat(document.getElementById('freqAumentoRal').value);
-    const aumentoRal = parseFloat(document.getElementById('aumentoRal').value);
-    const primoInvestimento = parseFloat(document.getElementById('primoInvestimento').value);
+    const primoReddito = parseFloat(document.getElementById('reddito').value);
+    const tipoAumentoReddito = (document.querySelector('input[name="tipoAumentoReddito"]:checked').value === "%")
+    const freqAumentoReddito = parseFloat(document.getElementById('freqAumentoReddito').value);
+    const aumentoReddito = parseFloat(document.getElementById('aumentoReddito').value);
+    const primoInvestimento = parseFloat(document.getElementById('investimento').value);
     const tipoAumentoInvestimento = (document.querySelector('input[name="tipoAumentoInvestimento"]:checked').value === "%")
     const freqAumentoInvestimento = parseFloat(document.getElementById('freqAumentoInvestimento').value);
     const aumentoInvestimento = parseFloat(document.getElementById('aumentoInvestimento').value);
     const contribuzioneDatoreFpPerc = parseFloat(document.getElementById('contribuzioneDatoreFpPerc').value) / 100;
     const rendimentoAnnualeFpPerc = parseFloat(document.getElementById('rendimentoAnnualeFpPerc').value) / 100;
     const rendimentoAnnualePacPerc = parseFloat(document.getElementById('rendimentoAnnualePacPerc').value) / 100;
-    const limiteDeduzioneFp = 5164;
-
-    const mapFattoreMesiInvestiti = {
-        'Mensile': 11 / 24,
-        'Bimestrale': 10 / 24,
-        'Trimestrale': 9 / 24,
-        'Quadrimestrale': 8 / 24,
-        'Semestrale': 6 / 24,
-        'Annuale': 0
-    };
-
     const fattoreMesiInvestiti = mapFattoreMesiInvestiti[document.getElementById('frequenzaDiCarico').value]
 
-    let ral = primaRal
-    let investimentoAnnuale = primoInvestimento
+    let reddito = primoReddito
+    let investimento = primoInvestimento
+    let deduzione = 0;
     let deduzione_1 = 0;
+
     let fpVersamenti = 0;
     let fpMontante = 0
-    let fpVersamentiEd = 0;
-    let fpMontanteEd = 0;
-    let pacVersamentiOd = 0;
-    let pacMontanteOd = 0;
+    
     let pacVersamenti = 0;
     let pacMontante = 0;
 
+    let fpVersamentiDed = 0;
+    let fpMontanteDed = 0;
+    let pacVersamentiDed = 0;
+    let pacMontanteDed = 0;
+
+    let fpVersamentiMax = 0;
+    let fpMontanteMax = 0;
+    let pacVersamentiMax = 0;
+    let pacMontanteMax = 0;
+    
     const results = [];
     const rows = [];
 
@@ -52,103 +62,126 @@ function updateResults() {
 
         const eta = etaInizio + i;
 
-        if ((i + 1) % freqAumentoRal == 0 && i != 0) {
-            if (tipoAumentoRal) {
-                ral = ral + Math.floor(ral * aumentoRal / 100)
+        if ((i) % freqAumentoReddito == 0 && i != 0) {
+            if (tipoAumentoReddito) {
+                reddito = reddito + Math.floor(reddito * aumentoReddito / 100)
             }
             else {
-                ral = ral + aumentoRal
+                reddito = reddito + aumentoReddito
             }
         }
-
-        const contribuzioneDatoreFp = Math.floor(ral * contribuzioneDatoreFpPerc);
-        const ralConContribuzione = ral + contribuzioneDatoreFp;
-        const tassazioneVersamentiFp = Math.max((15 - Math.max(i + 1 - 15, 0) * 0.3), 9).toFixed(2)
 
         if ((i + 1) % freqAumentoInvestimento == 0 && i != 0) {
             if (tipoAumentoInvestimento) {
-                investimentoAnnuale = investimentoAnnuale + Math.floor(investimentoAnnuale * aumentoInvestimento / 100)
+                investimento = investimento + Math.floor(investimento * aumentoInvestimento / 100)
             }
             else {
-                investimentoAnnuale = investimentoAnnuale + aumentoInvestimento
+                investimento = investimento + aumentoInvestimento
             }
         }
-
-        const investimentoAnnualeConDed = investimentoAnnuale + deduzione_1;
-        const investimentoAnnualeConContribuzione = investimentoAnnuale + contribuzioneDatoreFp;
-        const imposta = calcolaImposta(ralConContribuzione);
-        const ralConContribuzioneDedotta = Math.max(ralConContribuzione - Math.min(investimentoAnnualeConContribuzione, limiteDeduzioneFp), 0);
-        const ralConContribuzioneDedotta_1 = Math.max(ralConContribuzione - Math.min(investimentoAnnualeConContribuzione + deduzione_1, limiteDeduzioneFp), 0);
-        const impostaRidotta = calcolaImposta(ralConContribuzioneDedotta);
-        const impostaRidotta_1 = calcolaImposta(ralConContribuzioneDedotta_1);
-        const investimentoAnnuale_1 = investireDeduzioni ? (investimentoAnnualeConContribuzione + deduzione_1) : investimentoAnnualeConContribuzione;
-        const investimentoEntroDeduzione_1 = Math.min(investimentoAnnuale_1, limiteDeduzioneFp)
-        const investimentoOltreDeduzione_1 = investimentoAnnuale_1 - investimentoEntroDeduzione_1
-        const deduzione = deduzione_1;
-        deduzione_1 = investireDeduzioni ? imposta - impostaRidotta_1 : imposta - impostaRidotta;
-        fpVersamenti = fpVersamenti + investimentoAnnuale_1;
-        fpMontante = fpMontante + Math.floor(fpMontante * rendimentoAnnualeFpPerc) + investimentoAnnuale_1 + Math.floor((investimentoAnnuale_1) * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
-        const fpExit = (fpMontante - Math.floor(fpVersamenti * tassazioneVersamentiFp / 100));
-        fpVersamentiEd = fpVersamentiEd + investimentoEntroDeduzione_1;
-        fpMontanteEd = fpMontanteEd + Math.floor(fpMontanteEd * rendimentoAnnualeFpPerc) + investimentoEntroDeduzione_1 + Math.floor((investimentoEntroDeduzione_1) * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
-        pacVersamentiOd = pacVersamentiOd + investimentoOltreDeduzione_1;
-        pacMontanteOd = pacMontanteOd + Math.floor(pacMontanteOd * rendimentoAnnualePacPerc) + investimentoOltreDeduzione_1 + Math.floor(investimentoOltreDeduzione_1 * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
-        const fpPacExit = (fpMontanteEd - Math.floor(fpVersamentiEd * tassazioneVersamentiFp / 100)) + (pacMontanteOd - Math.floor((pacMontanteOd - pacVersamentiOd) * 0.26));
-
-        pacVersamenti = pacVersamenti + investimentoAnnuale;
-        pacMontante = pacMontante + Math.floor(pacMontante * rendimentoAnnualePacPerc) + investimentoAnnuale + Math.floor(investimentoAnnuale * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
-        const pacExit = pacMontante - Math.floor((pacMontante - pacVersamenti) * 0.26);
         
-        const result =  {
-            "Età": eta + 1,
+        const tassazioneVersamentiFp = Math.max((15 - Math.max(i + 1 - 15, 0) * 0.3), 9).toFixed(2)
+        const contribuzioneDatoreFp = Math.floor(reddito * contribuzioneDatoreFpPerc);
+        const redditoConContribuzione = reddito + contribuzioneDatoreFp;
+        const investimentoConContribuzione = investimento + contribuzioneDatoreFp;
+        const imposta = calcolaImposta(redditoConContribuzione);
+
+        const redditoConContribuzioneDedotta = Math.max(redditoConContribuzione - Math.min(investimentoConContribuzione, limiteDeduzioneFp), 0);
+        const impostaRidotta = calcolaImposta(redditoConContribuzioneDedotta);
+        deduzione = imposta - impostaRidotta;
+
+        const redditoConContribuzioneDedotta_1 = Math.max(redditoConContribuzione - Math.min(investimentoConContribuzione + deduzione_1, limiteDeduzioneFp), 0);
+        const impostaRidotta_1 = calcolaImposta(redditoConContribuzioneDedotta_1);
+        deduzione_1 = investireDeduzioni ? imposta - impostaRidotta_1 : deduzione;       
+        
+        const investimentoDed = investireDeduzioni ? (investimentoConContribuzione + deduzione_1) : investimentoConContribuzione;
+        const investimentoEntroDeduzione = Math.min(investimentoDed, limiteDeduzioneFp)
+        const investimentoOltreDeduzione = investimentoDed - investimentoEntroDeduzione
+
+        //Solo FP
+        fpVersamenti = fpVersamenti + investimentoDed;
+        fpMontante = fpMontante + Math.floor(fpMontante * rendimentoAnnualeFpPerc) + investimentoDed + Math.floor((investimentoDed) * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
+        const fpExit = (fpMontante - Math.floor(fpVersamenti * tassazioneVersamentiFp / 100));
+
+        //Solo PAC
+        pacVersamenti = pacVersamenti + investimento;
+        pacMontante = pacMontante + Math.floor(pacMontante * rendimentoAnnualePacPerc) + investimento + Math.floor(investimento * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
+        const pacExit = pacMontante - Math.floor((pacMontante - pacVersamenti) * 0.26);
+
+        //FP fino a limite deduzioni, poi PAC
+        fpVersamentiDed = fpVersamentiDed + investimentoEntroDeduzione;
+        fpMontanteDed = fpMontanteDed + Math.floor(fpMontanteDed * rendimentoAnnualeFpPerc) + investimentoEntroDeduzione + Math.floor(investimentoEntroDeduzione * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
+        pacVersamentiDed = pacVersamentiDed + investimentoOltreDeduzione;
+        pacMontanteDed = pacMontanteDed + Math.floor(pacMontanteDed * rendimentoAnnualePacPerc) + investimentoOltreDeduzione + Math.floor(investimentoOltreDeduzione * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
+        const fpPacExit = (fpMontanteDed - Math.floor(fpVersamentiDed * tassazioneVersamentiFp / 100)) + (pacMontanteDed - Math.floor((pacMontanteDed - pacVersamentiDed) * 0.26));
+
+        //Rendimento massimo tra FP e PAC
+        interesseCompostoFP = Math.floor(investimentoDed * ((1 + rendimentoAnnualeFpPerc) ** (durata - i)));
+        interesseCompostoPAC = Math.floor(investimento * ((1 + rendimentoAnnualePacPerc) ** (durata - i)));
+        if (interesseCompostoPAC > interesseCompostoFP) {
+            fpVersamentiMax = fpVersamentiMax + 1;
+            fpMontanteMax = fpMontanteMax + Math.floor(fpMontanteMax * rendimentoAnnualeFpPerc) + 1 + Math.floor(1 * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
+            pacVersamentiMax = pacVersamentiMax + investimento - 1;
+            pacMontanteMax = pacMontanteMax + Math.floor(pacMontanteMax * rendimentoAnnualePacPerc) + investimento - 1 + Math.floor(investimento * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
+        } 
+        else {
+            fpVersamentiMax = fpVersamentiMax + investimentoEntroDeduzione;
+            fpMontanteMax = fpMontanteMax + Math.floor(fpMontanteMax * rendimentoAnnualeFpPerc) + investimentoEntroDeduzione + Math.floor(investimentoEntroDeduzione * rendimentoAnnualeFpPerc * fattoreMesiInvestiti);
+            pacVersamentiMax = pacVersamentiMax + investimentoOltreDeduzione;
+            pacMontanteMax = pacMontanteMax + Math.floor(pacMontanteMax * rendimentoAnnualePacPerc) + investimentoOltreDeduzione + Math.floor(investimentoOltreDeduzione * rendimentoAnnualePacPerc * fattoreMesiInvestiti);
+        }
+        const fpPacMaxExit = (fpMontanteMax - Math.floor(fpVersamentiMax * tassazioneVersamentiFp / 100)) + (pacMontanteMax - Math.floor((pacMontanteMax - pacVersamentiMax) * 0.26));
+
+        const result = {
             "Durata": i + 1,
-            "Reddito": ral,
-            "Investimento": investimentoAnnuale,
-            "Deduzione": deduzione,
-            "FP: Exit": fpExit,
-            "FP Mix PAC: Exit": fpPacExit,
-            "PAC: Exit": pacExit
+            "Età": eta + 1,
+            "Reddito": reddito,
+            "Investimento": investimento,
+            "Deduzione": deduzione_1,
+            "FP": fpExit,
+            "PAC": pacExit,
+            "Mix 1": fpPacExit,
+            "Mix 2": fpPacMaxExit
         }
         results.push(result);
 
         const row = {
-            "Età": eta + 1,
             "Durata": i + 1,
-            "Reddito": formatNumberWithCommas(ral),
-            "Investimento": formatNumberWithCommas(investimentoAnnuale),
-            "Deduzione": formatNumberWithCommas(deduzione),
-            "FP: Exit": formatNumberWithCommas(fpExit),
-            "FP Mix PAC: Exit": formatNumberWithCommas(fpPacExit),
-            "PAC: Exit": formatNumberWithCommas(pacExit)
+            "Età": eta + 1,
+            "Reddito": formatNumberWithCommas(reddito),
+            "Investimento": formatNumberWithCommas(investimento),
+            "Deduzione": formatNumberWithCommas(deduzione_1),
+            "FP": formatNumberWithCommas(fpExit),
+            "PAC": formatNumberWithCommas(pacExit),
+            "Mix 1": formatNumberWithCommas(fpPacExit),
+            "Mix 2": formatNumberWithCommas(fpPacMaxExit)
         }
         rows.push(row);
     }
 
     csvContent = convertToCSV(results);
+    createTable(rows)
     createChart(results);
+}
 
+function createTable(rows) {
     const table = document.createElement('table');
     table.id = 'output-table';
 
-    // Create thead element
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
 
-    // Create header cells
     for (const key in rows[0]) {
         const headerCell = document.createElement('th');
         headerCell.textContent = key;
         headerRow.appendChild(headerCell);
     }
 
-    // Append header row to thead
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
-    // Create tbody element
     const tbody = document.createElement('tbody');
 
-    // Populate table rows
     rows.forEach(row => {
         const newRow = document.createElement('tr');
         for (const key in row) {
@@ -159,31 +192,25 @@ function updateResults() {
         tbody.appendChild(newRow);
     });
 
-    // Append tbody to table
     table.appendChild(tbody);
 
-    // Clear any existing content in outputDiv and append the new table
+    outputDiv = document.getElementById('output-div');
     while (outputDiv.firstChild) {
         outputDiv.removeChild(outputDiv.firstChild);
     }
     outputDiv.appendChild(table);
-
-
 }
-
 
 function createChart(rows) {
 
-    // Extract data for plotting
     const durata = rows.map(row => row["Durata"]);
     const fpExit = rows.map(row => row["FP: Exit"]);
     const fpMixPacExit = rows.map(row => row["FP Mix PAC: Exit"]);
     const pacExit = rows.map(row => row["PAC: Exit"]);
 
-    // Create the chart
     const ctx = document.getElementById('myChart').getContext('2d');
 
-    if (myChart){
+    if (myChart) {
         myChart.destroy();
     }
 
@@ -239,10 +266,8 @@ function createChart(rows) {
 }
 
 function downloadCsv() {
-    // Create a Blob from the CSV content
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-    // Create a download link and trigger it
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
@@ -253,35 +278,12 @@ function downloadCsv() {
     document.body.removeChild(link);
 }
 
-
-document.addEventListener('DOMContentLoaded', updateResults);
-inputForm.addEventListener('input', updateResults);
-document.getElementById("downloadCsv").addEventListener("click", downloadCsv)
-
-function calcolaImposta(RAL) {
-    let imposta;
-    if (RAL <= 28000) {
-        imposta = RAL * 0.23;
-    } else if (RAL <= 50000) {
-        imposta = 28000 * 0.23 + (RAL - 28000) * 0.35;
-    } else {
-        imposta = 28000 * 0.23 + 22000 * 0.35 + (RAL - 50000) * 0.43;
-    }
-    return Math.floor(imposta)
-}
-
-function formatNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
-}
-
 function convertToCSV(rows) {
     let str = '';
 
-    // Add CSV headers
     let headers = Object.keys(rows[0]).join(',');
     str += headers + '\r\n';
 
-    // Add CSV rows
     for (let i = 0; i < rows.length; i++) {
         let line = '';
         for (let index in rows[i]) {
@@ -291,6 +293,26 @@ function convertToCSV(rows) {
         str += line + '\r\n';
     }
     return str;
+}
+
+function calcolaImposta(Reddito) {
+    let imposta;
+    if (Reddito <= 28000) {
+        imposta = Reddito * 0.23;
+    } else if (Reddito <= 50000) {
+        imposta = 28000 * 0.23 + (Reddito - 28000) * 0.35;
+    } else {
+        imposta = 28000 * 0.23 + 22000 * 0.35 + (Reddito - 50000) * 0.43;
+    }
+    return Math.floor(imposta)
+}
+
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
+}
+
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
 }
 
 
