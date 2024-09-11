@@ -5,204 +5,245 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piano di Accumulo Capitale vs Fondo Pensione</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="container">
-        <h1>Calcolatore Fondo Pensione vs Piano di Accumulo</h1>
-        <div id="top-div">
-            <div id="input-div">
-                <form id="input-form">
-                    <h2>Parametri </h2>
-                    <div class="input-form-div"to>
-                        <label for="etaInizio">Età:</label>
-                        <input type="number" id="etaInizio" value=30 min="0" required>
-                    </div>
-                    <div class="input-form-div"to>
-                        <label for="durata">Durata:</label>
-                        <input type="number" id="durata" name="durata" value=35 min="0" required>
-                    </div>
-                    <div class="input-form-div"to>
-                        <label for="reddito">Reddito:</label>
-                        <input type="number" id="reddito" name="reddito" value=30000 step=100 min="0" required>
-                    </div>
-                    <div class="input-form-div"to>
-                        <h3>Variazione Reddito:</h3>
-                        <div class="input-aumento">
-                            <label for="tipoAumentoReddito">Tipo:</label>
-                            <div class="radio-group">
-                                <input type="radio" id="tipoAumentoRedditoPerc" name="tipoAumentoReddito" value="%"
-                                    checked>
-                                <label for="tipoAumentoRedditoPerc">%</label>
-                                <input type="radio" id="tipoAumentoRedditoN" name="tipoAumentoReddito" value="€">
-                                <label for="tipoAumentoRedditoN">€</label>
-                            </div>
-                            <label for="freqAumentoReddito">Frequenza:</label>
-                            <input type="number" id="freqAumentoReddito" name="freqAumentoReddito" value=1 step=1
-                                min="0" required>
-                            <label for="aumentoReddito">Valore:</label>
-                            <input type="number" id="aumentoReddito" name="aumentoReddito" value=2 step=0.1 min="0"
-                                required>
+        <div id="title-div">
+            <h2>PIANO DI ACCUMULO vs FONDO PENSIONE</h2>
+        </div>
+        <form id="input-form">
+            <div class="input-form-col">
+                <div class="input-form-input">
+                    <label for="etaInizio">Età</label>
+                    <input type="number" id="etaInizio" value=25 min=0 max=100 required>
+                </div>
+                <div class="input-form-input">
+                    <label for="durata">Durata</label>
+                    <input type="number" id="durata" name="durata" value=35 min=1 max=60 required>
+                </div>
+                <div class="input-form-input">
+                    <label for="frequenzaDiCarico">Freq. di Carico</label>
+                    <select id="frequenzaDiCarico" name="frequenzaDiCarico">
+                        <option value=0.4583>Mensile</option>
+                        <option value=0.4166>Bimestrale</option>
+                        <option value=0.375>Trimestrale</option>
+                        <option value=0.3333>Quadrimestrale</option>
+                        <option value=0.25>Semestrale</option>
+                        <option value=0 selected>Annuale</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-form-col">
+                <div class="input-form-input">
+                    <label for="reddito">Reddito</label>
+                    <input type="number" id="reddito" name="reddito" value=30000 step=100 min="0" required>
+                </div>
+                <div class="input-form-input">
+                    <label>Var. Reddito</label>
+                    <div class="radio-group-div">
+                        <div class="radio-div">
+                            <input type="radio" id="tipoAumentoRedditoPerc" name="tipoAumentoReddito" value="%" checked>
+                            <label for="tipoAumentoRedditoPerc">%</label>
+                        </div>
+                        <div class="radio-div">
+                            <input type="radio" id="tipoAumentoRedditoN" name="tipoAumentoReddito" value="€">
+                            <label for="tipoAumentoRedditoN">€</label>
                         </div>
                     </div>
-                    <div class="input-form-div"to>
-                        <label for="investimento">Investimento:</label>
-                        <input type="number" id="investimento" name="investimento" value=3000 step=100 min="0" required>
+                </div>
+                <div class="input-form-row">
+                    <div class="input-form-input">
+                        <label for="freqAumentoReddito">Freq.</label>
+                        <input type="number" id="freqAumentoReddito" name="freqAumentoReddito" value=1 step=1 min="0"
+                            required>
                     </div>
-                    <div class="input-form-div"to>
-                        <h3>Variazione Investimento:</h3>
-                        <div class="input-aumento">
-                            <label for="tipoAumentoInvestimento">Tipo:</label>
-                            <div class="radio-group">
-                                <input type="radio" id="tipoAumentoInvestimentoPerc" name="tipoAumentoInvestimento"
-                                    value="%" checked>
-                                <label for="tipoAumentoInvestimentoPerc">%</label>
-                                <input type="radio" id="tipoAumentoInvestimentoN" name="tipoAumentoInvestimento"
-                                    value="€">
-                                <label for="tipoAumentoInvestimentoN">€</label>
-                            </div>
-                            <label for="freqAumentoInvestimento">Frequenza:</label>
-                            <input type="number" id="freqAumentoInvestimento" name="freqAumentoInvestimento" value=1
-                                step=1 min="0" required>
-                            <label for="aumentoInvestimento">Valore:</label>
-                            <input type="number" id="aumentoInvestimento" name="aumentoInvestimento" value=2 step=0.1
-                                min="0" required>
+                    <div class="input-form-input">
+                        <label for="aumentoReddito">Valore</label>
+                        <input type="number" id="aumentoReddito" name="aumentoReddito" value=2 step=0.1 min="0"
+                            required>
+                    </div>
+                </div>
+            </div>
+            <div class="input-form-col">
+                <div class="input-form-input">
+                    <label for="investimento">Investimento</label>
+                    <input type="number" id="investimento" name="investimento" value=3000 step=100 min="0" required>
+                </div>
+                <div class="input-form-input">
+                    <label>Var. Investimento</label>
+                    <div class="radio-group-div">
+                        <div class="radio-div">
+                            <input type="radio" id="tipoAumentoInvestimentoPerc" name="tipoAumentoInvestimento"
+                                value="%" checked>
+                            <label for="tipoAumentoInvestimentoPerc">%</label>
+                        </div>
+                        <div class="radio-div">
+                            <input type="radio" id="tipoAumentoInvestimentoN" name="tipoAumentoInvestimento" value="€">
+                            <label for="tipoAumentoInvestimentoN">€</label>
                         </div>
                     </div>
-                    <div class="input-form-div"to>
-                        <label for="frequenzaDiCarico">Frequenza di Carico</label>
-                        <select id="frequenzaDiCarico" name="frequenzaDiCarico">
-                            <option>Mensile</option>
-                            <option>Bimestrale</option>
-                            <option>Trimestrale</option>
-                            <option>Quadrimestrale</option>
-                            <option>Semestrale</option>
-                            <option selected>Annuale</option>
-                        </select>
+                </div>
+                <div class="input-form-row">
+                    <div class="input-form-input">
+                        <label for="freqAumentoInvestimento">Freq.</label>
+                        <input type="number" id="freqAumentoInvestimento" name="freqAumentoInvestimento" value=1 step=1
+                            min="0" required>
                     </div>
-                    <div class="input-form-div"to>
-                        <label for="investireDeduzioni">Investire Deduzioni:</label>
-                        <div class="radio-group">
+                    <div class="input-form-input">
+                        <label for="aumentoInvestimento">Valore</label>
+                        <input type="number" id="aumentoInvestimento" name="aumentoInvestimento" value=2 step=0.1
+                            min="0" required>
+                    </div>
+                </div>
+            </div>
+            <div class="input-form-col">
+                <div class="input-form-input">
+                    <label for="contribuzioneDatoreFpPerc">Contributo Datore %</label>
+                    <input type="number" id="contribuzioneDatoreFpPerc" name="contribuzioneDatoreFpPerc" value=1
+                        step=0.1 min="0" required>
+                </div>
+                <div class="input-form-input">
+                    <label>Investire Deduzioni</label>
+                    <div class="radio-group-div">
+                        <div class="radio-div">
                             <input type="radio" id="investireDeduzioniSi" name="investireDeduzioni" value="Si" checked>
                             <label for="investireDeduzioniSi">Si</label>
+                        </div>
+                        <div class="radio-div">
                             <input type="radio" id="investireDeduzioniNo" name="investireDeduzioni" value="No">
                             <label for="investireDeduzioniNo">No</label>
                         </div>
                     </div>
-                    <div class="input-form-div"to>
-                        <label for="contribuzioneDatoreFpPerc">Contributo Datore FP %:</label>
-                        <input type="number" id="contribuzioneDatoreFpPerc" name="contribuzioneDatoreFpPerc" value=1
-                            step=0.1 min="0" required>
-                    </div>
-                    <div class="input-form-div"to>
-                        <label for="rendimentoAnnualeFpPerc">Rendimento FP %:</label>
-                        <input type="number" id="rendimentoAnnualeFpPerc" name="rendimentoAnnualeFpPerc" value=4
-                            step=0.1 min="0" required>
-                    </div>
-                    <div class="input-form-div"to>
-                        <label for="rendimentoAnnualePacPerc">Rendimento PAC %:</label>
-                        <input type="number" id="rendimentoAnnualePacPerc" name="rendimentoAnnualePacPerc" value=8
-                            step=0.1 min="0" required>
-                    </div>
-                    <input type="button" id="downloadCsv" name="downloadCsv" value="Download CSV">
-                </form>
+                </div>
+                <div class="input-form-input">
+                    <label for="tfr">Scelta TFR</label>
+                    <select id="tfr" name="tfr">
+                        <option>In Azienda</option>
+                        <option>In Fondo Pensione</option>
+                        <option selected>Non Percepito</option>
+                    </select>
+                </div>
             </div>
-            <div id="output-div">
+            <div class="input-form-col">
+                <div class="input-form-input">
+                    <label for="inflazione">Inflazione %</label>
+                    <input type="number" id="inflazione" name="inflazione" value=2 step=0.1 min="0" required>
+                </div>
+                <div class="input-form-input">
+                    <label for="rendimentoAnnualeFpPerc">Rendimento FP %</label>
+                    <input type="number" id="rendimentoAnnualeFpPerc" name="rendimentoAnnualeFpPerc" value=4 step=0.1
+                        min="0" required>
+                </div>
+                <div class="input-form-input">
+                    <label for="rendimentoAnnualePacPerc">Rendimento PAC %</label>
+                    <input type="number" id="rendimentoAnnualePacPerc" name="rendimentoAnnualePacPerc" value=8 step=0.1
+                        min="0" required>
+                </div>
+            </div>
+        </form>
+        <div id="grid-div" class="ag-theme-mycustomtheme">
+        </div>
+        <input type="button" id="download-csv" name="download-csv" value="Download CSV">
+        <div id="chart-wrapper-div">
+            <div id="chart-div">
             </div>
         </div>
-        
         <div id="explain-div">
-            <p><strong>FP: Fondo Pensione</strong></p>
-            <p><strong>PAC: Piano di Accumulo Capitale</strong></p>
-            <p><strong>FP Mix PAC: investimento in FP fino al limite delle deduzioni, oltre in PAC</strong></p>
-            <h2>Note sui Parametri</h2>
-            <p><strong>Età:</strong> L'età alla quale si prevede di iniziare l'investimento, serve solo come
-                riferimento in tabella.
-            </p>
-            <p><strong>Durata:</strong> La durata dell'invesimento, si consiglia una durata minima di dieci
-                anni.</p>
-            <p><strong>Reddito:</strong> Il reddito al momento d'inizio dell'investimento. Si deve indicare il solo
-                reddito deducibile. Serve per calcolare la deduzione fiscale.</p>
-            <p><strong>Variazione Reddito:</strong> Indicare un fattore di variazione del reddito percentuale o
-                numerico e indicare la frequenza.</p>
-            <p><strong>Investimento:</strong> La cifra investita su base annuale al momento dell'inizio
-                dell'investimento.</p>
-            <p><strong>Variazione Investimento:</strong>Indicare un fattore di variazione dell'investimento
-                percentuale o numerico e
-                indicare la frequenza.</p>
-            <p><strong>Frequenza di Carico:</strong> La frequenza dei versamenti incide sul calcolo dei rendimenti.
-                Indicare “Mensile” se il carico avviene l'ultimo giorno di ogni mese, in questo caso, su un
-                dodicesimo dell'investimento si applicano undici dodicesimi del tasso annuale, su un altro
-                dodicesimo dieci dodicesimi del tasso annuale, etc. Se indicato “Annuale”, si considera che il
-                versamento venga fatto al 31 dicembre e non sarà calcolato
-                nessun interesse per quell'anno.</p>
-            <p><strong>Investire Deduzioni:</strong> Indicare se si vogliono investire nell'anno successivo le
-                deduzioni ottenute. Attenzione, senza il reinvestimento delle deduzioni il fondo Pensione diventa
-                molto svantaggioso.</p>
-            <p><strong>Contributo del Datore di Lavoro:</strong> In alcuni casi, il datore di lavoro eroga
-                direttamente sul fondo pensione un contributo pari a una percentuale del reddito. Indicare se
-                presente, altrimenti indicare zero.</p>
-            <p><strong>Rendimento Annuo Storico del Fondo Pensione:</strong> Deve essere recuperato dalle tabelle
-                presenti sul sito COVIP ed è già al netto della tassazione sulle plusvalenze, che nel caso dei fondi
-                pensione avviene con cadenza annua.</p>
-            <p><strong>Rendimento Annuo PAC %:</strong> Utilizziamo come benchmark l'MSCI ALL WORLD INDEX, che negli
-                ultimi 30 anni ha avuto un rendimento medio annuo dell'8.23%. ATTENZIONE: questo valore può variare
-                in base alla vostra strategia d'investimento.</p>
+            <h1>Fondo Pensione e Piano di Accumulo Capitale</h1>
+            <h2>Introduzione</h2>
+            <p>Il <strong>Fondo Pensione (FP)</strong> e il <strong>Piano di Accumulo Capitale (PAC)</strong>
+                rappresentano due strumenti di investimento a lungo termine, con obiettivi e vantaggi differenti. Il
+                <strong>FP Mix PAC</strong> combina i benefici di entrambi, investendo nel fondo pensione fino al limite
+                delle deduzioni fiscali e oltre in un piano di accumulo.</p>
 
-            <h2>Note sui Calcoli</h2>
-            <p><strong>Reddito:</strong> <i>Reddito + Variazione Reddito</i></p>
-            <p><strong>Reddito con Contributo:</strong> <i>Reddito + Contributo Datore</i></p>
-            <p><strong>Investimento:</strong> <i>Investimento + Variazione Investimento</i></p>
-            <p><strong>Investimento con Contributo:</strong> <i>Investimento + Contributo Datore</i></p>
-            <p><strong>Investimento Entro Deduzione:</strong> <i>MIN(Investimento con Contributo, 5164)</i></p>
-            <p><strong>Investimento Oltre Deduzione:</strong> <i>MAX(0, Investimento con Contributo - 5164)</i></p>
-            <p><strong>Reddito con Contributo e Deduzione:</strong> <i>Reddito con Contributo - Investimento Entro
-                    Deduzione</i></p>
-            <p><strong>Irpef:</strong> <i>IMPOSTA(Reddito con Contributo)</i></p>
-            <p><strong>Irpef con Deduzione:</strong> <i>IMPOSTA(Reddito con Contributo e Deduzione)</i></p>
-            <p><strong>Risparmio Irpef:</strong> <i>Irpef - Irpef con Deduzione</i></p>
+            <h2>Parametri di Investimento</h2>
+            <ol>
+                <li><strong>Età</strong>: L'età alla quale si prevede di iniziare l'investimento. Viene utilizzata come
+                    riferimento per la proiezione dei risultati.</li>
+                <li><strong>Durata</strong>: La durata dell'investimento. È consigliata una durata minima di 10 anni per
+                    massimizzare i benefici di entrambi gli strumenti.</li>
+                <li><strong>Reddito</strong>: Si riferisce al reddito deducibile al momento dell'inizio
+                    dell'investimento. Viene utilizzato per calcolare le deduzioni fiscali disponibili.</li>
+                <li><strong>Variazione del Reddito</strong>: Indica un fattore di variazione percentuale o numerico del
+                    reddito, specificando la frequenza con cui questa variazione si applica.</li>
+                <li><strong>Investimento Iniziale</strong>: La cifra investita annualmente all'inizio dell'investimento.
+                </li>
+                <li><strong>Variazione dell'Investimento</strong>: Rappresenta il cambiamento previsto nell'importo
+                    investito, esprimibile come percentuale o valore numerico. Anche in questo caso, è importante
+                    indicare la frequenza di questa variazione.</li>
+                <li><strong>Frequenza di Carico</strong>: La frequenza con cui vengono effettuati i versamenti influisce
+                    sul calcolo dei rendimenti. Se mensile, ogni versamento viene moltiplicato per una frazione del
+                    tasso annuale. Se annuale, il versamento viene considerato come effettuato il 31 dicembre, senza
+                    interessi per quell'anno.</li>
+                <li><strong>Investimento delle Deduzioni</strong>: Indicare se si desidera reinvestire le deduzioni
+                    fiscali ottenute nell'anno successivo. Questo è un aspetto cruciale, poiché il mancato
+                    reinvestimento delle deduzioni può rendere il fondo pensione meno vantaggioso.</li>
+                <li><strong>Contributo del Datore di Lavoro</strong>: In alcuni casi, il datore di lavoro contribuisce
+                    al fondo pensione con una percentuale del reddito del lavoratore. È necessario specificare se questo
+                    contributo è presente.</li>
+                <li><strong>Rendimento Annuo Storico del Fondo Pensione</strong>: Recuperabile dalle tabelle fornite
+                    dalla COVIP (Commissione di Vigilanza sui Fondi Pensione). Questo rendimento è al netto della
+                    tassazione sulle plusvalenze.</li>
+                <li><strong>Rendimento Annuo PAC (%)</strong>: Si utilizza come benchmark l'indice <em>MSCI All World
+                        Index</em>, che ha ottenuto un rendimento medio annuo dell'8,23% negli ultimi 30 anni. Tuttavia,
+                    il rendimento può variare in base alla strategia di investimento scelta.</li>
+            </ol>
 
-            <h2>Note Varie</h2>
-            <p><strong>Componente assicurativa del Fondo Pensioone:</strong> Il Fondo Pensione non è solo uno
-                strumento finanziario, ma include una componente
-                assicurativa che garantisce una rendita fino al decesso del titolare. È importante considerare anche
-                questi aspetti non puramente finanziari quando si si decide se investire in un Fondo Pensione o in
-                un PAC</p>
-            <p><strong>Sgravi Fiscali in Italia:</strong> I Fondi Pensione godono di significativi sgravi fiscali
-                tramite deduzione IRPEF per i lavoratori dipendenti. Questo sgravio può essere applicato
-                direttamente nell'anno corrente tramite il sostituto d'imposta o recuperato nell'anno successivo con
-                la dichiarazione dei redditi. Per semplicità, consideriamo lo sgravio fiscale come liquidato
-                interamente nell'anno successivo ai versamenti.</p>
-            <p><strong>Definizione di Sgravio Fiscale:</strong> Lo sgravio fiscale non rappresenta un rendimento del
-                fondo, ma una riduzione delle uscite (IRPEF), che incrementa la capacità di risparmio. Se
-                reinvestiamo questo sgravio nel fondo, in un PAC, o lo accantoniamo, esso diventa, ai fini
-                dell'analisi, equiparabile a un rendimento del fondo. Se utilizzato per altre spese (domestiche,
-                vacanze, ecc.), resta una semplice riduzione del costo.</p>
-            <p><strong>Contributo del Datore di Lavoro:</strong> Nei fondi pensione chiusi, il contributo del datore
-                di lavoro è equiparabile a un rendimento del fondo.</p>
-            <p><strong>Tassazione Versamenti dei Fondi Pensione:</strong> La deduzione non è una detassazione; la
-                tassazione è posticipata al momento dell'anticipazione o del riscatto. In caso di maturazione della
-                pensione, la tassazione è del 15% per i primi 15 anni, ridotta dello 0.3% ogni anno fino al 9%. In
-                caso di riscatto anticipato, la tassazione può arrivare al 23% a seconda della motivazione.</p>
-            <p><strong>Tassazione Versamenti del PAC:</strong> I versamenti del PAC sono già stati tassati dal
-                momento che hanno costituito reddito. Verranno tassate solo le plusvalenze generate (vedi sotto).
-            </p>
-            <p><strong>Tassazione delle Plusvalenze del Fondo Pensione:</strong> Le plusvalenze del fondo sono
-                tassate annualmente al 20%, mentre quelle derivanti da titoli di Stato e similari sono tassate al
-                12.5%. I rendimenti indicati sul sito COVIP sono al netto di questa tassazione. Essendo difficile
-                ricostruire anno per anno e in base al compartimento al quota di titoli di stato nel fondo pensione,
-                si utilizzerà direttamente il rendimento COVIP indicato.</p>
-            <p><strong>Tassazione delle Plusvalenze del Piano di Accumulo (PAC):</strong> Per il PAC, si calcola
-                l'aliquota sulle plusvalenze al 26%, oltre all'aliquota del 12.5% per la quota di titoli di Stato,
-                definita come parametro.</p>
+            <h2>Risultati</h2>
+            <ul>
+                <li><strong>Deduzione</strong>: La deduzione viene calcolata annualmente. Se reinvestita, ogni anno si
+                    investirà una somma pari all'ammontare dell'investimento iniziale più la deduzione fiscale.</li>
+                <li><strong>Fondo Pensione (FP)</strong>: Il valore del fondo pensione al termine del periodo
+                    d'investimento, al netto della tassazione decrescente sui versamenti.</li>
+                <li><strong>Piano di Accumulo Capitale (PAC)</strong>: Il valore del PAC al termine del periodo
+                    d'investimento, al netto della tassazione sulle plusvalenze.</li>
+                <li><strong>Mix 1</strong>: Strategia in cui si investe nel fondo pensione fino al limite delle
+                    deduzioni fiscali e il surplus viene investito in un PAC.</li>
+                <li><strong>Mix 2</strong>: Strategia che ottimizza l'allocazione degli investimenti basandosi sul
+                    rendimento composto netto di ciascuna opzione (FP o PAC). A breve termine, il fondo pensione risulta
+                    più vantaggioso, mentre a lungo termine il PAC può superarlo in termini di rendimento.</li>
+            </ul>
+
+            <h2>Aspetti Fiscali e Assicurativi</h2>
+            <ul>
+                <li><strong>Componente Assicurativa del Fondo Pensione</strong>: Oltre alla componente finanziaria, il
+                    fondo pensione include un'elemento assicurativo che garantisce una rendita vitalizia al titolare,
+                    fino al decesso.</li>
+                <li><strong>Sgravi Fiscali in Italia</strong>: I fondi pensione godono di significativi sgravi fiscali
+                    grazie alla deduzione IRPEF per i lavoratori dipendenti. Questa deduzione può essere applicata
+                    direttamente nell'anno corrente o recuperata nell'anno successivo attraverso la dichiarazione dei
+                    redditi.</li>
+                <li><strong>Definizione di Sgravio Fiscale</strong>: Lo sgravio fiscale non rappresenta un rendimento
+                    diretto del fondo, ma una riduzione dell'imposta (IRPEF), che aumenta la capacità di risparmio. Se
+                    reinvestito, diventa equiparabile a un rendimento.</li>
+                <li><strong>Contributo del Datore di Lavoro</strong>: Nei fondi pensione chiusi, il contributo del
+                    datore di lavoro può essere considerato un incremento del rendimento effettivo del fondo.</li>
+            </ul>
+
+            <h2>Tassazione</h2>
+            <ul>
+                <li><strong>Tassazione dei Versamenti nel Fondo Pensione</strong>: I versamenti dedotti non sono esenti
+                    da imposte, ma la tassazione è posticipata al momento del riscatto o della pensione. L'aliquota è
+                    del 15%, riducibile fino al 9% dopo 35 anni di partecipazione al fondo. In caso di riscatto
+                    anticipato, l'aliquota può raggiungere il 23%, in base alla motivazione.</li>
+                <li><strong>Tassazione dei Versamenti del PAC</strong>: I versamenti effettuati nel PAC sono già tassati
+                    come reddito. Vengono tassate solo le plusvalenze realizzate, con un'aliquota del 26%, ridotta al
+                    12,5% per i titoli di Stato.</li>
+                <li><strong>Tassazione delle Plusvalenze del Fondo Pensione</strong>: Le plusvalenze del fondo pensione
+                    sono tassate annualmente al 20%, mentre per i titoli di Stato l'aliquota è del 12,5%. I rendimenti
+                    riportati sul sito COVIP sono già al netto di queste imposte.</li>
+                <li><strong>Tassazione delle Plusvalenze del PAC</strong>: Le plusvalenze del PAC sono soggette a
+                    un'aliquota del 26%, ridotta al 12,5% per i titoli di Stato, se presenti nel portafoglio.</li>
+            </ul>
         </div>
-        <div id="chart-div">
-            <canvas id="myChart"></canvas>
-        </div>
+
     </div>
     <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-charts-community/dist/umd/ag-charts-community.js"></script>
 </body>
 
 </html>
