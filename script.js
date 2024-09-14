@@ -157,8 +157,6 @@ function updateResults() {
             "PAC": Math.round(pacExit),
             "Mix-1": Math.round(fpPacMix1Exit),
             "Mix-2": Math.round(fpPacMix2Exit),
-            "intfp": Math.round(interesseCompostoFP),
-            "intpac": Math.round(interesseCompostoPAC)
         }
         results.push(result);
     }
@@ -199,8 +197,6 @@ function createTable(rows) {
                 { field: "PAC", headerName: "PAC Exit", flex: 3, minWidth: 100 },
                 { field: "Mix-1", headerName: "Mix-1 Exit", flex: 3, minWidth: 100 },
                 { field: "Mix-2", headerName: "Mix-2 Exit", flex: 3, minWidth: 100 },
-                { field: "intfp", headerName: "Interesse Composto FP", flex: 3, minWidth: 100 },
-                { field: "intpac", headerName: "Interesse Composto PAC", flex: 3, minWidth: 100 },
             ],
         };
         api = agGrid.createGrid(outputDiv, gridOptions);
