@@ -84,7 +84,7 @@ function updateResults() {
         const redditoConContribuzioneDedottoRic = Math.max(redditoConContribuzione - deduzioneRic, 0);
         const impostaDedottaRic = calcolaImposta(redditoConContribuzioneDedottoRic);
         const risparmioImpostaRic = imposta - impostaDedottaRic;
-        
+
         //const deduzione_1 = Math.min(investimentoConContribuzione + risparmioImposta_1, limiteDeduzioneFp)
         //const redditoConContribuzioneDedotto_1 = Math.max(redditoConContribuzione - deduzione_1, 0);
         //const impostaDedotta_1 = calcolaImposta(redditoConContribuzioneDedotto_1);
@@ -125,7 +125,7 @@ function updateResults() {
 
         avanzo = investimentoEntroDeduzione + contribuzioneDatoreFp + risparmioImposta - investimentoFpEntroDeduzione
         interesseCompostoFP = investimentoFpEntroDeduzione * rendimentoCompostoFPPerc + (investimentoFpEntroDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) + avanzo - (investimentoFpEntroDeduzione * calcolaImpostaFp(durata));
-        
+
         rendimentoCompostoPAC = investimentoEntroDeduzione * rendimentoCompostoPACPerc + (investimentoEntroDeduzione * rendimentoAnnualePacPerc * fattoreFrequenza);
         interesseCompostoPAC = rendimentoCompostoPAC - ((rendimentoCompostoPAC - investimentoEntroDeduzione) * tassazioneRenditePac)
 
@@ -147,9 +147,9 @@ function updateResults() {
             "Anno": anno + 1,
             "Età": eta + 1,
             "Reddito": Math.round(reddito),
-            "Inv": Math.round(investimento),
-            "Risp": Math.round(risparmioImposta),
-            "Cont": Math.round(contribuzioneDatoreFp),
+            "Investimento": Math.round(investimento),
+            "Risparmio Fiscale": Math.round(risparmioImposta),
+            "Contributo Datore": Math.round(contribuzioneDatoreFp),
             "FP": Math.round(fpExit),
             "PAC": Math.round(pacExit),
             "Mix-1": Math.round(fpPacMix1Exit),
@@ -162,7 +162,7 @@ function updateResults() {
 
     const rows = results.map(result => {
         return Object.entries(result).map(([key, value]) => {
-            if (key !== "Durata" && key !== "Anno") {
+            if (key !== "Anno" && key !== "Età") {
                 value = formatMoney(value);
             }
             return [key, value];
@@ -170,8 +170,8 @@ function updateResults() {
     }).map(entryArray => Object.fromEntries(entryArray));
 
     csvContent = convertToCSV(results);
-    createTable(rows)
-    createChart(results);
+    //createTable(rows)
+    createTable2(rows)
 }
 
 let api;
@@ -189,9 +189,9 @@ function createTable(rows) {
                 { field: "Anno", headerName: "Anno", flex: 1, minWidth: 60 },
                 { field: "Età", headerName: "Età", flex: 1, minWidth: 60 },
                 { field: "Reddito", headerName: "Reddito", flex: 3, minWidth: 100 },
-                { field: "Inv", headerName: "Investimento", flex: 3, minWidth: 100 },
-                { field: "Risp", headerName: "Risp. Imposta", flex: 3, minWidth: 100 },
-                { field: "Cont", headerName: "Con. Datore", flex: 3, minWidth: 100 },
+                { field: "Investimento", headerName: "Investimento", flex: 3, minWidth: 100 },
+                { field: "Risparmio Fiscale", headerName: "Risp. Imposta", flex: 3, minWidth: 100 },
+                { field: "Conttributo Datore", headerName: "Con. Datore", flex: 3, minWidth: 100 },
                 { field: "FP", headerName: "FP Exit", flex: 3, minWidth: 100 },
                 { field: "PAC", headerName: "PAC Exit", flex: 3, minWidth: 100 },
                 { field: "Mix-1", headerName: "Mix-1 Exit", flex: 3, minWidth: 100 },
@@ -205,43 +205,43 @@ function createTable(rows) {
     return;
 }
 
-function createChart(rows) {
 
-    chartDiv = document.getElementById('chart-div');
+function createTable2(rows) {
+    const table = document.createElement('table');
+    table.id = 'output-table';
 
-    // Remove all child elements
-    while (chartDiv.firstChild) {
-        chartDiv.removeChild(chartDiv.firstChild);
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    for (const key in rows[0]) {
+        const headerCell = document.createElement('th');
+        headerCell.textContent = key;
+        headerRow.appendChild(headerCell);
     }
 
-    const keysToExtract = ["Anno", "FP", "PAC", "Mix-1", "Mix-2"];
-    const filteredRows = rows.map(result => {
-        let filteredResult = {};
-        keysToExtract.forEach(key => {
-            if (result.hasOwnProperty(key)) {
-                filteredResult[key] = result[key];
-            }
-        });
-        return filteredResult;
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+
+    rows.forEach(row => {
+        const newRow = document.createElement('tr');
+        for (const key in row) {
+            const cell = document.createElement('td');
+            cell.textContent = row[key];
+            newRow.appendChild(cell);
+        }
+        tbody.appendChild(newRow);
     });
 
-    // Chart Options
-    const options = {
-        // Container: HTML Element to hold the chart
-        container: chartDiv,
-        // Data: Data to be displayed in the chart
-        data: filteredRows,
-        // Series: Defines which chart type and data to use
-        series: [
-            { type: 'line', xKey: 'Anno', yKey: 'FP', yName: 'FP' },
-            { type: 'line', xKey: 'Anno', yKey: 'PAC', yName: 'PAC' },
-            { type: 'line', xKey: 'Anno', yKey: 'Mix-1', yName: 'Mix-1' },
-            { type: 'line', xKey: 'Anno', yKey: 'Mix-2', yName: 'Mix-2' }
-        ],
-    };
+    table.appendChild(tbody);
 
-    agCharts.AgCharts.create(options);
+    gridDiv2 = document.getElementById("grid-div2")
+    while (gridDiv2.firstChild) {
+        gridDiv2.removeChild(gridDiv2.firstChild);
+    }
+    gridDiv2.appendChild(table);
 }
+
 
 function convertToCSV(rows) {
     let str = '';

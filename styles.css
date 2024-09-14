@@ -1,9 +1,10 @@
 body {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;    
+    min-width: 350px;
     font-size: 12px;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    font-family:'Trebuchet MS'
 }
 
 #container {
@@ -22,6 +23,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    padding: 10px;
+    gap: 10px;
     width: 100%;
     border: 1px solid #ddd;
     box-sizing: border-box;
@@ -104,18 +108,52 @@ body {
     height: 930px;
 }
 
-#chart-wrapper-div {
+#grid-div2 {
     width: 100%;
-    overflow-x: auto;
-}
-
-#chart-div {
-    padding: 10px;
-    width: 100%;
-    min-width: 1120px;
-    height: 650px;
+    max-height: 700px;
     border: 1px solid #ddd;
     box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+#output-table {
+    width: 100%;
+    min-width: 1200px;
+    table-layout: fixed;
+}
+
+#output-table thead th {
+    font-weight: bold;
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 5px;
+    border: 1px solid #ddd;
+    position: sticky; top: 0; z-index: 1; 
+}
+
+#output-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#output-table tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+#output-table tbody td {
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+#output-table tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+#download-csv{
+    padding: 6px;
+    height: 33px;
+    font-family:'Trebuchet MS'
 }
 
 #explain-div {
