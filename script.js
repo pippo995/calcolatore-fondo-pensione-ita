@@ -124,7 +124,10 @@ function updateResults() {
         console.log(rendimentoCompostoPACPerc)
 
         avanzo = investimentoEntroDeduzione + contribuzioneDatoreFp + risparmioImposta - investimentoFpEntroDeduzione
-        interesseCompostoFP = investimentoFpEntroDeduzione * rendimentoCompostoFPPerc + (investimentoFpEntroDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) + avanzo - (investimentoFpEntroDeduzione * calcolaImpostaFp(durata));
+        interesseCompostoFPFP = investimentoFpEntroDeduzione * rendimentoCompostoFPPerc + (investimentoFpEntroDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) - (investimentoFpEntroDeduzione * calcolaImpostaFp(durata - 1));
+        rendimentoCompostoFPPAC = avanzo * rendimentoCompostoPACPerc + (avanzo * rendimentoAnnualePacPerc * fattoreFrequenza);
+        interesseCompostoFPPAC = rendimentoCompostoFPPAC - ((rendimentoCompostoFPPAC - avanzo) * tassazioneRenditePac)
+        interesseCompostoFP = interesseCompostoFPFP + interesseCompostoFPPAC;
 
         rendimentoCompostoPAC = investimentoEntroDeduzione * rendimentoCompostoPACPerc + (investimentoEntroDeduzione * rendimentoAnnualePacPerc * fattoreFrequenza);
         interesseCompostoPAC = rendimentoCompostoPAC - ((rendimentoCompostoPAC - investimentoEntroDeduzione) * tassazioneRenditePac)
@@ -141,7 +144,7 @@ function updateResults() {
             pacVersamentiMix2 = pacVersamentiMix2 + investimentoFpOltreDeduzione;
             pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + investimentoFpOltreDeduzione * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
         }
-        const fpPacMix2Exit = (fpMontanteMix2 - fpVersamentiMix2 * tassazioneVersamentiFp) + (pacMontanteMix2 - (pacMontanteMix2 - pacVersamentiMix2) * tassazioneRenditePac);
+        const fpPacMix2Exit = (fpMontanteMix2 - fpVersamentiMix2 * calcolaImpostaFp(durata - 1)) + (pacMontanteMix2 - (pacMontanteMix2 - pacVersamentiMix2) * tassazioneRenditePac);
 
         const result = {
             "Anno": anno + 1,
