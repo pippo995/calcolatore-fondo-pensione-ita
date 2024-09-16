@@ -57,12 +57,12 @@
                 <div class="input-form-row">
                     <div class="input-form-input">
                         <label for="freqAumentoReddito">Freq.</label>
-                        <input type="number" id="freqAumentoReddito" name="freqAumentoReddito" value=1 step=1 min="0"
+                        <input type="number" id="freqAumentoReddito" name="freqAumentoReddito" value=3 step=1 min="0"
                             required>
                     </div>
                     <div class="input-form-input">
                         <label for="aumentoReddito">Valore</label>
-                        <input type="number" id="aumentoReddito" name="aumentoReddito" value=1 step=0.1 min="0"
+                        <input type="number" id="aumentoReddito" name="aumentoReddito" value=5 step=0.1 min="0"
                             required>
                     </div>
                 </div>
@@ -89,24 +89,24 @@
                 <div class="input-form-row">
                     <div class="input-form-input">
                         <label for="freqAumentoInvestimento">Freq.</label>
-                        <input type="number" id="freqAumentoInvestimento" name="freqAumentoInvestimento" value=1 step=1
+                        <input type="number" id="freqAumentoInvestimento" name="freqAumentoInvestimento" value=3 step=1
                             min="0" required>
                     </div>
                     <div class="input-form-input">
                         <label for="aumentoInvestimento">Valore</label>
-                        <input type="number" id="aumentoInvestimento" name="aumentoInvestimento" value=1 step=0.1
+                        <input type="number" id="aumentoInvestimento" name="aumentoInvestimento" value=5 step=0.1
                             min="0" required>
                     </div>
                 </div>
             </div>
             <div class="input-form-col">
                 <div class="input-form-input">
-                    <label for="contribuzioneDatoreFpPerc">Contributo Datore %</label>
+                    <label for="contribuzioneDatoreFpPerc">Con. Datore %</label>
                     <input type="number" id="contribuzioneDatoreFpPerc" name="contribuzioneDatoreFpPerc" value=1
                         step=0.1 min="0" required>
                 </div>
                 <div class="input-form-input">
-                    <label for="investireRisparmioFisc">Investire Ris. Fiscale</label>
+                    <label for="investireRisparmioFisc">Investi Ris. Fiscale</label>
                     <select id="investireRisparmioFisc" name="investireRisparmioFisc">
                         <option selected>Anno corrente</option>
                         <option>Anno successivo</option>
@@ -151,121 +151,146 @@
                 strumenti di investimento a lungo termine, ciascuno con caratteristiche e vantaggi distinti. Il Fondo
                 Pensione è progettato per accumulare risparmi destinati alla pensione, offrendo vantaggi fiscali e una
                 crescita graduale del capitale. Il Piano di Accumulo Capitale, invece, consente di accumulare un
-                capitale attraverso versamenti regolari, con l'obiettivo di ottenere rendimenti nel lungo periodo.
-                Per fornire stime precise dei risultati potenziali, è essenziale considerare una serie di variabili
+                capitale attraverso versamenti regolari, con l'obiettivo di ottenere rendimenti nel lungo periodo.</p>
+            <p>Per fornire stime precise dei risultati potenziali, è essenziale considerare una serie di variabili
                 fiscali complesse. Questo calcolatore è stato progettato per integrare tutte queste variabili, offrendo
                 una panoramica dettagliata dei risultati attesi per entrambi gli strumenti. Gli utenti possono inserire
                 i rendimenti sperati e il calcolatore elaborerà le stime tenendo conto delle implicazioni fiscali
-                specifiche.
-                Inoltre, il calcolatore esplora due strategie miste che prevedono un investimento suddiviso tra il Fondo Pensione e il Piano di Accumulo Capitale. L'obiettivo è
-                ottimizzare il rendimento finale, sfruttando i benefici e gestendo i rischi di entrambi gli strumenti
-                per ottenere i migliori risultati possibili.
-                Nelle note del calcolatore, vengono spiegate dettagliatamente la metodologia di calcolo utilizzata e le
+                specifiche.</p>
+            <p>Inoltre, il calcolatore esplora due strategie miste che prevedono un investimento suddiviso tra il Fondo
+                Pensione e il Piano di Accumulo Capitale. L'obiettivo è ottimizzare il rendimento finale, sfruttando i
+                benefici e gestendo i rischi di entrambi gli strumenti per ottenere i migliori risultati possibili.</p>
+            <p>Nelle note del calcolatore, vengono spiegate dettagliatamente la metodologia di calcolo utilizzata e le
                 decisioni adottate per affrontare le complessità fiscali e ottimizzare le stime. Inoltre, sono forniti
                 chiarimenti su come inserire i parametri necessari per ottenere le simulazioni desiderate, garantendo
                 così una comprensione completa del funzionamento del calcolatore e dei criteri impiegati per generare i
                 risultati.</p>
 
             <h2>Parametri</h2>
-            <ul>
-                <li><strong>Età</strong>: L'età alla quale si prevede di iniziare l'investimento. Questo dato è utile
-                    solo come riferimento in tabella. Iniziare a investire il prima possibile può massimizzare i
-                    rendimenti grazie all'effetto dell'interesse composto.</li>
-                <li><strong>Durata</strong>: La durata dell'investimento. È consigliata una durata minima di 10 anni per
-                    massimizzare i benefici di entrambi gli strumenti. Investimenti a lungo termine tendono a ridurre il
-                    rischio e aumentare i rendimenti.</li>
-                <li><strong>Frequenza di Carico</strong>: La frequenza con cui vengono effettuati i versamenti influisce
-                    sul calcolo dei rendimenti. Se mensile, ogni versamento viene moltiplicato per una frazione del
-                    tasso annuale. Se annuale, il versamento viene considerato come effettuato il 31 dicembre, senza
-                    interessi per quell'anno. Versamenti più frequenti possono aumentare i rendimenti grazie all'effetto
-                    dell'interesse composto.</li>
-                <li><strong>Reddito</strong>: Indicare il reddito deducibile al momento dell'inizio dell'investimento.
-                    Questo dato viene utilizzato per calcolare il TFR, le deduzioni fiscali e il contributo del datore
-                    di lavoro.</li>
-                <li><strong>Variazione del Reddito</strong>: Scegliere tra variazione percentuale o numerica del
-                    reddito, specificando la frequenza in anni con cui la variazione avviene e il valore della
-                    variazione.</li>
-                <li><strong>Investimento Iniziale</strong>: La cifra investita annualmente all'inizio dell'investimento.
-                    Un investimento iniziale maggiore può portare a rendimenti più elevati nel lungo termine.</li>
-                <li><strong>Variazione dell'Investimento</strong>: Scegliere tra variazione percentuale o numerica
-                    dell'investimento, specificando la frequenza in anni con cui la variazione avviene e il valore della
-                    variazione.</li>
-                <li><strong>Contributo del Datore di Lavoro</strong>: In alcuni casi, il datore di lavoro contribuisce
-                    al fondo pensione con una percentuale del reddito del lavoratore. È necessario specificare se questo
-                    contributo è presente. Questo contributo può aumentare significativamente il montante finale del
-                    fondo pensione.</li>
-                <li><strong>Investire Risparmio Fisc.</strong>: Indicare se si desidera reinvestire il risparmio fiscale
-                    ottenuto dalle deduzioni. Si può scegliere di investirlo nello stesso anno in cui la deduzione viene
-                    generata o nell'anno successivo. Il risparmio fiscale investito genera a sua volta altro risparmio
-                    fiscale (es. se investo 1000 euro e ottengo 100 euro di risparmio fiscale potrò investire altri 100
-                    euro. Questi 100 euro mi permettono di risparmiare altri 10 euro etc.). Se non si hanno problemi di
-                    liquidità, si consiglia di selezionare "Anno Corrente" e aggiungere al proprio investimento la cifra
-                    indicata nella colonna "Risparmio Fiscale". Il risparmio fiscale (a parte la quota mediata dal
-                    sostituto d'imposta) viene recuperato nell'anno successivo in fase di dichiarazione dei redditi.
-                </li>
-                <li><strong>TFR</strong>: Indicare se è presente il TFR e se viene lasciato in azienda o portato nel
-                    Fondo Pensione. Lasciare il TFR in azienda può essere meno vantaggioso rispetto a investirlo in un
-                    fondo pensione, che può offrire rendimenti più elevati nel lungo termine.</li>
-                <li><strong>Inflazione</strong>: L'inflazione media attesa nel periodo indicato. Si consiglia di
-                    lasciare il valore al 2%, target delle Banche Centrali.</li>
-                <li><strong>Rendimento Annuo Storico del Fondo Pensione</strong>: Recuperabile dalle tabelle fornite
-                    dalla COVIP (Commissione di Vigilanza sui Fondi Pensione). Questo rendimento è da intendersi al
-                    netto della tassazione sulle plusvalenze, come per i rendimenti indicati dalla COVIP.</li>
-                <li><strong>Rendimento Annuo PAC (%)</strong>: Si può utilizzare come benchmark l'indice <em>MSCI All
-                        World Index</em>, che ha ottenuto un rendimento medio annuo dell'8,23% negli ultimi 30 anni.
-                    Tuttavia, il rendimento può variare molto in base alla strategia di investimento scelta e non è in
-                    alcun modo garantito.</li>
-            </ul>
+
+            <p>
+            <h3>Età</h3>L'età alla quale si prevede di iniziare l'investimento. Questo dato è utile
+            solo come riferimento in tabella. Iniziare a investire il prima possibile può massimizzare i
+            rendimenti grazie all'effetto dell'interesse composto.</p>
+            <p>
+            <h3>Durata</h3>La durata dell'investimento. È consigliata una durata minima di 10 anni per
+            massimizzare i benefici di entrambi gli strumenti. Investimenti a lungo termine tendono a ridurre il
+            rischio e aumentare i rendimenti.</p>
+            <p>
+            <h3>Frequenza di Carico</h3>La frequenza con cui vengono effettuati i versamenti influisce
+            sul calcolo dei rendimenti. Se mensile, ogni versamento viene moltiplicato per una frazione del
+            tasso annuale. Se annuale, il versamento viene considerato come effettuato il 31 dicembre, senza
+            interessi per quell'anno. Versamenti più frequenti possono aumentare i rendimenti grazie all'effetto
+            dell'interesse composto.</p>
+            <p>
+            <h3>Reddito</h3>Indicare il reddito deducibile al momento dell'inizio dell'investimento.
+            Questo dato viene utilizzato per calcolare il TFR, le deduzioni fiscali e il contributo del datore
+            di lavoro.</p>
+            <p>
+            <h3>Variazione del Reddito</h3>Scegliere tra variazione percentuale o numerica del
+            reddito, specificando la frequenza in anni con cui la variazione avviene e il valore della
+            variazione.</p>
+            <p>
+            <h3>Investimento Iniziale</h3>La cifra investita annualmente all'inizio dell'investimento.
+            Un investimento iniziale maggiore può portare a rendimenti più elevati nel lungo termine.</p>
+            <p>
+            <h3>Variazione dell'Investimento</h3>Scegliere tra variazione percentuale o numerica
+            dell'investimento, specificando la frequenza in anni con cui la variazione avviene e il valore della
+            variazione.</p>
+            <p>
+            <h3>Contributo del Datore di Lavoro</h3>In alcuni casi, il datore di lavoro contribuisce
+            al fondo pensione con una percentuale del reddito del lavoratore. È necessario specificare se questo
+            contributo è presente. Questo contributo può aumentare significativamente il montante finale del
+            fondo pensione.</p>
+            <p>
+            <h3>Investire Risparmio Fisc.</h3>Indicare se si desidera reinvestire il risparmio fiscale
+            ottenuto dalle deduzioni. Si può scegliere di investirlo nello stesso anno in cui la deduzione viene
+            generata o nell'anno successivo. Il risparmio fiscale investito genera a sua volta altro risparmio
+            fiscale (es. se investo 1000 euro e ottengo 100 euro di risparmio fiscale potrò investire altri 100
+            euro. Questi 100 euro mi permettono di risparmiare altri 10 euro etc.). Se non si hanno problemi di
+            liquidità, si consiglia di selezionare "Anno Corrente" e aggiungere al proprio investimento la cifra
+            indicata nella colonna "Risparmio Fiscale". Il risparmio fiscale (a parte la quota mediata dal
+            sostituto d'imposta) viene recuperato nell'anno successivo in fase di dichiarazione dei redditi.
+            </p>
+            <p>
+            <h3>TFR</h3>Indicare se è presente il TFR e se viene lasciato in azienda o portato nel
+            Fondo Pensione. Lasciare il TFR in azienda può essere meno vantaggioso rispetto a investirlo in un
+            fondo pensione, che può offrire rendimenti più elevati nel lungo termine.</p>
+            <p>
+            <h3>Inflazione</h3>L'inflazione media attesa nel periodo indicato. Si consiglia di
+            lasciare il valore al 2%, target delle Banche Centrali.</p>
+            <p>
+            <h3>Rendimento Annuo Storico del Fondo Pensione</h3>Recuperabile dalle tabelle fornite
+            dalla COVIP (Commissione di Vigilanza sui Fondi Pensione). Questo rendimento è da intendersi al
+            netto della tassazione sulle plusvalenze, come per i rendimenti indicati dalla COVIP.</p>
+            <p>
+            <h3>Rendimento Annuo PAC (%)</h3>Si può utilizzare come benchmark l'indice <em>MSCI All
+                World Index</em>, che ha ottenuto un rendimento medio annuo dell'8,23% negli ultimi 30 anni.
+            Tuttavia, il rendimento può variare molto in base alla strategia di investimento scelta e non è in
+            alcun modo garantito.</p>
+
             <h2>Strategie</h2>
             Il TFR viene in ogni caso allocato secondo la scelta effettuta. Le exit finali di tutte le strategie
             riportano anche i ritorni generati dal TFR in azienda o nel Fondo Pensione, secondo la scelta effettuta.
-            <ul>
-                <li><strong>Strategia FP</strong>: Investimento esclusivo nel fondo pensione fino al limite delle
-                    deduzioni fiscali (5164 euro) e anche oltre, sfruttando al massimo i vantaggi fiscali e il
-                    contributo del datore di lavoro, con l'obiettivo di ottenere una rendita previdenziale a lungo
-                    termine.</li>
-                <li><strong>Strategia PAC</strong>: Investimento esclusivo nel Piano di Accumulo Capitale (PAC), senza
-                    limitazioni fiscali. Questo consente una gestione più flessibile del capitale e una diversificazione
-                    dell'investimento, sebbene senza i benefici fiscali e la contribuzione del datore di lavoro offerti
-                    dal fondo pensione.</li>
-                <li><strong>Strategia Mix-1</strong>: Investimento combinato tra FP e PAC. Si investe nel fondo pensione
-                    fino al limite massimo delle deduzioni fiscali (5164 euro), mentre l'eventuale eccedenza viene
-                    destinata al PAC. Questa strategia permette di ottimizzare i benefici fiscali del fondo pensione e,
-                    al contempo, diversificare l'investimento con il PAC.</li>
-                <li><strong>Strategia Mix-2</strong>: Strategia dinamica in cui ogni anno viene calcolato se l'interesse
-                    composto generato dal fondo pensione sulla quota d'investimento entro il limite di deduzione,
-                    sommato alle deduzioni fiscali e al contributo del datore di lavoro, superi l'interesse composto
-                    ottenuto investendo la stessa somma nel PAC. In base a quale delle due opzioni offra il ritorno più
-                    alto, l'investimento viene allocato di conseguenza, massimizzando così il guadagno finale.</li>
-            </ul>
+
+            <p>
+            <h3>Strategia FP</h3>Investimento esclusivo nel fondo pensione fino al limite delle
+            deduzioni fiscali (5164 euro) e anche oltre, sfruttando al massimo i vantaggi fiscali e il
+            contributo del datore di lavoro, con l'obiettivo di ottenere una rendita previdenziale a lungo
+            termine.</p>
+            <p>
+            <h3>Strategia PAC</h3>Investimento esclusivo nel Piano di Accumulo Capitale (PAC), senza
+            limitazioni fiscali. Questo consente una gestione più flessibile del capitale e una diversificazione
+            dell'investimento, sebbene senza i benefici fiscali e la contribuzione del datore di lavoro offerti
+            dal fondo pensione.</p>
+            <p>
+            <h3>Strategia Mix-1</h3>Investimento combinato tra FP e PAC. Si investe nel fondo pensione
+            fino al limite massimo delle deduzioni fiscali (5164 euro), mentre l'eventuale eccedenza viene
+            destinata al PAC. Questa strategia permette di ottimizzare i benefici fiscali del fondo pensione e,
+            al contempo, diversificare l'investimento con il PAC.</p>
+            <p>
+            <h3>Strategia Mix-2</h3>Strategia dinamica in cui ogni anno viene calcolato se l'interesse
+            composto generato dal fondo pensione sulla quota d'investimento entro il limite di deduzione,
+            sommato alle deduzioni fiscali e al contributo del datore di lavoro, superi l'interesse composto
+            ottenuto investendo la stessa somma nel PAC. In base a quale delle due opzioni offra il ritorno più
+            alto, l'investimento viene allocato di conseguenza, massimizzando così il guadagno finale.</p>
+
             <h2>Note varie sui calcoli</h2>
-            <ul>
-                <li><strong>Tassazione dei Versamenti nel Fondo Pensione</strong>: I versamenti dedotti non sono esenti
-                    da imposte, ma la tassazione è posticipata al momento del riscatto o della pensione. L'aliquota è
-                    del 15%, riducibile fino al 9% dopo 35 anni di partecipazione al fondo. In caso di riscatto
-                    anticipato, l'aliquota può raggiungere il 23%, in base alla motivazione.</li>
-                <li><strong>Tassazione dei Versamenti del PAC</strong>: I versamenti effettuati nel PAC sono già tassati
-                    come reddito. Vengono tassate solo le plusvalenze realizzate, con un'aliquota del 26%, ridotta al
-                    12,5% per i titoli di Stato.</li>
-                <li><strong>Tassazione delle Plusvalenze del Fondo Pensione</strong>: Le plusvalenze del fondo pensione
-                    sono tassate annualmente al 20%, mentre per i titoli di Stato l'aliquota è del 12,5%. I rendimenti
-                    riportati sul sito COVIP sono già al netto di queste imposte.</li>
-                <li><strong>Tassazione delle Plusvalenze del PAC</strong>: Le plusvalenze del PAC sono soggette a
-                    un'aliquota del 26%, ridotta al 12,5% per i titoli di Stato, se presenti nel portafoglio.</li>
-            
-                <li><strong>Componente Assicurativa del Fondo Pensione</strong>: Oltre alla componente finanziaria, il
-                    fondo pensione include un'elemento assicurativo che garantisce una rendita vitalizia al titolare,
-                    fino al decesso.</li>
-                <li><strong>Sgravi Fiscali in Italia</strong>: I fondi pensione godono di significativi sgravi fiscali
-                    grazie alla deduzione IRPEF per i lavoratori dipendenti. Questa deduzione può essere applicata
-                    direttamente nell'anno corrente o recuperata nell'anno successivo attraverso la dichiarazione dei
-                    redditi.</li>
-                <li><strong>Definizione di Sgravio Fiscale</strong>: Lo sgravio fiscale non rappresenta un rendimento
-                    diretto del fondo, ma una riduzione dell'imposta (IRPEF), che aumenta la capacità di risparmio. Se
-                    reinvestito, diventa equiparabile a un rendimento.</li>
-                <li><strong>Contributo del Datore di Lavoro</strong>: Nei fondi pensione chiusi, il contributo del
-                    datore di lavoro può essere considerato un incremento del rendimento effettivo del fondo.</li>
-            </ul>
+
+            <p>
+            <h3>Tassazione dei Versamenti nel Fondo Pensione</h3>I versamenti dedotti non sono esenti
+            da imposte, ma la tassazione è posticipata al momento del riscatto o della pensione. L'aliquota è
+            del 15%, riducibile fino al 9% dopo 35 anni di partecipazione al fondo. In caso di riscatto
+            anticipato, l'aliquota può raggiungere il 23%, in base alla motivazione.</p>
+            <p>
+            <h3>Tassazione dei Versamenti del PAC</h3>I versamenti effettuati nel PAC sono già tassati
+            come reddito. Vengono tassate solo le plusvalenze realizzate, con un'aliquota del 26%, ridotta al
+            12,5% per i titoli di Stato.</p>
+            <p>
+            <h3>Tassazione delle Plusvalenze del Fondo Pensione</h3>Le plusvalenze del fondo pensione
+            sono tassate annualmente al 20%, mentre per i titoli di Stato l'aliquota è del 12,5%. I rendimenti
+            riportati sul sito COVIP sono già al netto di queste imposte.</p>
+            <p>
+            <h3>Tassazione delle Plusvalenze del PAC</h3>Le plusvalenze del PAC sono soggette a
+            un'aliquota del 26%, ridotta al 12,5% per i titoli di Stato, se presenti nel portafoglio.</p>
+
+            <p>
+            <h3>Componente Assicurativa del Fondo Pensione</h3>Oltre alla componente finanziaria, il
+            fondo pensione include un'elemento assicurativo che garantisce una rendita vitalizia al titolare,
+            fino al decesso.</p>
+            <p>
+            <h3>Sgravi Fiscali in Italia</h3>I fondi pensione godono di significativi sgravi fiscali
+            grazie alla deduzione IRPEF per i lavoratori dipendenti. Questa deduzione può essere applicata
+            direttamente nell'anno corrente o recuperata nell'anno successivo attraverso la dichiarazione dei
+            redditi.</p>
+            <p>
+            <h3>Definizione di Sgravio Fiscale</h3>Lo sgravio fiscale non rappresenta un rendimento
+            diretto del fondo, ma una riduzione dell'imposta (IRPEF), che aumenta la capacità di risparmio. Se
+            reinvestito, diventa equiparabile a un rendimento.</p>
+            <p>
+            <h3>Contributo del Datore di Lavoro</h3>Nei fondi pensione chiusi, il contributo del
+            datore di lavoro può essere considerato un incremento del rendimento effettivo del fondo.</p>
+
         </div>
 
     </div>

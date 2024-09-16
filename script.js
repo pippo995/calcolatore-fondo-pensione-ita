@@ -200,8 +200,8 @@ function updateResults() {
             "Reddito": Math.round(reddito),
             "Investimento": Math.round(investimento),
             "TFR": Math.round(tfr),
-            "Risparmio Fiscale": Math.round(risparmioImposta),
-            "Contributo Datore": Math.round(contribuzioneDatoreFp),
+            "Ris. Fiscale": Math.round(risparmioImposta),
+            "Con. Datore": Math.round(contribuzioneDatoreFp),
             "Strategia FP": Math.round(fpExit),
             "Strategia PAC": Math.round(pacExit),
             "Strategia Mix-1": Math.round(fpPacMix1Exit),
@@ -282,10 +282,10 @@ function updateTipoReddito() {
     console.log("fire")
     if (tipoAumentoReddito == "%") {
         aumentoRedditoInput.step = "0.1";
-        aumentoRedditoInput.value = "1";
+        aumentoRedditoInput.value = "5";
     } else if (tipoAumentoReddito == "€") {
         aumentoRedditoInput.step = "100";
-        aumentoRedditoInput.value = "1000";
+        aumentoRedditoInput.value = "5000";
     }
     updateResults()
 }
@@ -295,10 +295,10 @@ function updateTipoInvestimento() {
     const tipoAumentoInvestimento = document.querySelector('input[name="tipoAumentoInvestimento"]:checked').value;
     if (tipoAumentoInvestimento == "%") {
         aumentoInvestimentoInput.step = "0.1";
-        aumentoInvestimentoInput.value = "1";
+        aumentoInvestimentoInput.value = "5";
     } else if (tipoAumentoInvestimento == "€") {
         aumentoInvestimentoInput.step = "100";
-        aumentoInvestimentoInput.value = "100";
+        aumentoInvestimentoInput.value = "500";
     }
     updateResults()
 }
