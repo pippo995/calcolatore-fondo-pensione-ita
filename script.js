@@ -31,11 +31,8 @@ function updateResults() {
     const rendimentoAnnualeFpPerc = parseFloat(document.getElementById('rendimentoAnnualeFpPerc').value) / 100;
     const rendimentoAnnualePacPerc = parseFloat(document.getElementById('rendimentoAnnualePacPerc').value) / 100;
 
-
     let reddito = primoReddito;
     let investimento = primoInvestimento;
-    let tfrInAzienda = 0;
-    let tfrInFp = 0;
 
     let tfrAziendaVersamenti = 0;
     let tfrAziendaMontante = 0;
@@ -88,7 +85,9 @@ function updateResults() {
         const investimentoConContribuzione = investimento + contribuzioneDatoreFp;
         const imposta = calcolaImposta(redditoConContribuzione);
 
-        const tfr = reddito / 13.5 - reddito / 13.5 * 0.005;
+        let tfr = reddito / 13.5 - reddito / 13.5 * 0.005;
+        let tfrInAzienda = 0;
+        let tfrInFp = 0;
         switch (sceltaTfr) {
             case "Azienda":
                 tfrInAzienda = tfr;
@@ -101,6 +100,7 @@ function updateResults() {
             default:
                 tfrInAzienda = 0;
                 tfrInFp = 0;
+                tfr = 0;
         }
 
         //TFR in Azienda
@@ -110,8 +110,11 @@ function updateResults() {
 
         //TFR in FP
         tfrFpVersamenti = tfrFpVersamenti + tfrInFp;
-        tfrFpMontante = tfrFpMontante * (1 + rendimentoAnnualeFpPerc) + tfrInFp * 0.375;
+        tfrFpMontante = tfrFpMontante * (1 + rendimentoAnnualeFpPerc) + tfrInFp * (1 + rendimentoAnnualeFpPerc * 0.375);
         const tfrFpExit = tfrFpMontante - tfrFpVersamenti * calcolaTassazioneFp(anno);
+        console.log(tfrFpVersamenti);
+        console.log(tfrFpMontante);
+        console.log(tfrFpExit)
 
         const tfrExit = tfrAziendaExit + tfrFpExit;
 
@@ -143,6 +146,9 @@ function updateResults() {
                 risparmioImposta = 0;
         }
 
+        const investimentoEntroDeduzione = Math.min(investimento, limiteDeduzioneFp)
+        const investimentoOltreDeduzione = investimento - investimentoEntroDeduzione;
+
         const investimentoFp = investimentoConContribuzione + risparmioImposta;
         const investimentoFpEntroDeduzione = Math.min(investimentoFp, limiteDeduzioneFp)
         const investimentoFpOltreDeduzione = investimentoFp - investimentoFpEntroDeduzione
@@ -170,27 +176,39 @@ function updateResults() {
         rendimentoCompostoFPPerc = (1 + rendimentoAnnualeFpPerc) ** (durata - anno - 1);
         rendimentoCompostoPACPerc = (1 + rendimentoAnnualePacPerc) ** (durata - anno - 1);
 
-        const investimentoEntroDeduzione = Math.min(investimento, limiteDeduzioneFp)
-        avanzo = investimentoEntroDeduzione + contribuzioneDatoreFp + risparmioImposta - investimentoFpEntroDeduzione
-        interesseCompostoFPFP = investimentoFpEntroDeduzione * rendimentoCompostoFPPerc + (investimentoFpEntroDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) - (investimentoFpEntroDeduzione * calcolaTassazioneFp(durata - 1));
-        rendimentoCompostoFPPAC = avanzo * rendimentoCompostoPACPerc + (avanzo * rendimentoAnnualePacPerc * fattoreFrequenza);
-        interesseCompostoFPPAC = rendimentoCompostoFPPAC - ((rendimentoCompostoFPPAC - avanzo) * tassazioneRenditePac)
-        interesseCompostoFP = interesseCompostoFPFP + interesseCompostoFPPAC;
+        const investimentoAvanzo = investimentoEntroDeduzione + contribuzioneDatoreFp + risparmioImposta - investimentoFpEntroDeduzione
+        interesseCompostoFPFPEntro = investimentoFpEntroDeduzione * rendimentoCompostoFPPerc + (investimentoFpEntroDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) - (investimentoFpEntroDeduzione * calcolaTassazioneFp(durata - 1));
+        rendimentoCompostoFPPACEntro = investimentoAvanzo * rendimentoCompostoPACPerc + (investimentoAvanzo * rendimentoAnnualePacPerc * fattoreFrequenza);
+        interesseCompostoFPPACEntro = rendimentoCompostoFPPACEntro - ((rendimentoCompostoFPPACEntro - investimentoAvanzo) * tassazioneRenditePac)
+        interesseCompostoFPEntro = interesseCompostoFPFPEntro + interesseCompostoFPPACEntro;
 
-        rendimentoCompostoPAC = investimentoEntroDeduzione * rendimentoCompostoPACPerc + (investimentoEntroDeduzione * rendimentoAnnualePacPerc * fattoreFrequenza);
-        interesseCompostoPAC = rendimentoCompostoPAC - ((rendimentoCompostoPAC - investimentoEntroDeduzione) * tassazioneRenditePac)
+        rendimentoCompostoPACEntro = investimentoEntroDeduzione * rendimentoCompostoPACPerc + (investimentoEntroDeduzione * rendimentoAnnualePacPerc * fattoreFrequenza);
+        interesseCompostoPACEntro = rendimentoCompostoPACEntro - ((rendimentoCompostoPACEntro - investimentoEntroDeduzione) * tassazioneRenditePac)
 
-        if (interesseCompostoPAC > interesseCompostoFP) {
+        interesseCompostoFPOltre = investimentoFpOltreDeduzione * rendimentoCompostoFPPerc + (investimentoFpOltreDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) - (investimentoFpOltreDeduzione * calcolaTassazioneFp(durata - 1));
+
+        rendimentoCompostoPACOltre = investimentoOltreDeduzione * rendimentoCompostoPACPerc + (investimentoOltreDeduzione * rendimentoAnnualePacPerc * fattoreFrequenza);
+        interesseCompostoPACOltre = rendimentoCompostoPACOltre - ((rendimentoCompostoPACOltre - investimentoOltreDeduzione) * tassazioneRenditePac)
+
+        if (interesseCompostoPACEntro > interesseCompostoFPEntro) {
             fpVersamentiMix2 = fpVersamentiMix2 + 1;
             fpMontanteMix2 = fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + 1 * (1 + rendimentoAnnualeFpPerc * fattoreFrequenza);
             pacVersamentiMix2 = pacVersamentiMix2 + investimento - 1;
             pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + (investimento - 1) * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
         }
         else {
-            fpVersamentiMix2 = fpVersamentiMix2 + investimentoFpEntroDeduzione;
-            fpMontanteMix2 = fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + investimentoFpEntroDeduzione * (1 + rendimentoAnnualeFpPerc * fattoreFrequenza);
-            pacVersamentiMix2 = pacVersamentiMix2 + investimentoFpOltreDeduzione;
-            pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + investimentoFpOltreDeduzione * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
+            if (interesseCompostoPACOltre > interesseCompostoFPOltre) {
+                fpVersamentiMix2 = fpVersamentiMix2 + investimentoFpEntroDeduzione;
+                fpMontanteMix2 = fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + investimentoFpEntroDeduzione * (1 + rendimentoAnnualeFpPerc * fattoreFrequenza);
+                pacVersamentiMix2 = pacVersamentiMix2 + investimentoFpOltreDeduzione;
+                pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + investimentoFpOltreDeduzione * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
+            }
+            else {
+                fpVersamentiMix2 = fpVersamentiMix2 + investimentoFp;
+                fpMontanteMix2 = fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + investimentoFp * (1 + rendimentoAnnualeFpPerc * fattoreFrequenza);
+                pacVersamentiMix2 = pacVersamentiMix2;
+                pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc);
+            }
         }
         const fpPacMix2Exit = (fpMontanteMix2 - fpVersamentiMix2 * calcolaTassazioneFp(durata - 1)) + (pacMontanteMix2 - (pacMontanteMix2 - pacVersamentiMix2) * tassazioneRenditePac) + tfrExit;
 
@@ -204,11 +222,30 @@ function updateResults() {
             "Con. Datore": Math.round(contribuzioneDatoreFp),
             "Strategia FP": Math.round(fpExit),
             "Strategia PAC": Math.round(pacExit),
-            "Strategia Mix-1": Math.round(fpPacMix1Exit),
-            "Strategia Mix-2": Math.round(fpPacMix2Exit),
+            "Strategia Mix1": Math.round(fpPacMix1Exit),
+            "Strategia Mix2": Math.round(fpPacMix2Exit),
         }
         results.push(result);
+
+        const resultFP = {
+            "Anno": anno + 1,
+            "Età": eta + 1,
+            "Reddito": Math.round(reddito),
+            "Investimento": Math.round(investimento),
+            "TFR": Math.round(tfr),
+            "Ris. Fiscale": Math.round(risparmioImposta),
+            "Con. Datore": Math.round(contribuzioneDatoreFp),
+            "Strategia FP": Math.round(fpExit),
+        }
     }
+
+
+
+    csvContent = convertToCSV(results);
+    createTable(results);
+}
+
+function createTable(results) {
 
     const rows = results.map(result => {
         return Object.entries(result).map(([key, value]) => {
@@ -219,11 +256,6 @@ function updateResults() {
         });
     }).map(entryArray => Object.fromEntries(entryArray));
 
-    csvContent = convertToCSV(results);
-    createTable(rows)
-}
-
-function createTable(rows) {
     const table = document.createElement('table');
     table.id = 'output-table';
 
@@ -279,10 +311,9 @@ function convertToCSV(rows) {
 function updateTipoReddito() {
     const aumentoRedditoInput = document.getElementById('aumentoReddito');
     const tipoAumentoReddito = document.querySelector('input[name="tipoAumentoReddito"]:checked').value;
-    console.log("fire")
     if (tipoAumentoReddito == "%") {
         aumentoRedditoInput.step = "0.1";
-        aumentoRedditoInput.value = "5";
+        aumentoRedditoInput.value = "10";
     } else if (tipoAumentoReddito == "€") {
         aumentoRedditoInput.step = "100";
         aumentoRedditoInput.value = "5000";
@@ -295,7 +326,7 @@ function updateTipoInvestimento() {
     const tipoAumentoInvestimento = document.querySelector('input[name="tipoAumentoInvestimento"]:checked').value;
     if (tipoAumentoInvestimento == "%") {
         aumentoInvestimentoInput.step = "0.1";
-        aumentoInvestimentoInput.value = "5";
+        aumentoInvestimentoInput.value = "10";
     } else if (tipoAumentoInvestimento == "€") {
         aumentoInvestimentoInput.step = "100";
         aumentoInvestimentoInput.value = "500";
