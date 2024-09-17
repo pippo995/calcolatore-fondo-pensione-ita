@@ -57,6 +57,10 @@ function updateResults() {
     let pacMontanteMix2 = 0;
 
     const results = [];
+    const entroDeduzioneFP = [];
+    const oltreDeduzioneFP = [];
+    const entroDeduzionePAC = [];
+    const oltreDeduzionePAC = [];
 
     for (let anno = 0; anno < durata; anno++) {
 
@@ -112,10 +116,6 @@ function updateResults() {
         tfrFpVersamenti = tfrFpVersamenti + tfrInFp;
         tfrFpMontante = tfrFpMontante * (1 + rendimentoAnnualeFpPerc) + tfrInFp * (1 + rendimentoAnnualeFpPerc * 0.375);
         const tfrFpExit = tfrFpMontante - tfrFpVersamenti * calcolaTassazioneFp(anno);
-        console.log(tfrFpVersamenti);
-        console.log(tfrFpMontante);
-        console.log(tfrFpExit)
-
         const tfrExit = tfrAziendaExit + tfrFpExit;
 
         const deduzione_0 = Math.min(investimentoConContribuzione, limiteDeduzioneFp)
@@ -185,7 +185,7 @@ function updateResults() {
         rendimentoCompostoPACEntro = investimentoEntroDeduzione * rendimentoCompostoPACPerc + (investimentoEntroDeduzione * rendimentoAnnualePacPerc * fattoreFrequenza);
         interesseCompostoPACEntro = rendimentoCompostoPACEntro - ((rendimentoCompostoPACEntro - investimentoEntroDeduzione) * tassazioneRenditePac)
 
-        interesseCompostoFPOltre = investimentoFpOltreDeduzione * rendimentoCompostoFPPerc + (investimentoFpOltreDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) - (investimentoFpOltreDeduzione * calcolaTassazioneFp(durata - 1));
+        interesseCompostoFPOltre = investimentoOltreDeduzione * rendimentoCompostoFPPerc + (investimentoOltreDeduzione * rendimentoAnnualeFpPerc * fattoreFrequenza) - (investimentoOltreDeduzione * calcolaTassazioneFp(durata - 1));
 
         rendimentoCompostoPACOltre = investimentoOltreDeduzione * rendimentoCompostoPACPerc + (investimentoOltreDeduzione * rendimentoAnnualePacPerc * fattoreFrequenza);
         interesseCompostoPACOltre = rendimentoCompostoPACOltre - ((rendimentoCompostoPACOltre - investimentoOltreDeduzione) * tassazioneRenditePac)
@@ -195,6 +195,10 @@ function updateResults() {
             fpMontanteMix2 = fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + 1 * (1 + rendimentoAnnualeFpPerc * fattoreFrequenza);
             pacVersamentiMix2 = pacVersamentiMix2 + investimento - 1;
             pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + (investimento - 1) * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
+            entroDeduzionePAC.push(anno);
+            if (interesseCompostoPACOltre > 0) {
+                oltreDeduzionePAC.push(anno);
+            }
         }
         else {
             if (interesseCompostoPACOltre > interesseCompostoFPOltre) {
@@ -202,14 +206,22 @@ function updateResults() {
                 fpMontanteMix2 = fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + investimentoFpEntroDeduzione * (1 + rendimentoAnnualeFpPerc * fattoreFrequenza);
                 pacVersamentiMix2 = pacVersamentiMix2 + investimentoFpOltreDeduzione;
                 pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + investimentoFpOltreDeduzione * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
+                entroDeduzioneFP.push(anno);
+                oltreDeduzionePAC.push(anno);
             }
             else {
                 fpVersamentiMix2 = fpVersamentiMix2 + investimentoFp;
                 fpMontanteMix2 = fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + investimentoFp * (1 + rendimentoAnnualeFpPerc * fattoreFrequenza);
                 pacVersamentiMix2 = pacVersamentiMix2;
                 pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc);
+                entroDeduzioneFP.push(anno);
+                if (interesseCompostoPACOltre > 0) {
+                    console.log(interesseCompostoPACOltre)
+                    oltreDeduzioneFP.push(anno);
+                }
             }
         }
+
         const fpPacMix2Exit = (fpMontanteMix2 - fpVersamentiMix2 * calcolaTassazioneFp(durata - 1)) + (pacMontanteMix2 - (pacMontanteMix2 - pacVersamentiMix2) * tassazioneRenditePac) + tfrExit;
 
         const result = {
@@ -222,24 +234,22 @@ function updateResults() {
             "Con. Datore": Math.round(contribuzioneDatoreFp),
             "Strategia FP": Math.round(fpExit),
             "Strategia PAC": Math.round(pacExit),
-            "Strategia Mix1": Math.round(fpPacMix1Exit),
-            "Strategia Mix2": Math.round(fpPacMix2Exit),
+            "Strategia Mix-1": Math.round(fpPacMix1Exit),
+            "Strategia Mix-2": Math.round(fpPacMix2Exit),
         }
         results.push(result);
-
-        const resultFP = {
-            "Anno": anno + 1,
-            "Età": eta + 1,
-            "Reddito": Math.round(reddito),
-            "Investimento": Math.round(investimento),
-            "TFR": Math.round(tfr),
-            "Ris. Fiscale": Math.round(risparmioImposta),
-            "Con. Datore": Math.round(contribuzioneDatoreFp),
-            "Strategia FP": Math.round(fpExit),
-        }
     }
 
 
+    const fpRangesEntro = getRanges(entroDeduzioneFP, 'Fondo Pensione');
+    const pacRangesEntro = getRanges(entroDeduzionePAC, 'PAC');
+    const resultStringEntro = [...pacRangesEntro, ...fpRangesEntro].join(', ');
+    console.log("Per la quota entro deduzione: " + resultStringEntro + ".");
+
+    const fpRangesOltre = getRanges(oltreDeduzioneFP, 'Fondo Pensione');
+    const pacRangesOltre = getRanges(oltreDeduzionePAC, 'PAC');
+    const resultStringOltre = [...pacRangesOltre, ...fpRangesOltre].join(', ');
+    console.log("Per la quota oltre deduzione: " + resultStringOltre + ".");
 
     csvContent = convertToCSV(results);
     createTable(results);
@@ -306,6 +316,25 @@ function convertToCSV(rows) {
         str += line + '\r\n';
     }
     return str;
+}
+
+function getRanges(arr, name) {
+    let ranges = [];
+    let start = arr[0];
+
+    for (let i = 1; i <= arr.length; i++) {
+        if (arr[i] !== arr[i - 1] + 1 || i === arr.length) {
+            let end = arr[i - 1];
+            if (start === end) {
+                ranges.push(`nell'anno ${start} investire in ${name}`);
+            } else {
+                ranges.push(`dall'anno ${start} all'anno ${end} investire in ${name}`);
+            }
+            start = arr[i];
+        }
+    }
+
+    return ranges;
 }
 
 function updateTipoReddito() {

@@ -9,8 +9,21 @@ body {
     color: #333;
 }
 
-h2 {
+h1 {
+    text-align: center;
     margin: 0px;
+}
+
+h2 {
+    text-align: center;
+    margin: 0px;
+    margin-top: 40px;
+}
+
+
+h3 {
+    margin: 0px;
+    margin-bottom: 3px;
 }
 
 #container {
@@ -208,10 +221,6 @@ h2 {
     border: 1px solid #e0e0e0;
     box-sizing: border-box;
     background-color: #f9f9f9;
-}
-
-h3 {
-    margin: 0;
 }
 
 @media (max-width: 1000px) {
