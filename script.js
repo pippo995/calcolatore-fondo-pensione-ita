@@ -34,6 +34,7 @@ function updateResults() {
 
     let reddito = primoReddito;
     let investimento = primoInvestimento;
+    let investimentoEffettivo = primoInvestimento;
     let risparmioImposta_1 = 0;
 
     let tfrAziendaVersamenti = 0;
@@ -144,13 +145,14 @@ function updateResults() {
                 risparmioImposta = risparmioImposta_1;
                 break;
             default:
+                investimentoEffettivo = investimento - risparmioImposta_0;
                 risparmioImposta = 0;
         }
         risparmioImposta_1 = imposta - impostaDedotta_1;
 
 
-        const investimentoEntroDeduzione = Math.min(investimento, limiteDeduzioneFp)
-        const investimentoOltreDeduzione = investimento - investimentoEntroDeduzione;
+        const investimentoEntroDeduzione = Math.min(investimentoEffettivo, limiteDeduzioneFp)
+        const investimentoOltreDeduzione = investimentoEffettivo - investimentoEntroDeduzione;
 
         const investimentoFp = investimentoConContribuzione + risparmioImposta;
         const investimentoFpEntroDeduzione = Math.min(investimentoFp, limiteDeduzioneFp)
@@ -162,8 +164,8 @@ function updateResults() {
         const fpExit = fpMontante - fpVersamenti * calcolaTassazioneFp(anno) + tfrExit;
 
         //Strategia PAC
-        pacVersamenti = pacVersamenti + investimento;
-        pacMontante = pacMontante * (1 + rendimentoAnnualePacPerc) + investimento * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
+        pacVersamenti = pacVersamenti + investimentoEffettivo;
+        pacMontante = pacMontante * (1 + rendimentoAnnualePacPerc) + investimentoEffettivo * (1 + rendimentoAnnualePacPerc * fattoreFrequenza);
         const pacExit = pacMontante - (pacMontante - pacVersamenti) * tassazioneRenditePac + tfrExit;
 
         //Strategia FP fino a limite deduzioni, poi PAC
@@ -230,7 +232,7 @@ function updateResults() {
             "Anno": anno + 1,
             "Età": eta + 1,
             "Reddito": Math.round(reddito),
-            "Investimento": Math.round(investimento),
+            "Investimento": Math.round(investimentoEffettivo),
             "TFR": Math.round(tfr),
             "Ris. Fiscale": Math.round(risparmioImposta),
             "Con. Datore": Math.round(contribuzioneDatoreFp),
