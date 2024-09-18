@@ -34,6 +34,7 @@ function updateResults() {
 
     let reddito = primoReddito;
     let investimento = primoInvestimento;
+    let risparmioImposta_1 = 0;
 
     let tfrAziendaVersamenti = 0;
     let tfrAziendaMontante = 0;
@@ -130,12 +131,10 @@ function updateResults() {
         const impostaDedottaRic = calcolaImposta(redditoConContribuzioneDedottoRic);
         const risparmioImpostaRic = imposta - impostaDedottaRic;
 
-        let risparmioImposta_1 = 0;
         const deduzione_1 = Math.min(investimentoConContribuzione + risparmioImposta_1, limiteDeduzioneFp)
         const redditoConContribuzioneDedotto_1 = Math.max(redditoConContribuzione - deduzione_1, 0);
         const impostaDedotta_1 = calcolaImposta(redditoConContribuzioneDedotto_1);
-        risparmioImposta_1 = imposta - impostaDedotta_1;
-
+        
         let risparmioImposta;
         switch (investireRisparmioFisc) {
             case "Anno corrente":
@@ -147,6 +146,8 @@ function updateResults() {
             default:
                 risparmioImposta = 0;
         }
+        risparmioImposta_1 = imposta - impostaDedotta_1;
+
 
         const investimentoEntroDeduzione = Math.min(investimento, limiteDeduzioneFp)
         const investimentoOltreDeduzione = investimento - investimentoEntroDeduzione;
@@ -410,6 +411,18 @@ function calcolaTassazioneTfr(tfrVersamenti, anno) {
         tassazioneTfr = 0;
     }
     return tassazioneTfr;
+}
+
+function calcolaImposta(reddito) {
+    let imposta;
+    if (reddito <= 28000) {
+        imposta = reddito * 0.23;
+    } else if (reddito <= 50000) {
+        imposta = 28000 * 0.23 + (reddito - 28000) * 0.35;
+    } else {
+        imposta = 28000 * 0.23 + 22000 * 0.35 + (reddito - 50000) * 0.43;
+    }
+    return imposta
 }
 
 function calcolaDeduzioneRicorsiva(reddito, investimento) {
