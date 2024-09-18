@@ -7,6 +7,7 @@ document.getElementById("tipoAumentoInvestimentoPerc").addEventListener("change"
 document.getElementById("tipoAumentoInvestimentoN").addEventListener("change", updateTipoInvestimento);
 
 const limiteDeduzioneFp = 5164;
+const tassazioneInps = 0.0919;
 const tassazioneRenditePac = 0.26
 
 let csvContent = "data:text/csv;charset=utf-8,";
@@ -84,8 +85,9 @@ function updateResults() {
             }
         }
 
+        const redditoImponibile = reddito * (1 - tassazioneInps);
         const contribuzioneDatoreFp = reddito * contribuzioneDatoreFpPerc;
-        const redditoConContribuzione = reddito + contribuzioneDatoreFp;
+        const redditoConContribuzione = redditoImponibile + contribuzioneDatoreFp;
         const investimentoConContribuzione = investimento + contribuzioneDatoreFp;
         const imposta = calcolaImposta(redditoConContribuzione);
 
@@ -216,7 +218,6 @@ function updateResults() {
                 pacMontanteMix2 = pacMontanteMix2 * (1 + rendimentoAnnualePacPerc);
                 entroDeduzioneFP.push(anno);
                 if (interesseCompostoPACOltre > 0) {
-                    console.log(interesseCompostoPACOltre)
                     oltreDeduzioneFP.push(anno);
                 }
             }
@@ -244,12 +245,14 @@ function updateResults() {
     const fpRangesEntro = getRanges(entroDeduzioneFP, 'Fondo Pensione');
     const pacRangesEntro = getRanges(entroDeduzionePAC, 'PAC');
     const resultStringEntro = [...pacRangesEntro, ...fpRangesEntro].join(', ');
-    console.log("Per la quota entro deduzione: " + resultStringEntro + ".");
+    const stringEntro = "Per la quota entro deduzione: " + resultStringEntro + ".";
 
     const fpRangesOltre = getRanges(oltreDeduzioneFP, 'Fondo Pensione');
     const pacRangesOltre = getRanges(oltreDeduzionePAC, 'PAC');
     const resultStringOltre = [...pacRangesOltre, ...fpRangesOltre].join(', ');
-    console.log("Per la quota oltre deduzione: " + resultStringOltre + ".");
+    const stringOltre = "Per la quota oltre deduzione: " + resultStringOltre + ".";
+
+    document.getElementById("strategy-div").textContent = stringEntro + "\n" + stringOltre;
 
     csvContent = convertToCSV(results);
     createTable(results);
