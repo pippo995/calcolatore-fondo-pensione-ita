@@ -153,13 +153,6 @@ function updateResults() {
                 break;
         }
 
-        const detrazioneDipendente_1 = calcolaDetrazioniDipendente(redditoImponibile_1);
-        const deduzione_1 = Math.min(investimento + risparmioImposta_1, limiteDeduzioneFpEffettivo);
-        const redditoDedotto_1 = Math.max(redditoImponibile - deduzione_1, 0);
-        const impostaLordaDedotta_1 = calcolaImposta(redditoDedotto_1);
-        const impostaNettaDedotta_1 = impostaLordaDedotta_1 - detrazioneDipendente_1;
-        risparmioImposta_1 = impostaNetta - impostaNettaDedotta_1;
-
         let risparmioImposta;
         switch (investireRisparmioFisc) {
             case "Anno corrente":
@@ -172,6 +165,13 @@ function updateResults() {
                 risparmioImposta = 0;
                 break;
         }
+
+        const detrazioneDipendente_1 = calcolaDetrazioniDipendente(redditoImponibile_1);
+        const deduzione_1 = Math.min(investimento + risparmioImposta_1, limiteDeduzioneFpEffettivo);
+        const redditoDedotto_1 = Math.max(redditoImponibile - deduzione_1, 0);
+        const impostaLordaDedotta_1 = calcolaImposta(redditoDedotto_1);
+        const impostaNettaDedotta_1 = impostaLordaDedotta_1 - detrazioneDipendente_1;
+        risparmioImposta_1 = impostaNetta - impostaNettaDedotta_1;
 
         // Gestione Investimento
         const investimentoEntroDeduzione = Math.min(investimento, limiteDeduzioneFpEffettivo)
