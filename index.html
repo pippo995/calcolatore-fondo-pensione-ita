@@ -17,10 +17,11 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico?">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div id="container">
         <div id="title-div">
-            <h2>FONDO PENSIONE vs PIANO DI ACCUMULO</h2>
+            <h1>FONDO PENSIONE vs PIANO DI ACCUMULO</h1>
         </div>
         <form id="input-form">
             <div class="input-form-col">
@@ -162,6 +163,24 @@
         </div>
         <div id="strategy-div"></div>
         <div id="explain-div">
+            <h1>Note</h1>
+            <strong>Il lavoro è ancora lontano dall'essere finito, in particolare manca:
+                <ul>
+                    <li>Quota Minima Aderente: al momento non è parametrizzata. In tutte le strategie in cui si investe
+                        in FP fino a saturazione viene sempre considerata raggiunta la quota minima aderente, ergo
+                        ottenuta la quota datoriale.</li>
+                    <li>Gestione separata di quota minima aderente e quota volontaria aderente nel caso la seconda
+                        vegna effettuta tramite bonifico (al momento la quota complessiva dell'invesimento viene
+                        considerata effettuata integralmente tramite bonifico o busta paga, in base alla scelta).</li>
+                    <li>Gestione ricorsiva del risparmio fiscale: al momento il risparmio fiscale ottenuto nell'anno 0
+                        viene investito nell'anno 1 etc., si potrebbe calcolare il risparmio fiscale ottimale anno su
+                        anno (se ottengo deduzione x e la investo genero altro risparmio fiscale y, dovuto al ricalcolo di deduzione e detrazione).</li>
+                    <li>Addizionali regionali e comunali: al momento non gestite, sono state aumentate le prima due
+                        aliquote irpef dell'1% e le ultime due del 2% per ottenere un effetto simile.</li>
+                    <li>Aggiungere la parte di reddito variabile.</li>
+                </ul>
+            Per qualsiasi ulteriore feedback o segnalazione posso essere contattato all'indirizzo pippo995@gmail.com
+            </strong>
             <h2>Introduzione</h2>
             <p>Il <strong>Fondo Pensione (FP)</strong> e il <strong>Piano di Accumulo Capitale (PAC)</strong> sono due
                 strumenti di investimento a lungo termine, ciascuno con caratteristiche e vantaggi distinti. Il Fondo
@@ -189,15 +208,16 @@
             rischio e aumentare i rendimenti.</p>
             <p>
             <h3>Frequenza di Carico</h3>La frequenza con cui vengono effettuati i versamenti influisce
-            sul calcolo dei rendimenti. Se mensile, ogni versamento viene moltiplicato per una frazione del
-            tasso annuale. Se annuale, il versamento viene considerato come effettuato il 31 dicembre, senza
-            interessi per quell'anno. Versamenti più frequenti possono aumentare i rendimenti grazie all'effetto
-            dell'interesse composto.</p>
+            sul calcolo dei rendimenti. Se mensile (viene considerato effettuato l'ultimo giorno del mese) viene
+            moltiplicato per una frazione del tasso annuale. Se annuale, il versamento viene considerato effettuato il
+            31 dicembre, senza
+            interessi per quell'anno.</p>
             <p>
             <p>
             <h3>Modalità di Carico</h3>Le quote volontarie versate tramite bonifico a favore del proprio Fondo Pensione
             beneficeranno del rimborso fiscale relativo all'IRPEF, ma non consentono di ottenere il rimborso dovuto alle
-            maggiori detrazioni spettanti ai dipendenti.
+            maggiori detrazioni spettanti ai dipendenti. Se invece i versamenti avvengono in busta paga il reddito
+            imponibile ai fini delle detrazioni viene decurtato di tali versamenti.
             </p>
             <p>
             <h3>Reddito</h3>Indicare il reddito deducibile al momento dell'inizio dell'investimento.
@@ -220,7 +240,7 @@
             contributo è presente. Questo contributo può aumentare significativamente il montante finale del
             fondo pensione.</p>
             <p>
-            <h3>Investire Ris. Fiscale</h3>Indicare se si desidera reinvestire il risparmio fiscale
+            <h3>Investire Risparmio Fiscale</h3>Indicare se si desidera reinvestire il risparmio fiscale
             ottenuto dalle deduzioni. Si può scegliere di investirlo nello stesso anno in cui la deduzione viene
             generata o nell'anno successivo. Il risparmio fiscale investito genera a sua volta altro risparmio
             fiscale (es. se investo 1000 euro e ottengo 100 euro di risparmio fiscale potrò investire altri 100
@@ -279,49 +299,49 @@
             uscita.</p>
             <p></p>
 
-            <h2>Note sui Calcoli</h2>
-
+            <h2>Calcoli</h2>
+            <p>
             <h3>Temporalità</h3>
-            <p>L'anno 0 non è riportato in tabella perché viene considerato esclusivamente come anno di carico. Se
-                consideriamo il 2024 come primo anno e scegliamo una frequenza di carico annuale, il versamento al Fondo
-                Pensione o al PAC è ipotizzato come effettuato al 31-12-2024. Ad esempio, la riga 30 riporta la
-                situazione dell'investimento al 31 dicembre 2054, considerando il 2024 come anno "0" dell'investimento.
+            L'anno 0 non è riportato in tabella perché viene considerato esclusivamente come anno di carico. Se
+            consideriamo il 2024 come primo anno e scegliamo una frequenza di carico annuale, il versamento al Fondo
+            Pensione o al PAC è ipotizzato come effettuato al 31-12-2024. Ad esempio, la riga 30 riporta la
+            situazione dell'investimento al 31 dicembre 2054, considerando il 2024 come anno "0" dell'investimento.
             </p>
-
+            <p>
             <h3>Tassazione dei Versamenti nel Fondo Pensione</h3>
-            <p>I versamenti dedotti al Fondo Pensione non sono esenti da imposte, ma la tassazione è posticipata al
-                momento del riscatto o della pensione. L'aliquota fiscale è del 15%, riducibile fino al 9% dopo 35 anni
-                di adesione al fondo. In caso di riscatto anticipato, l'aliquota può salire fino al 23%, a seconda della
-                motivazione del riscatto.</p>
-
+            I versamenti dedotti al Fondo Pensione non sono esenti da imposte, ma la tassazione è posticipata al
+            momento del riscatto o della pensione. L'aliquota fiscale è del 15%, riducibile fino al 9% dopo 35 anni
+            di adesione al fondo. In caso di riscatto anticipato, l'aliquota può salire fino al 23%, a seconda della
+            motivazione del riscatto.</p>
+            <p>
             <h3>Tassazione delle Plusvalenze nel Fondo Pensione</h3>
-            <p>Le plusvalenze generate dal Fondo Pensione sono tassate annualmente con un'aliquota del 20%, ridotta al
-                12,5% per i titoli di Stato. I rendimenti indicati sul sito della COVIP sono già al netto di queste
-                imposte.</p>
-
+            Le plusvalenze generate dal Fondo Pensione sono tassate annualmente con un'aliquota del 20%, ridotta al
+            12,5% per i titoli di Stato. I rendimenti indicati sul sito della COVIP sono già al netto di queste
+            imposte.</p>
+            <p>
             <h3>Tassazione dei Versamenti nel PAC</h3>
-            <p>I versamenti effettuati in un Piano di Accumulo Capitale (PAC) sono già tassati come reddito personale.
-                Tuttavia, vengono tassate solo le plusvalenze realizzate, con un'aliquota del 26%, ridotta al 12,5% per
-                le plusvalenze generate da titoli di Stato.</p>
-
+            I versamenti effettuati in un Piano di Accumulo Capitale (PAC) sono già tassati come reddito personale.
+            Tuttavia, vengono tassate solo le plusvalenze realizzate, con un'aliquota del 26%, ridotta al 12,5% per
+            le plusvalenze generate da titoli di Stato.</p>
+            <p>
             <h3>Tassazione delle Plusvalenze nel PAC</h3>
-            <p>Le plusvalenze realizzate con un PAC sono soggette a un'aliquota del 26%, ridotta al 12,5% nel caso in
-                cui il portafoglio includa titoli di Stato.</p>
-
+            Le plusvalenze realizzate con un PAC sono soggette a un'aliquota del 26%, ridotta al 12,5% nel caso in
+            cui il portafoglio includa titoli di Stato.</p>
+            <p>
             <h3>Rivalutazione del TFR in Azienda</h3>
-            <p>Il Trattamento di Fine Rapporto (TFR) viene rivalutato annualmente sulla base del 75% dell'inflazione (in
-                base all'indice dei prezzi al consumo per famiglie di operai e impiegati, calcolato dall'ISTAT), più un
-                tasso fisso dell'1,5%.</p>
-
+            Il Trattamento di Fine Rapporto (TFR) viene rivalutato annualmente sulla base del 75% dell'inflazione (in
+            base all'indice dei prezzi al consumo per famiglie di operai e impiegati, calcolato dall'ISTAT), più un
+            tasso fisso dell'1,5%.</p>
+            <p>
             <h3>Tassazione del TFR in Azienda</h3>
-            <p>Al momento del riscatto, il TFR viene tassato in base alla durata complessiva dell'impiego presso
-                l'azienda. Nel calcolo si ipotizza che il lavoratore non cambi mai azienda. La formula utilizzata è:
-                [totale dei versamenti] * 12 / [numero di anni in azienda], per ottenere il "TFR di Riferimento", sul
-                quale si calcola l'imposta in base alle aliquote IRPEF.</p>
-
+            Al momento del riscatto, il TFR viene tassato in base alla durata complessiva dell'impiego presso
+            l'azienda. Nel calcolo si ipotizza che il lavoratore non cambi mai azienda. La formula utilizzata è:
+            [totale dei versamenti] * 12 / [numero di anni in azienda], per ottenere il "TFR di Riferimento", sul
+            quale si calcola l'imposta in base alle aliquote IRPEF.</p>
+            <p>
             <h3>Componente Assicurativa del Fondo Pensione</h3>
-            <p>Oltre alla componente finanziaria, il Fondo Pensione include una componente assicurativa che garantisce
-                una rendita vitalizia al titolare fino al decesso.</p>
+            Oltre alla componente finanziaria, il Fondo Pensione include una componente assicurativa che garantisce
+            una rendita vitalizia al titolare fino al decesso.</p>
             <p style="text-align: right; margin-top: 50px;">by pippo995@gmail.com</p>
 
         </div>
