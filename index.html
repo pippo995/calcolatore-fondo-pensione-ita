@@ -2,13 +2,21 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0Q3KXK3K5N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-0Q3KXK3K5N');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piano di Accumulo Capitale vs Fondo Pensione</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico?">
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div id="container">
         <div id="title-div">
@@ -17,15 +25,11 @@
         <form id="input-form">
             <div class="input-form-col">
                 <div class="input-form-input">
-                    <label for="etaInizio">Età</label>
-                    <input type="number" id="etaInizio" value=25 min=1 max=100 required>
-                </div>
-                <div class="input-form-input">
                     <label for="durata">Durata</label>
                     <input type="number" id="durata" name="durata" value=35 min=1 max=100 required>
                 </div>
                 <div class="input-form-input">
-                    <label for="frequenzaDiCarico">Freq. di Carico</label>
+                    <label for="frequenzaDiCarico">Frequenza di Carico</label>
                     <select id="frequenzaDiCarico" name="frequenzaDiCarico">
                         <option value=0.4583>Mensile</option>
                         <option value=0.4166>Bimestrale</option>
@@ -35,6 +39,13 @@
                         <option value=0 selected>Annuale</option>
                     </select>
                 </div>
+                <div class="input-form-input">
+                    <label for="quotaEccedente">Modalità di Carico</label>
+                    <select id="quotaEccedente" name="quotaEccedente">
+                        <option selected>Bonifico</option>
+                        <option>Busta Paga</option>
+                    </select>
+                </div>
             </div>
             <div class="input-form-col">
                 <div class="input-form-input">
@@ -42,7 +53,7 @@
                     <input type="number" id="reddito" name="reddito" value=30000 step=100 min="0" required>
                 </div>
                 <div class="input-form-input">
-                    <label>Var. Reddito</label>
+                    <label>Aumento Reddito</label>
                     <div class="radio-group-div">
                         <div class="radio-div">
                             <input type="radio" id="tipoAumentoRedditoPerc" name="tipoAumentoReddito" value="%" checked>
@@ -56,7 +67,7 @@
                 </div>
                 <div class="input-form-row">
                     <div class="input-form-input">
-                        <label for="freqAumentoReddito">Freq.</label>
+                        <label for="freqAumentoReddito">Frequenza</label>
                         <input type="number" id="freqAumentoReddito" name="freqAumentoReddito" value=3 step=1 min="0"
                             required>
                     </div>
@@ -73,7 +84,7 @@
                     <input type="number" id="investimento" name="investimento" value=3000 step=100 min="0" required>
                 </div>
                 <div class="input-form-input">
-                    <label>Var. Investimento</label>
+                    <label>Aumento Investimento</label>
                     <div class="radio-group-div">
                         <div class="radio-div">
                             <input type="radio" id="tipoAumentoInvestimentoPerc" name="tipoAumentoInvestimento"
@@ -88,7 +99,7 @@
                 </div>
                 <div class="input-form-row">
                     <div class="input-form-input">
-                        <label for="freqAumentoInvestimento">Freq.</label>
+                        <label for="freqAumentoInvestimento">Frequenza</label>
                         <input type="number" id="freqAumentoInvestimento" name="freqAumentoInvestimento" value=3 step=1
                             min="0" required>
                     </div>
@@ -100,16 +111,21 @@
                 </div>
             </div>
             <div class="input-form-col">
+                <div class="input-form-input" hidden>
+                    <label for="quotaMinAderentePerc">Quota Minima Aderente %</label>
+                    <input type="number" id="quotaMinAderentePerc" name="quotaMinAderentePerc" value=1 step=0.1 min="0"
+                        required>
+                </div>
                 <div class="input-form-input">
-                    <label for="contribuzioneDatoreFpPerc">Con. Datore %</label>
+                    <label for="contribuzioneDatoreFpPerc">Quota Datore FP %</label>
                     <input type="number" id="contribuzioneDatoreFpPerc" name="contribuzioneDatoreFpPerc" value=1
                         step=0.1 min="0" required>
                 </div>
                 <div class="input-form-input">
-                    <label for="investireRisparmioFisc">Investire Ris. Fiscale</label>
+                    <label for="investireRisparmioFisc">Investire Risparmio Fiscale</label>
                     <select id="investireRisparmioFisc" name="investireRisparmioFisc">
-                        <option selected>Anno corrente</option>
-                        <option>Anno successivo</option>
+                        <option hidden>Anno corrente</option>
+                        <option selected>Anno successivo</option>
                         <option>No</option>
                     </select>
                 </div>
@@ -117,34 +133,34 @@
                     <label for="tfr">Investire TFR</label>
                     <select id="tfr" name="tfr">
                         <option>Azienda</option>
-                        <option>Fondo Pensione</option>
-                        <option selected>No</option>
+                        <option selected>Fondo Pensione</option>
+                        <option>No</option>
                     </select>
                 </div>
             </div>
             <div class="input-form-col">
                 <div class="input-form-input">
-                    <label for="inflazione">Inflazione %</label>
+                    <label for="inflazione">Indice FOI %</label>
                     <input type="number" id="inflazione" name="inflazione" value=2 step=0.1 min="0" required>
                 </div>
                 <div class="input-form-input">
-                    <label for="rendimentoAnnualeFpPerc">Rendimento FP %</label>
+                    <label for="rendimentoAnnualeFpPerc">Rendimento [Netto] FP %</label>
                     <input type="number" id="rendimentoAnnualeFpPerc" name="rendimentoAnnualeFpPerc" value=4 step=0.1
                         min="0" required>
                 </div>
                 <div class="input-form-input">
-                    <label for="rendimentoAnnualePacPerc">Rendimento PAC %</label>
+                    <label for="rendimentoAnnualePacPerc">Rendimento [Lordo] PAC %</label>
                     <input type="number" id="rendimentoAnnualePacPerc" name="rendimentoAnnualePacPerc" value=8 step=0.1
                         min="0" required>
                 </div>
             </div>
         </form>
-        <div id="grid-div">
-        </div>
-        <div id="strategy-div"></div>
         <div id="download-div">
             <input type="button" id="download-csv" name="download-csv" value="Download CSV">
         </div>
+        <div id="grid-div">
+        </div>
+        <div id="strategy-div"></div>
         <div id="explain-div">
             <h2>Introduzione</h2>
             <p>Il <strong>Fondo Pensione (FP)</strong> e il <strong>Piano di Accumulo Capitale (PAC)</strong> sono due
@@ -168,10 +184,6 @@
             <p></p>
             <h2>Parametri</h2>
             <p>
-            <h3>Età</h3>L'età alla quale si prevede di iniziare l'investimento. Questo dato è utile
-            solo come riferimento in tabella. Iniziare a investire il prima possibile può massimizzare i
-            rendimenti grazie all'effetto dell'interesse composto.</p>
-            <p>
             <h3>Durata</h3>La durata dell'investimento. È consigliata una durata minima di 10 anni per
             massimizzare i benefici di entrambi gli strumenti. Investimenti a lungo termine tendono a ridurre il
             rischio e aumentare i rendimenti.</p>
@@ -181,6 +193,12 @@
             tasso annuale. Se annuale, il versamento viene considerato come effettuato il 31 dicembre, senza
             interessi per quell'anno. Versamenti più frequenti possono aumentare i rendimenti grazie all'effetto
             dell'interesse composto.</p>
+            <p>
+            <p>
+            <h3>Modalità di Carico</h3>Le quote volontarie versate tramite bonifico a favore del proprio Fondo Pensione
+            beneficeranno del rimborso fiscale relativo all'IRPEF, ma non consentono di ottenere il rimborso dovuto alle
+            maggiori detrazioni spettanti ai dipendenti.
+            </p>
             <p>
             <h3>Reddito</h3>Indicare il reddito deducibile al momento dell'inizio dell'investimento.
             Questo dato viene utilizzato per calcolare il TFR, le deduzioni fiscali e il contributo del datore
@@ -232,7 +250,8 @@
             <h2>Strategie</h2>
 
             <p>
-            <h3>Nota su TFR</h3>Il TFR viene in ogni caso allocato secondo la scelta effettuta. Le exit finali di tutte le
+            <h3>Nota su TFR</h3>Il TFR viene in ogni caso allocato secondo la scelta effettuta. Le exit finali di tutte
+            le
             strategie
             riportano anche i ritorni generati dal TFR in azienda o nel Fondo Pensione, secondo la scelta effettuta.</p>
             <p>
