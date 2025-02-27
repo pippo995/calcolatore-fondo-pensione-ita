@@ -1,288 +1,948 @@
+:root {
+    /* Palette di colori - Stile Finanziario */
+    --primary-color: #14506C;      /* Blu navy professionale */
+    --primary-dark: #0D3347;       /* Blu navy scuro */
+    --primary-light: #E5EFF5;      /* Blu chiaro sottile */
+    
+    --secondary-color: #2E5941;    /* Verde finanziario */
+    --secondary-light: #E8F0EC;    /* Verde chiaro subtile */
+    
+    --accent-color: #475569;       /* Grigio slate */
+    --accent-light: #F1F3F5;
+    
+    /* Colori di stato */
+    --success-color: #22863A;      /* Verde corporate */
+    --warning-color: #E67E22;      /* Arancione moderato */
+    --danger-color: #D0021B;       /* Rosso business */
+    
+    /* Colori neutrali */
+    --white: #FFFFFF;
+    --light-color: #F8FAFC;
+    --light-gray: #E9EFF4;
+    --medium-gray: #CFD7DF;
+    --dark-gray: #384052;
+    --dark-color: #1F2937;
+    --text-color: #1E293B;
+    --text-light: #64748B;
+    --border-color: #CBD5E1;
+    
+    /* Ombre - minime e discrete per stile squadrato */
+    --shadow-sm: 0 1px 1px rgba(0, 0, 0, 0.03);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    /* Border radius - squadrato */
+    --border-radius-sm: 2px;
+    --border-radius: 3px;
+    --border-radius-lg: 4px;
+    
+    /* Transizioni - precise */
+    --transition: all 0.15s ease-in-out;
+    
+    /* Font sizes */
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-md: 1rem;       /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    
+    /* Layout */
+    --max-width: 1280px;
+    --sidebar-width: 360px;
+    
+    /* Font families - squadrati e professionali */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-serif: 'IBM Plex Serif', Georgia, Times, serif;
+    --font-mono: 'IBM Plex Mono', Consolas, monospace;
+}
+
+/* Reset e stili di base */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
 body {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    font-size: var(--font-size-md);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+/* Header stile finanziario */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1.25rem 0;
+    border-bottom: 2px solid var(--primary-dark);
+    position: relative;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
     justify-content: center;
-    min-width: 300px;
-    font-size: 13px;
-    font-family: monospace;
-    background-color: #fafafa;
-    color: #333;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    width: 3rem;
+    height: 3rem;
+    background-color: white;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.25rem;
+    box-shadow: var(--shadow-sm);
 }
 
 h1 {
-    font-size: 30px;
-    text-align: center;
-    margin: 0px;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
 }
 
-h2 {
-    text-align: center;
-    margin: 0px;
-    margin-top: 30px;
+.subheader {
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+    margin-top: 0.25rem;
 }
 
-
-h3 {
-    text-align: left;
-    margin: 0px;
-}
-
-#container {
+/* Layout principale */
+.page-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex: 1;
+    position: relative;
+    transition: var(--transition);
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    padding: 2rem 1.5rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
     width: 100%;
-    max-width: 1500px;
-    gap: 10px;
-    padding: 15px;
-    border: 1px solid #e0e0e0;
-    background-color: #fff;
-    box-shadow: none;
-    box-sizing: border-box;
 }
 
-#title-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 5px;
-    gap: 5px;
-    width: 100%;
-    border: none;
-    box-sizing: border-box;
-    color: #1a1a1a;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-#input-form {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 20px;
-    gap: 20px;
-    width: 100%;
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-}
-
-.input-form-col {
-    flex: 1 1 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.input-form-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    gap: 5px;
-}
-
-.input-form-input {
-    align-items: center;
-    width: 100%;
-    height: 43px;
-}
-
-#input-form label {
-    font-weight: bold;
-    color: #333;
-}
-
-#input-form input[type="number"] {
-    padding: 6px;
-    width: 100%;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-    font-family: monospace;
-}
-
-#input-form select {
-    padding: 6px;
-    width: 100%;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-    font-family: monospace;
-}
-
-#input-form input[type="number"]:focus,
-#input-form select:focus {
-    border-color: #3f3f3f;
-    outline: none;
-}
-
-#input-form input[type="radio"] {
-    margin-top: -1px;
-}
-
-.radio-group-div {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    gap: 5px;
-}
-
-.radio-div {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: center;
-    gap: 2px;
-    height: 29px;
-}
-
-#grid-div {
-    width: 100%;
-    max-height: 650px;
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    overflow-x: auto;
-    overflow-y: auto;
-    background-color: #fff;
-}
-
-#output-table {
-    width: 100%;
-    min-width: 1200px;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-
-#output-table thead th {
-    font-weight: bold;
-    background-color: #f2f2f2;
-    color: #333;
-    padding: 7px;
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    position: sticky;
+/* SIDEBAR FINANZIARIA */
+/* Overlay che copre tutto lo schermo quando la sidebar è aperta */
+.sidebar-overlay {
+    position: fixed;
     top: 0;
-    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
 }
 
-#output-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+.sidebar-overlay.active {
+    display: block;
 }
 
-#output-table tbody tr:nth-child(odd) {
+/* Sidebar principale - fissa sullo schermo */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 360px; /* Larghezza fissa per desktop */
+    max-width: 90%; /* Mai più largo del 90% dello schermo per mobile */
     background-color: #fff;
-}
-
-#output-table tbody td {
-    text-align: center;
-    padding: 5px;
-    border: 1px solid #e0e0e0;
-}
-
-#output-table tbody tr:hover {
-    background-color: #f2f2f2;
-    transition: background-color 0.2s ease;
-}
-
-#download-div {
+    z-index: 1000;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%); /* Inizialmente fuori dallo schermo */
+    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Nasconde lo scrolling overflow */
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar.active {
+    transform: translateX(0);
+}
+
+/* Header della sidebar */
+.sidebar-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0; /* Non si contrae */
+    border-bottom: 2px solid var(--primary-dark);
+}
+
+.close-sidebar {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.close-sidebar:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Contenuto principale della sidebar con scrolling */
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto; /* Permette lo scrolling */
+    padding: 0;
+}
+
+/* Sezioni con un design più squadrato */
+.section {
+    margin: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.section-header {
+    padding: 12px 16px;
+    background-color: var(--light-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary-color);
+}
+
+.section-title {
+    font-weight: 500;
+    color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-icon {
+    color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.section.collapsed .section-icon {
+    transform: rotate(-90deg);
+}
+
+/* Contenuto delle sezioni */
+.section-content {
+    padding: 16px;
+    background-color: white;
+    transition: max-height 0.3s ease;
+    max-height: 1000px;
+    overflow: hidden;
+}
+
+.section.collapsed .section-content {
+    max-height: 0;
+    padding: 0 16px;
+}
+
+/* LAYOUT VERTICALE FINANZIARIO */
+.input-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0;
     width: 100%;
 }
 
-#download-csv {
-    padding: 6px;
-    height: 33px;
-    background-color: #d7d7d7;
-    width: 100px;
-    color: #000000;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-family: 'Trebuchet MS', sans-serif;
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
+.input-col {
+    width: 100%;
+    padding: 0;
 }
 
-#download-csv:hover {
-    background-color: #c0c0c0;
+/* Miglioramento dell'allineamento nei form */
+.form-group {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--dark-color);
+    font-size: var(--font-size-sm);
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-md);
+    height: 40px;
+    transition: border-color 0.2s;
+    background-color: var(--white);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: none;
+    border-width: 2px;
+}
+
+/* Gruppo Radio verticale */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+/* Tooltip posizionamento corretto */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 2px;
+    font-size: 10px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 260px;
+    background-color: var(--dark-color);
+    color: white;
+    text-align: left;
+    border-radius: var(--border-radius);
+    padding: 10px 12px;
+    position: absolute;
+    z-index: 1;
+    bottom: auto;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-90%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    bottom: auto;
+    top: -10px;
+    left: 80%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent var(--dark-color) transparent;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+/* Gestire correttamente i selettori */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231F2937' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 30px;
+}
+
+/* Pulsante Toggle Sidebar - stile squadrato */
+.toggle-sidebar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toggle-sidebar:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Action buttons */
+.button-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Quick controls */
+.quick-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-left: auto;
+}
+
+.quick-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.quick-control label {
+    font-weight: 500;
+    color: var(--dark-color);
+    font-size: var(--font-size-md);
+    white-space: nowrap;
+}
+
+.quick-control .form-control {
+    width: 5rem;
+    height: 2.5rem;
+    font-size: var(--font-size-md);
+}
+
+/* Cards squadrate stile finanziario */
+.card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    font-size: var(--font-size-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 2px solid var(--primary-dark);
+}
+
+.card-header i {
+    font-size: 1.25rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Buttons squadrati */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    font-size: var(--font-size-md);
+    line-height: 1.5;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    cursor: pointer;
+    gap: 0.625rem;
+}
+
+.btn-primary {
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+    color: white;
+    background-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    background-color: #1E3C2C; /* Versione più scura */
+}
+
+/* Strategy section */
+.strategy-explanation {
+    font-size: var(--font-size-md);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    padding: 1rem 1.25rem;
+    background-color: var(--primary-light);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--primary-color);
 }
 
 #strategy-div {
+    padding: 1.25rem;
+    margin: 0.75rem 0;
+    background-color: var(--light-color);
+    font-weight: 400;
+    font-size: var(--font-size-md);
+    border-radius: var(--border-radius);
+    line-height: 1.7;
+    border: 1px solid var(--border-color);
+}
+
+/* Table squadrata */
+.table-container {
+    overflow-x: auto;
     width: 100%;
-    padding: 50px;
-    font-size: 13px;
-    line-height: 1.5;
-    color: #4a4a4a;
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: white;
+    margin-bottom: 1.25rem;
 }
 
-#explain-div {
+table {
     width: 100%;
-    padding: 50px;
-    font-size: 13px;
-    line-height: 1.5;
-    color: #4a4a4a;
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-mono);
 }
 
-@media (max-width: 1200px) {
-    #input-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        max-width: 500px;
-        padding: 5px;
-        gap: 5px;
-        border: 1px solid #e0e0e0;
-        box-sizing: border-box;
-    }
-
-    .input-form-col {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        padding: 5px;
-        gap: 10px;
-        box-sizing: border-box;
-    }
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: right;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    white-space: nowrap;
+    width: calc((100% - 120px) / (var(--total-columns, 10) - 1)); /* Tutte le colonne uguali tranne la prima */
 }
 
+td {
+    font-feature-settings: "tnum";  /* Numeri tabulari per allineamento */
+    font-variant-numeric: tabular-nums;
+}
+
+th:last-child, td:last-child {
+    border-right: none;
+}
+
+th:first-child, td:first-child {
+    text-align: left;
+    padding-left: 1.25rem;
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 10;
+    border-right: 1px solid var(--border-color);
+    width: 120px; /* Larghezza fissa per la colonna "Anno" */
+}
+
+th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+th:first-child {
+    background-color: var(--primary-color);
+}
+
+tr:nth-child(even) {
+    background-color: var(--light-color);
+}
+
+tr:nth-child(even) td:first-child {
+    background-color: var(--light-color);
+}
+
+tr:hover {
+    background-color: var(--primary-light);
+}
+
+tr:hover td:first-child {
+    background-color: var(--primary-light);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 1.25rem 0;
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+    background-color: white;
+    border-top: 1px solid var(--border-color);
+    width: 100%;
+    margin-top: auto;
+}
+
+/* Badge stile finanziario */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 0.625rem;
+}
+
+.badge-primary {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+.badge-success {
+    background-color: #E6F4EA;
+    color: #276749;
+}
+
+/* Loading indicatori */
+.loading-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    margin: 0 0.188rem;
+}
+
+/* Beta notification */
+.beta-notification {
+    background-color: var(--warning-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.beta-notification i {
+    margin-right: 0.5rem;
+}
+
+/* Documentation section */
+.docs-section {
+    margin-top: 1.875rem;
+    margin-bottom: 3.125rem;
+    font-size: var(--font-size-md);
+    line-height: 1.7;
+}
+
+.docs-section h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.625rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.docs-section h2:first-child {
+    margin-top: 0;
+}
+
+.docs-section h3 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin: 1.5rem 0 1rem;
+}
+
+.docs-section p {
+    margin-bottom: 1.125rem;
+}
+
+.docs-section ul, .docs-section ol {
+    margin-bottom: 1.125rem;
+    padding-left: 1.5rem;
+}
+
+.docs-section li {
+    margin-bottom: 0.625rem;
+}
+
+.docs-section strong {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.docs-section em {
+    color: var(--primary-dark);
+    font-style: italic;
+}
+
+/* Nav documentazione che scorre con la pagina */
+.docs-nav {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    top: 20px;
+    z-index: 90;
+    max-height: calc(100vh - 40px); /* Altezza massima per evitare che esca dallo schermo */
+    overflow-y: auto; /* Permette lo scrolling se il menu è troppo lungo */
+}
+
+.docs-nav-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: var(--font-size-lg);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.docs-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.docs-nav li {
+    margin-bottom: 0.5rem;
+}
+
+.docs-nav a {
+    color: var(--primary-color);
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    font-weight: 500;
+    border-left: 2px solid transparent;
+}
+
+.docs-nav a:hover, .docs-nav a.active {
+    background-color: var(--primary-light);
+    border-left-color: var(--primary-color);
+}
+
+/* Go to top button stile finanziario */
+.go-to-top {
+    position: fixed;
+    bottom: 1.875rem;
+    right: 1.875rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 100;
+    border: none;
+}
+
+.go-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.go-to-top:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Tabs stile finanziario */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    user-select: none;
+    background-color: white;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    overflow: hidden;
+}
+
+.tab {
+    padding: 0.875rem 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.tab:hover:not(.active) {
+    background-color: var(--light-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
-    #input-form {
-        display: flex;
+    .quick-controls {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        margin-left: 0;
         width: 100%;
-        max-width: 500px;
-        padding: 5px;
-        gap: 5px;
-        border: 1px solid #e0e0e0;
-        box-sizing: border-box;
     }
 
-    .input-form-col {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .quick-control {
         width: 100%;
-        padding: 5px;
-        gap: 10px;
-        box-sizing: border-box;
     }
 
-    #explain-div {
-        padding: 20px;
+    .quick-control .form-control {
+        width: 100%;
+    }
+
+    .card-header {
+        padding: 0.875rem 1.125rem;
+    }
+    
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn {
+        width: 100%; /* Bottoni a tutta larghezza */
+    }
+    
+    th, td {
+        padding: 0.625rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .main-content {
+        padding: 1.25rem 1rem;
+    }
+
+    .tooltip-text {
+        width: 240px;
+        left: auto;
+        right: 0;
+        transform: none;
+    }
+
+    .tooltip-text::after {
+        left: auto;
+        right: 10px;
+    }
+
+    .tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .tab {
+        padding: 0.75rem 1rem;
+    }
+    
+    .go-to-top {
+        width: 2.5rem;
+        height: 2.5rem;
+        bottom: 1.25rem;
+        right: 1.25rem;
     }
 }

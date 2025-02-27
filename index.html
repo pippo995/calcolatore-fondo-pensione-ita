@@ -1,354 +1,612 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="it">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0Q3KXK3K5N"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-0Q3KXK3K5N');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piano di Accumulo Capitale vs Fondo Pensione</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.png"> 
+    <title>Calcolatore Rendimenti Fondo Pensione</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap">
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div id="container">
-        <div id="title-div">
-            <h1>FONDO PENSIONE vs PIANO DI ACCUMULO</h1>
-        </div>
-        <form id="input-form">
-            <div class="input-form-col">
-                <div class="input-form-input">
-                    <label for="durata">Durata</label>
-                    <input type="number" id="durata" name="durata" value=35 min=1 max=100 required>
-                </div>
-                <div class="input-form-input">
-                    <label for="frequenzaDiCarico">Frequenza di Carico</label>
-                    <select id="frequenzaDiCarico" name="frequenzaDiCarico">
-                        <option value=0.4583>Mensile</option>
-                        <option value=0.4166>Bimestrale</option>
-                        <option value=0.375>Trimestrale</option>
-                        <option value=0.3333>Quadrimestrale</option>
-                        <option value=0.25>Semestrale</option>
-                        <option value=0 selected>Annuale</option>
-                    </select>
-                </div>
-                <div class="input-form-input">
-                    <label for="quotaEccedente">Modalità di Carico</label>
-                    <select id="quotaEccedente" name="quotaEccedente">
-                        <option selected>Bonifico</option>
-                        <option>Busta Paga</option>
-                    </select>
-                </div>
-            </div>
-            <div class="input-form-col">
-                <div class="input-form-input">
-                    <label for="reddito">Reddito Annuo Lordo</label>
-                    <input type="number" id="reddito" name="reddito" value=30000 step=100 min="0" required>
-                </div>
-                <div class="input-form-input">
-                    <label>Aumento Reddito</label>
-                    <div class="radio-group-div">
-                        <div class="radio-div">
-                            <input type="radio" id="tipoAumentoRedditoPerc" name="tipoAumentoReddito" value="%" checked>
-                            <label for="tipoAumentoRedditoPerc">%</label>
-                        </div>
-                        <div class="radio-div">
-                            <input type="radio" id="tipoAumentoRedditoN" name="tipoAumentoReddito" value="€">
-                            <label for="tipoAumentoRedditoN">€</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-form-row">
-                    <div class="input-form-input">
-                        <label for="freqAumentoReddito">Frequenza</label>
-                        <input type="number" id="freqAumentoReddito" name="freqAumentoReddito" value=3 step=1 min="0"
-                            required>
-                    </div>
-                    <div class="input-form-input">
-                        <label for="aumentoReddito">Valore</label>
-                        <input type="number" id="aumentoReddito" name="aumentoReddito" value=10 step=0.1 min="0"
-                            required>
-                    </div>
-                </div>
-            </div>
-            <div class="input-form-col">
-                <div class="input-form-input">
-                    <label for="investimento">Investimento</label>
-                    <input type="number" id="investimento" name="investimento" value=3000 step=100 min="0" required>
-                </div>
-                <div class="input-form-input">
-                    <label>Aumento Investimento</label>
-                    <div class="radio-group-div">
-                        <div class="radio-div">
-                            <input type="radio" id="tipoAumentoInvestimentoPerc" name="tipoAumentoInvestimento"
-                                value="%" checked>
-                            <label for="tipoAumentoInvestimentoPerc">%</label>
-                        </div>
-                        <div class="radio-div">
-                            <input type="radio" id="tipoAumentoInvestimentoN" name="tipoAumentoInvestimento" value="€">
-                            <label for="tipoAumentoInvestimentoN">€</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-form-row">
-                    <div class="input-form-input">
-                        <label for="freqAumentoInvestimento">Frequenza</label>
-                        <input type="number" id="freqAumentoInvestimento" name="freqAumentoInvestimento" value=3 step=1
-                            min="0" required>
-                    </div>
-                    <div class="input-form-input">
-                        <label for="aumentoInvestimento">Valore</label>
-                        <input type="number" id="aumentoInvestimento" name="aumentoInvestimento" value=10 step=0.1
-                            min="0" required>
-                    </div>
-                </div>
-            </div>
-            <div class="input-form-col">
-                <div class="input-form-input" hidden>
-                    <label for="quotaMinAderentePerc">Quota Minima Aderente %</label>
-                    <input type="number" id="quotaMinAderentePerc" name="quotaMinAderentePerc" value=1 step=0.1 min="0"
-                        required>
-                </div>
-                <div class="input-form-input">
-                    <label for="contribuzioneDatoreFpPerc">Quota Datore FP %</label>
-                    <input type="number" id="contribuzioneDatoreFpPerc" name="contribuzioneDatoreFpPerc" value=1
-                        step=0.1 min="0" required>
-                </div>
-                <div class="input-form-input">
-                    <label for="investireRisparmioFisc">Investire Risparmio Fiscale</label>
-                    <select id="investireRisparmioFisc" name="investireRisparmioFisc">
-                        <option hidden>Anno corrente</option>
-                        <option selected>Anno successivo</option>
-                        <option>No</option>
-                    </select>
-                </div>
-                <div class="input-form-input">
-                    <label for="tfr">Investire TFR</label>
-                    <select id="tfr" name="tfr">
-                        <option>Azienda</option>
-                        <option selected>Fondo Pensione</option>
-                        <option>No</option>
-                    </select>
-                </div>
-            </div>
-            <div class="input-form-col">
-                <div class="input-form-input">
-                    <label for="inflazione">Indice FOI %</label>
-                    <input type="number" id="inflazione" name="inflazione" value=2 step=0.1 min="0" required>
-                </div>
-                <div class="input-form-input">
-                    <label for="rendimentoAnnualeFpPerc">Rendimento [Netto] FP %</label>
-                    <input type="number" id="rendimentoAnnualeFpPerc" name="rendimentoAnnualeFpPerc" value=4 step=0.1
-                        min="0" required>
-                </div>
-                <div class="input-form-input">
-                    <label for="rendimentoAnnualePacPerc">Rendimento [Lordo] PAC %</label>
-                    <input type="number" id="rendimentoAnnualePacPerc" name="rendimentoAnnualePacPerc" value=8 step=0.1
-                        min="0" required>
-                </div>
-            </div>
-        </form>
-        <div id="download-div">
-            <input type="button" id="download-csv" name="download-csv" value="Download CSV">
-        </div>
-        <div id="grid-div">
-        </div>
-        <div id="strategy-div"></div>
-        <div id="explain-div">
-            <h1>Note</h1>
-            <strong>Il lavoro è ancora lontano dall'essere finito, in particolare manca:
-                <ul>
-                    <li>Il calcolatore è in fase di beta, NON È ANCORA GARANTITA L'ESATTEZZA DEI CALCOLI.</li>
-                    <li>Quota Minima Aderente: al momento non è parametrizzata. In tutte le strategie in cui si investe
-                        in FP fino a saturazione viene sempre considerata raggiunta la quota minima aderente, ergo
-                        ottenuta la quota datoriale.</li>
-                    <li>Gestione separata di quota minima aderente e quota volontaria aderente nel caso la seconda
-                        vegna effettuta tramite bonifico (al momento la quota complessiva dell'invesimento viene
-                        considerata effettuata integralmente tramite bonifico o busta paga, in base alla scelta).</li>
-                    <li>Gestione ricorsiva del risparmio fiscale: al momento il risparmio fiscale ottenuto nell'anno 0
-                        viene investito nell'anno 1 etc., si potrebbe calcolare il risparmio fiscale ottimale anno su
-                        anno (se ottengo deduzione x e la investo genero altro risparmio fiscale y, dovuto al ricalcolo di deduzione e detrazione).</li>
-                    <li>Addizionali regionali e comunali: al momento non gestite, sono state aumentate le prima due
-                        aliquote irpef dell'1% e le ultime due del 2% per ottenere un effetto simile.</li>
-                    <li>Aggiungere la parte di reddito variabile.</li>
-                    <li>Aggiungere un parametro "Cadenza uscita TFR" per spostare la exit TFR nel FP o nel PAC in base alla strategia (utile per verificare i risultati di una strategia solo PAC dove il tfr accumulato viene spostato nel pac ad ogni cambio lavorativo).</li>
-                </ul>
-            Per qualsiasi feedback o segnalazione posso essere contattato all'indirizzo pippo995@gmail.com
-            </strong>
-            <h2>Introduzione</h2>
-            <p>Il <strong>Fondo Pensione (FP)</strong> e il <strong>Piano di Accumulo Capitale (PAC)</strong> sono due
-                strumenti di investimento a lungo termine, ciascuno con caratteristiche e vantaggi distinti. Il Fondo
-                Pensione è progettato per accumulare risparmi destinati alla pensione, offrendo vantaggi fiscali e una
-                crescita graduale del capitale. Il Piano di Accumulo Capitale, invece, consente di accumulare un
-                capitale attraverso versamenti regolari, con l'obiettivo di ottenere rendimenti nel lungo periodo.</p>
-            <p>Per fornire stime precise dei risultati potenziali, è essenziale considerare una serie di variabili
-                fiscali complesse. Questo calcolatore è stato progettato per integrare tutte queste variabili, offrendo
-                una panoramica dettagliata dei risultati attesi per entrambi gli strumenti. Gli utenti possono inserire
-                i rendimenti sperati e il calcolatore elaborerà le stime tenendo conto delle implicazioni fiscali
-                specifiche.</p>
-            <p>Inoltre, il calcolatore esplora due strategie miste che prevedono un investimento suddiviso tra il Fondo
-                Pensione e il Piano di Accumulo Capitale. L'obiettivo è ottimizzare il rendimento finale, sfruttando i
-                benefici e gestendo i rischi di entrambi gli strumenti per ottenere i migliori risultati possibili.</p>
-            <p>Nelle note del calcolatore, vengono spiegate dettagliatamente la metodologia di calcolo utilizzata e le
-                decisioni adottate per affrontare le complessità fiscali e ottimizzare le stime. Inoltre, sono forniti
-                chiarimenti su come inserire i parametri necessari per ottenere le simulazioni desiderate, garantendo
-                così una comprensione completa del funzionamento del calcolatore e dei criteri impiegati per generare i
-                risultati.</p>
-            <p></p>
-            <h2>Parametri</h2>
-            <p>
-            <h3>Durata</h3>La durata dell'investimento. È consigliata una durata minima di 10 anni per
-            massimizzare i benefici di entrambi gli strumenti. Investimenti a lungo termine tendono a ridurre il
-            rischio e aumentare i rendimenti.</p>
-            <p>
-            <h3>Frequenza di Carico</h3>La frequenza con cui vengono effettuati i versamenti influisce
-            sul calcolo dei rendimenti. Se mensile (viene considerato effettuato l'ultimo giorno del mese) viene
-            moltiplicato per una frazione del tasso annuale. Se annuale, il versamento viene considerato effettuato il
-            31 dicembre, senza
-            interessi per quell'anno.</p>
-            <p>
-            <p>
-            <h3>Modalità di Carico</h3>Le quote volontarie versate tramite bonifico a favore del proprio Fondo Pensione
-            beneficeranno del rimborso fiscale relativo all'IRPEF, ma non consentono di ottenere il rimborso dovuto alle
-            maggiori detrazioni spettanti ai dipendenti. Se invece i versamenti avvengono in busta paga il reddito
-            imponibile ai fini delle detrazioni viene decurtato di tali versamenti.
-            </p>
-            <p>
-            <h3>Reddito</h3>Indicare il reddito deducibile al momento dell'inizio dell'investimento.
-            Questo dato viene utilizzato per calcolare il TFR, le deduzioni fiscali e il contributo del datore
-            di lavoro.</p>
-            <p>
-            <h3>Variazione del Reddito</h3>Scegliere tra variazione percentuale o numerica del
-            reddito, specificando la frequenza in anni con cui la variazione avviene e il valore della
-            variazione.</p>
-            <p>
-            <h3>Investimento Iniziale</h3>La cifra investita annualmente all'inizio dell'investimento.
-            Un investimento iniziale maggiore può portare a rendimenti più elevati nel lungo termine.</p>
-            <p>
-            <h3>Variazione dell'Investimento</h3>Scegliere tra variazione percentuale o numerica
-            dell'investimento, specificando la frequenza in anni con cui la variazione avviene e il valore della
-            variazione.</p>
-            <p>
-            <h3>Contributo del Datore di Lavoro</h3>In alcuni casi, il datore di lavoro contribuisce
-            al fondo pensione con una percentuale del reddito del lavoratore. È necessario specificare se questo
-            contributo è presente. Questo contributo può aumentare significativamente il montante finale del
-            fondo pensione.</p>
-            <p>
-            <h3>Investire Risparmio Fiscale</h3>Indicare se si desidera reinvestire il risparmio fiscale
-            ottenuto dalle deduzioni. Si può scegliere di investirlo nello stesso anno in cui la deduzione viene
-            generata o nell'anno successivo. Il risparmio fiscale investito genera a sua volta altro risparmio
-            fiscale (es. se investo 1000 euro e ottengo 100 euro di risparmio fiscale potrò investire altri 100
-            euro. Questi 100 euro mi permettono di risparmiare altri 10 euro etc.). Se non si hanno problemi di
-            liquidità, si consiglia di selezionare "Anno Corrente" e aggiungere al proprio investimento la cifra
-            indicata nella colonna "Risparmio Fiscale". Il risparmio fiscale (a parte la quota mediata dal
-            sostituto d'imposta) viene recuperato nell'anno successivo in fase di dichiarazione dei redditi.
-            </p>
-            <p>
-            <h3>Investire TFR</h3>Indicare se è presente il TFR e se viene lasciato in azienda o portato nel
-            Fondo Pensione. Lasciare il TFR in azienda può essere meno vantaggioso rispetto a investirlo in un
-            fondo pensione, che può offrire rendimenti più elevati nel lungo termine.</p>
-            <p>
-            <h3>Inflazione</h3>L'inflazione media attesa nel periodo indicato. Si consiglia di
-            lasciare il valore al 2%, target delle Banche Centrali.</p>
-            <p>
-            <h3>Rendimento Annuo Storico del Fondo Pensione</h3>Recuperabile dalle tabelle fornite
-            dalla COVIP (Commissione di Vigilanza sui Fondi Pensione). Questo rendimento è da intendersi al
-            netto della tassazione sulle plusvalenze, come per i rendimenti indicati dalla COVIP.</p>
-            <p>
-            <h3>Rendimento Annuo PAC (%)</h3>Si può utilizzare come benchmark l'indice <em>MSCI All
-                World Index</em>, che ha ottenuto un rendimento medio annuo dell'8,23% negli ultimi 30 anni.
-            Tuttavia, il rendimento può variare molto in base alla strategia di investimento scelta e non è in
-            alcun modo garantito.</p>
-            <p></p>
-
-            <h2>Strategie</h2>
-
-            <p>
-            <h3>Nota su TFR</h3>Il TFR viene in ogni caso allocato secondo la scelta effettuta. Le exit finali di tutte
-            le
-            strategie
-            riportano anche i ritorni generati dal TFR in azienda o nel Fondo Pensione, secondo la scelta effettuta.</p>
-            <p>
-            <h3>Strategia FP</h3>Investimento esclusivo nel fondo pensione fino al limite delle
-            deduzioni fiscali (5164 euro) e anche oltre, sfruttando al massimo i vantaggi fiscali e il
-            contributo del datore di lavoro, con l'obiettivo di ottenere una rendita previdenziale a lungo
-            termine.</p>
-            <p>
-            <h3>Strategia PAC</h3>Investimento esclusivo nel Piano di Accumulo Capitale (PAC), senza
-            limitazioni fiscali. Questo consente una gestione più flessibile del capitale e una diversificazione
-            dell'investimento, sebbene senza i benefici fiscali e la contribuzione del datore di lavoro offerti
-            dal fondo pensione.</p>
-            <p>
-            <h3>Strategia Mix-1</h3>Investimento combinato tra FP e PAC. Si investe nel fondo pensione
-            fino al limite massimo delle deduzioni fiscali (5164 euro), mentre l'eventuale eccedenza viene
-            destinata al PAC. Questa strategia permette di ottimizzare i benefici fiscali del fondo pensione e,
-            al contempo, diversificare l'investimento con il PAC.</p>
-            <p>
-            <h3>Strategia Mix-2</h3>Strategia dinamica in cui ogni anno viene calcolato se l'interesse
-            composto generato dal fondo pensione sulla quota d'investimento entro il limite di deduzione,
-            sommato alle deduzioni fiscali e al contributo del datore di lavoro, superi l'interesse composto
-            ottenuto investendo la stessa somma nel PAC. In base a quale delle due opzioni offra il ritorno più
-            alto, l'investimento viene allocato di conseguenza, massimizzando così il guadagno finale. Ogni anno viene
-            comunque considerato un investimento di 1 euro sul fondo pensione in modo da abbassare la tassazione in
-            uscita.</p>
-            <p></p>
-
-            <h2>Calcoli</h2>
-            <p>
-            <h3>Temporalità</h3>
-            L'anno 0 non è riportato in tabella perché viene considerato esclusivamente come anno di carico. Se
-            consideriamo il 2024 come primo anno e scegliamo una frequenza di carico annuale, il versamento al Fondo
-            Pensione o al PAC è ipotizzato come effettuato al 31-12-2024. Ad esempio, la riga 30 riporta la
-            situazione dell'investimento al 31 dicembre 2054, considerando il 2024 come anno "0" dell'investimento.
-            </p>
-            <p>
-            <h3>Tassazione dei Versamenti nel Fondo Pensione</h3>
-            I versamenti dedotti al Fondo Pensione non sono esenti da imposte, ma la tassazione è posticipata al
-            momento del riscatto o della pensione. L'aliquota fiscale è del 15%, riducibile fino al 9% dopo 35 anni
-            di adesione al fondo. In caso di riscatto anticipato, l'aliquota può salire fino al 23%, a seconda della
-            motivazione del riscatto.</p>
-            <p>
-            <h3>Tassazione delle Plusvalenze nel Fondo Pensione</h3>
-            Le plusvalenze generate dal Fondo Pensione sono tassate annualmente con un'aliquota del 20%, ridotta al
-            12,5% per i titoli di Stato. I rendimenti indicati sul sito della COVIP sono già al netto di queste
-            imposte.</p>
-            <p>
-            <h3>Tassazione dei Versamenti nel PAC</h3>
-            I versamenti effettuati in un Piano di Accumulo Capitale (PAC) sono già tassati come reddito personale.
-            Tuttavia, vengono tassate solo le plusvalenze realizzate, con un'aliquota del 26%, ridotta al 12,5% per
-            le plusvalenze generate da titoli di Stato.</p>
-            <p>
-            <h3>Tassazione delle Plusvalenze nel PAC</h3>
-            Le plusvalenze realizzate con un PAC sono soggette a un'aliquota del 26%, ridotta al 12,5% nel caso in
-            cui il portafoglio includa titoli di Stato.</p>
-            <p>
-            <h3>Rivalutazione del TFR in Azienda</h3>
-            Il Trattamento di Fine Rapporto (TFR) viene rivalutato annualmente sulla base del 75% dell'inflazione (in
-            base all'indice dei prezzi al consumo per famiglie di operai e impiegati, calcolato dall'ISTAT), più un
-            tasso fisso dell'1,5%.</p>
-            <p>
-            <h3>Tassazione del TFR in Azienda</h3>
-            Al momento del riscatto, il TFR viene tassato in base alla durata complessiva dell'impiego presso
-            l'azienda. Nel calcolo si ipotizza che il lavoratore non cambi mai azienda. La formula utilizzata è:
-            [totale dei versamenti] * 12 / [numero di anni in azienda], per ottenere il "TFR di Riferimento", sul
-            quale si calcola l'imposta in base alle aliquote IRPEF.</p>
-            <p>
-            <h3>Componente Assicurativa del Fondo Pensione</h3>
-            Oltre alla componente finanziaria, il Fondo Pensione include una componente assicurativa che garantisce
-            una rendita vitalizia al titolare fino al decesso.</p>
-            <p style="text-align: right; margin-top: 50px;">by pippo995@gmail.com</p>
-
-        </div>
-
+    <div class="vintage-decoration"></div>
+    
+    <div class="beta-notification">
+        <i class="fas fa-exclamation-triangle"></i>
+        Questo calcolatore è in fase BETA. I calcoli potrebbero non essere esatti.
     </div>
-    <script type="module" src="js/app.js"></script>
-</body>
+    
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div>Parametri di Calcolo</div>
+            <button class="close-sidebar" id="close-sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-content">
+            <form id="input-form">
+                <!-- Parametri Principali -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-sliders-h"></i>
+                            Parametri Principali
+                        </div>
+                        <i class="fas fa-chevron-down section-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="durata">Durata (anni)
+                                <span class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">
+                                        <div class="tooltip-title">Durata</div>
+                                        La durata dell'investimento. È consigliata una durata minima di 10 anni per
+                                        massimizzare i benefici di entrambi gli strumenti. Investimenti a lungo termine tendono a ridurre il
+                                        rischio e aumentare i rendimenti.
+                                    </span>
+                                </span>
+                            </label>
+                            <input type="number" id="durata" class="form-control" value="30" min="1" max="50">
+                        </div>
 
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="reddito">Reddito Annuale (€)
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Reddito Annuale</div>
+                                                Indicare il reddito deducibile al momento dell'inizio dell'investimento.
+                                                Questo dato viene utilizzato per calcolare il TFR, le deduzioni fiscali e il contributo del datore di lavoro.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="reddito" class="form-control" value="30000" min="0" step="1000">
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="investimento">Investimento (€)
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Investimento Iniziale</div>
+                                                La cifra investita annualmente all'inizio dell'investimento.
+                                                Un investimento iniziale maggiore può portare a rendimenti più elevati nel lungo termine.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="investimento" class="form-control" value="3000" min="0" step="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="tfr">Destinazione TFR
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Investire TFR</div>
+                                                Indicare se è presente il TFR e se viene lasciato in azienda o portato nel
+                                                Fondo Pensione. Lasciare il TFR in azienda può essere meno vantaggioso rispetto a investirlo in un
+                                                fondo pensione, che può offrire rendimenti più elevati nel lungo termine.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <select id="tfr" class="form-control">
+                                        <option value="Azienda">Azienda</option>
+                                        <option value="Fondo Pensione">Fondo Pensione</option>
+                                        <option value="Nessuno">Nessuno</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="contribuzioneDatoreFpPerc">Contributo Datore (%)
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Contributo del Datore di Lavoro</div>
+                                                In alcuni casi, il datore di lavoro contribuisce
+                                                al fondo pensione con una percentuale del reddito del lavoratore. È necessario specificare se questo
+                                                contributo è presente. Questo contributo può aumentare significativamente il montante finale del
+                                                fondo pensione.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="contribuzioneDatoreFpPerc" class="form-control" value="1.5" min="0" max="100" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rendimenti e Inflazione -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            Rendimenti e Inflazione
+                        </div>
+                        <i class="fas fa-chevron-down section-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="inflazione">Inflazione (%)
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Inflazione</div>
+                                                L'inflazione media attesa nel periodo indicato. Si consiglia di
+                                                lasciare il valore al 2%, target delle Banche Centrali.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="inflazione" class="form-control" value="2" min="0" max="20" step="0.1">
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="rendimentoAnnualeFpPerc">Rendimento FP (%)
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Rendimento Annuo Storico del Fondo Pensione</div>
+                                                Recuperabile dalle tabelle fornite dalla COVIP (Commissione di Vigilanza sui Fondi Pensione). Questo rendimento è da intendersi al netto della tassazione sulle plusvalenze, come per i rendimenti indicati dalla COVIP.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="rendimentoAnnualeFpPerc" class="form-control" value="5" min="0" max="20" step="0.1">
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="rendimentoAnnualePacPerc">Rendimento PAC (%)
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Rendimento Annuo PAC</div>
+                                                Si può utilizzare come benchmark l'indice <em>MSCI All World Index</em>, che ha ottenuto un rendimento medio annuo dell'8,23% negli ultimi 30 anni. Tuttavia, il rendimento può variare molto in base alla strategia di investimento scelta e non è in alcun modo garantito.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="rendimentoAnnualePacPerc" class="form-control" value="7" min="0" max="20" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aumento Reddito -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-arrow-trend-up"></i>
+                            Aumento Reddito
+                        </div>
+                        <i class="fas fa-chevron-down section-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>Variazione del Reddito
+                                <span class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">
+                                        <div class="tooltip-title">Variazione del Reddito</div>
+                                        Scegliere tra variazione percentuale o numerica del reddito, specificando la frequenza in anni con cui la variazione avviene e il valore della variazione.
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="tipoAumentoReddito" id="tipoAumentoRedditoPerc" value="%" checked>
+                                    Percentuale (%)
+                                </label>
+                                <label>
+                                    <input type="radio" name="tipoAumentoReddito" id="tipoAumentoRedditoN" value="€">
+                                    Valore (€)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="aumentoReddito">Importo</label>
+                                    <input type="number" id="aumentoReddito" class="form-control" value="10" min="0" step="0.1">
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="freqAumentoReddito">Frequenza (anni)</label>
+                                    <input type="number" id="freqAumentoReddito" class="form-control" value="3" min="1" step="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aumento Investimento -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-coins"></i>
+                            Aumento Investimento
+                        </div>
+                        <i class="fas fa-chevron-down section-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>Variazione dell'Investimento
+                                <span class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">
+                                        <div class="tooltip-title">Variazione dell'Investimento</div>
+                                        Scegliere tra variazione percentuale o numerica dell'investimento, specificando la frequenza in anni con cui la variazione avviene e il valore della variazione.
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="tipoAumentoInvestimento" id="tipoAumentoInvestimentoPerc" value="%" checked>
+                                    Percentuale (%)
+                                </label>
+                                <label>
+                                    <input type="radio" name="tipoAumentoInvestimento" id="tipoAumentoInvestimentoN" value="€">
+                                    Valore (€)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="aumentoInvestimento">Importo</label>
+                                    <input type="number" id="aumentoInvestimento" class="form-control" value="10" min="0" step="0.1">
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="freqAumentoInvestimento">Frequenza (anni)</label>
+                                    <input type="number" id="freqAumentoInvestimento" class="form-control" value="5" min="1" step="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opzioni aggiuntive -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-cog"></i>
+                            Opzioni Aggiuntive
+                        </div>
+                        <i class="fas fa-chevron-down section-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="quotaMinAderentePerc">Quota Aderente (%)
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Quota Minima Aderente</div>
+                                                La quota minima che l'aderente deve versare al fondo pensione per poter beneficiare del contributo del datore di lavoro. Nota: al momento non è parametrizzata. In tutte le strategie in cui si investe in FP fino a saturazione viene sempre considerata raggiunta la quota minima aderente.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="quotaMinAderentePerc" class="form-control" value="1" min="0" max="100" step="0.1">
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="frequenzaDiCarico">Frequenza di Carico
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Frequenza di Carico</div>
+                                                La frequenza con cui vengono effettuati i versamenti influisce sul calcolo dei rendimenti. Se mensile (viene considerato effettuato l'ultimo giorno del mese) viene moltiplicato per una frazione del tasso annuale. Se annuale, il versamento viene considerato effettuato il 31 dicembre, senza interessi per quell'anno.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <input type="number" id="frequenzaDiCarico" class="form-control" value="0.5" min="0" max="1" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="quotaEccedente">Quota Eccedente
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Modalità di Carico</div>
+                                                Le quote volontarie versate tramite bonifico a favore del proprio Fondo Pensione beneficeranno del rimborso fiscale relativo all'IRPEF, ma non consentono di ottenere il rimborso dovuto alle maggiori detrazioni spettanti ai dipendenti. Se invece i versamenti avvengono in busta paga il reddito imponibile ai fini delle detrazioni viene decurtato di tali versamenti.
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <select id="quotaEccedente" class="form-control">
+                                        <option value="Bonifico">Bonifico</option>
+                                        <option value="Busta Paga">Busta Paga</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-col">
+                                <div class="form-group">
+                                    <label for="investireRisparmioFisc">Risparmio Fiscale
+                                        <span class="tooltip">
+                                            <span class="tooltip-icon">?</span>
+                                            <span class="tooltip-text">
+                                                <div class="tooltip-title">Investire Risparmio Fiscale</div>
+                                                Indicare se si desidera reinvestire il risparmio fiscale ottenuto dalle deduzioni. Si può scegliere di investirlo nello stesso anno in cui la deduzione viene generata o nell'anno successivo. Il risparmio fiscale investito genera a sua volta altro risparmio fiscale. Se non si hanno problemi di liquidità, si consiglia di selezionare "Anno Corrente".
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <select id="investireRisparmioFisc" class="form-control">
+                                        <option value="Anno corrente">Anno corrente</option>
+                                        <option value="Anno successivo">Anno successivo</option>
+                                        <option value="Mai">Mai</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div>
+                    <h1>Calcolatore Fondo Pensione</h1>
+                    <div class="subheader">Confronta strategie di investimento per il tuo futuro</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <div class="main-content">
+            <!-- Tabs per navigare tra sezioni -->
+            <div class="tabs">
+                <div class="tab active" data-tab="calculator">
+                    <i class="fas fa-calculator"></i> Calcolatore
+                </div>
+                <div class="tab" data-tab="documentation">
+                    <i class="fas fa-book"></i> Guida e Informazioni
+                </div>
+            </div>
+
+            <!-- Sezione Calcolatore -->
+            <div class="tab-content active" id="calculator-content">
+                <!-- Action buttons and quick controls -->
+                <div class="button-container">
+                    <button class="toggle-sidebar" id="toggle-sidebar">
+                        <i class="fas fa-sliders-h toggle-icon"></i>
+                        Modifica Parametri
+                    </button>
+                    
+                    <div class="quick-controls">
+                        <div class="quick-control">
+                            <label for="quick-durata">Durata:</label>
+                            <input type="number" id="quick-durata" class="form-control" value="30" min="1" max="50">
+                        </div>
+                        <div class="quick-control">
+                            <label for="quick-inflazione">Inflazione (%):</label>
+                            <input type="number" id="quick-inflazione" class="form-control" value="2" min="0" max="20" step="0.1">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabella Risultati - Invertito ordine con il blocco "Strategia di Investimento Ottimale" -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-table"></i>
+                        Risultati della simulazione
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <div id="grid-div">
+                                <!-- La tabella verrà inserita qui dal JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="download-csv" class="btn btn-primary">
+                                <i class="fas fa-download"></i>
+                                Scarica CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategia Ottimale - Ora appare dopo la tabella -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-lightbulb"></i>
+                        Strategia di Investimento Ottimale
+                    </div>
+                    <div class="card-body">
+                        <div class="strategy-explanation">
+                            <span class="badge badge-primary">Analisi</span>
+                            <strong>Nota sulla strategia:</strong> Il calcolatore analizza quattro diverse strategie di investimento e indica, anno per anno, quale sarebbe la scelta ottimale tra Fondo Pensione (FP) e Piano di Accumulo Capitale (PAC). La strategia Mix-2 ottimizza dinamicamente i rendimenti, mentre Mix-1 investe nel FP fino al limite di deduzione e poi nel PAC. Le strategie pure FP e PAC permettono di confrontare gli approcci esclusivi.
+                        </div>
+                        <div id="strategy-div">
+                            <div class="loading-dots">
+                                <span class="loading-dot"></span>
+                                <span class="loading-dot"></span>
+                                <span class="loading-dot"></span>
+                            </div>
+                            Calcolo in corso...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sezione Documentazione - Migliorata -->
+            <div class="tab-content" id="documentation-content">
+                <div class="docs-nav">
+                    <div class="docs-nav-title">Indice dei Contenuti</div>
+                    <ul>
+                        <li><a href="#introduction">Introduzione</a></li>
+                        <li><a href="#parameters">Parametri di Configurazione</a></li>
+                        <li><a href="#strategies">Strategie di Investimento</a></li>
+                        <li><a href="#calculations">Calcoli e Tassazione</a></li>
+                        <li><a href="#status">Stato del Progetto</a></li>
+                    </ul>
+                </div>
+
+                <div class="docs-section">
+                    <h2 id="introduction">Introduzione</h2>
+                    <p>Il <strong>Fondo Pensione (FP)</strong> e il <strong>Piano di Accumulo Capitale (PAC)</strong> rappresentano due strumenti di investimento a lungo termine con caratteristiche e vantaggi specifici. Mentre il Fondo Pensione è progettato per costruire un capitale pensionistico integrativo con significativi vantaggi fiscali, il Piano di Accumulo Capitale offre maggiore flessibilità e liquidità, consentendo di accumulare risparmi attraverso versamenti periodici.</p>
+                    
+                    <p>Questo calcolatore è stato sviluppato per offrire una panoramica dettagliata dei risultati potenziali di entrambi gli strumenti, tenendo conto di molteplici variabili fiscali e finanziarie. L'obiettivo è fornire un confronto oggettivo tra le diverse strategie di investimento, evidenziando vantaggi e svantaggi di ciascuna opzione in base ai parametri specificati dall'utente.</p>
+                    
+                    <p>Il sistema analizza quattro strategie principali: investimento esclusivo in Fondo Pensione, investimento esclusivo in PAC e due strategie miste che combinano entrambi gli strumenti. Per ciascuna strategia, il calcolatore elabora proiezioni anno per anno, considerando tutti gli aspetti fiscali, i rendimenti attesi e l'impatto dell'inflazione.</p>
+
+                    <h2 id="parameters">Parametri di Configurazione</h2>
+                    
+                    <h3>Parametri Temporali</h3>
+                    <p><strong>Durata dell'investimento</strong>: Definisce l'orizzonte temporale complessivo del piano di investimento. Per sfruttare al meglio i benefici della capitalizzazione composta e dei vantaggi fiscali, si consiglia una durata minima di 10 anni. Gli investimenti a lungo termine tendono a ridurre la volatilità e a massimizzare i rendimenti potenziali.</p>
+                    
+                    <p><strong>Frequenza di Carico</strong>: Determina la cadenza con cui vengono effettuati i versamenti e influisce significativamente sul calcolo dei rendimenti composti. Per versamenti mensili (rappresentati da valori vicini a 1), il capitale investito beneficia di un maggiore effetto della capitalizzazione composta rispetto ai versamenti annuali (rappresentati da valori vicini a 0).</p>
+                    
+                    <h3>Parametri Economici</h3>
+                    <p><strong>Reddito Annuale</strong>: Il reddito lordo annuale dell'investitore, utilizzato come base per calcolare il TFR, le deduzioni fiscali e il contributo eventuale del datore di lavoro. Questo valore è fondamentale per determinare i limiti di deducibilità fiscale e i potenziali benefici delle strategie di investimento.</p>
+                    
+                    <p><strong>Variazione del Reddito</strong>: Consente di simulare aumenti periodici del reddito, sia in termini percentuali che in valore assoluto. Questo parametro è importante per rappresentare realisticamente la progressione di carriera e gli adeguamenti salariali durante l'orizzonte temporale dell'investimento.</p>
+                    
+                    <p><strong>Investimento Iniziale</strong>: Rappresenta l'importo destinato annualmente all'investimento all'inizio del piano. Questo valore può essere incrementato periodicamente in base alla variazione dell'investimento specificata.</p>
+                    
+                    <p><strong>Variazione dell'Investimento</strong>: Permette di simulare incrementi periodici dell'importo investito, sia in termini percentuali che in valore assoluto, riflettendo la potenziale capacità di risparmio crescente nel tempo.</p>
+                    
+                    <h3>Parametri Previdenziali</h3>
+                    <p><strong>Contributo del Datore di Lavoro</strong>: In molti contratti collettivi, il datore di lavoro contribuisce al fondo pensione con una percentuale del reddito del lavoratore quando quest'ultimo versa almeno la quota minima prevista. Questo contributo rappresenta un vantaggio esclusivo del fondo pensione e può aumentare significativamente il montante finale.</p>
+                    
+                    <p><strong>Quota Minima Aderente</strong>: Rappresenta la percentuale minima di contribuzione richiesta al lavoratore per poter beneficiare del contributo datoriale. Il valore specifico dipende dal contratto collettivo applicato.</p>
+                    
+                    <p><strong>Modalità di Carico</strong>: Specifica se i versamenti volontari al Fondo Pensione avvengono tramite bonifico diretto o trattenuta in busta paga. La modalità scelta influisce sul calcolo delle detrazioni fiscali: i versamenti in busta paga riducono il reddito imponibile, generando un vantaggio fiscale immediato attraverso un ricalcolo delle detrazioni.</p>
+                    
+                    <p><strong>Gestione del Risparmio Fiscale</strong>: Definisce se e quando reinvestire il risparmio fiscale ottenuto dalle deduzioni. Il risparmio può essere reinvestito nello stesso anno (necessitando di liquidità aggiuntiva), nell'anno successivo (dopo il rimborso fiscale) o non essere reinvestito. Il reinvestimento genera ulteriori benefici fiscali e rendimenti composti nel lungo periodo.</p>
+                    
+                    <p><strong>Destinazione TFR</strong>: Indica se il Trattamento di Fine Rapporto viene lasciato in azienda, versato nel Fondo Pensione o non è presente. Il TFR versato al Fondo Pensione beneficia potenzialmente di rendimenti più elevati rispetto alla rivalutazione garantita in azienda.</p>
+                    
+                    <h3>Parametri Finanziari</h3>
+                    <p><strong>Inflazione</strong>: Rappresenta il tasso medio di inflazione atteso nel periodo di investimento. L'inflazione erode il potere d'acquisto del capitale nel tempo, quindi è fondamentale considerarla per valutare i rendimenti reali. Il valore di riferimento consigliato è il 2%, target delle principali Banche Centrali.</p>
+                    
+                    <p><strong>Rendimento Annuo del Fondo Pensione</strong>: Il rendimento medio atteso per il Fondo Pensione, basato sui dati storici forniti dalla COVIP (Commissione di Vigilanza sui Fondi Pensione). Questo rendimento è già al netto della tassazione sulle plusvalenze.</p>
+                    
+                    <p><strong>Rendimento Annuo del PAC</strong>: Il rendimento medio atteso per il Piano di Accumulo Capitale. Come riferimento, si può considerare l'indice <em>MSCI All World Index</em>, che ha registrato un rendimento medio annuo dell'8,23% negli ultimi 30 anni. Il rendimento effettivo dipenderà dalla composizione del portafoglio e dalla strategia di investimento scelta.</p>
+
+                    <h2 id="strategies">Strategie di Investimento</h2>
+                    
+                    <h3>Considerazioni sul TFR</h3>
+                    <p>In tutte le strategie analizzate, il TFR viene allocato secondo la scelta effettuata dall'utente (azienda o Fondo Pensione). I risultati finali di ciascuna strategia includono anche i rendimenti generati dal TFR nella destinazione selezionata, garantendo un confronto equo tra le diverse opzioni.</p>
+                    
+                    <h3>Strategia Solo Fondo Pensione</h3>
+                    <p>Questa strategia prevede l'investimento esclusivo nel Fondo Pensione, sfruttando al massimo i vantaggi fiscali e il contributo del datore di lavoro. L'intero importo disponibile viene destinato al Fondo Pensione, anche oltre il limite di deducibilità fiscale di 5.164,57 euro. I principali vantaggi includono:</p>
+                    <ul>
+                        <li>Deduzione fiscale completa sui versamenti entro il limite annuo</li>
+                        <li>Contribuzione aggiuntiva del datore di lavoro</li>
+                        <li>Tassazione agevolata sui rendimenti (20% invece del 26% del PAC)</li>
+                        <li>Tassazione agevolata in fase di erogazione (dal 15% al 9%)</li>
+                    </ul>
+                    <p>Lo svantaggio principale è la minore liquidità, poiché il capitale è vincolato fino all'età pensionabile, salvo specifiche casistiche di riscatto anticipato.</p>
+                    
+                    <h3>Strategia Solo PAC</h3>
+                    <p>Questa strategia destina l'intero investimento al Piano di Accumulo Capitale, rinunciando ai vantaggi fiscali del Fondo Pensione ma beneficiando di maggiore flessibilità e controllo. I principali vantaggi includono:</p>
+                    <ul>
+                        <li>Completa libertà di accesso al capitale in qualsiasi momento</li>
+                        <li>Maggiore controllo sulla strategia d'investimento</li>
+                        <li>Possibilità di diversificazione più ampia</li>
+                        <li>Nessun vincolo temporale o di destinazione</li>
+                    </ul>
+                    <p>Gli svantaggi principali sono la mancanza di deducibilità fiscale sui versamenti, l'assenza del contributo datoriale e la tassazione piena sui rendimenti (26%).</p>
+                    
+                    <h3>Strategia Mix-1 (Ottimizzazione Fiscale)</h3>
+                    <p>Questa strategia combina i vantaggi di entrambi gli strumenti: investe nel Fondo Pensione fino al limite massimo delle deduzioni fiscali (5.164,57 euro), mentre l'eventuale eccedenza viene destinata al PAC. In questo modo:</p>
+                    <ul>
+                        <li>Si massimizzano i benefici fiscali del Fondo Pensione</li>
+                        <li>Si ottiene il contributo del datore di lavoro</li>
+                        <li>Si mantiene una componente liquida nell'investimento tramite il PAC</li>
+                        <li>Si diversifica il rischio tra due strumenti con regimi fiscali differenti</li>
+                    </ul>
+                    <p>Questa strategia è particolarmente indicata per chi desidera bilanciare i vantaggi fiscali con una maggiore flessibilità di accesso al capitale.</p>
+                    
+                    <h3>Strategia Mix-2 (Ottimizzazione Dinamica)</h3>
+                    <p>Questa è la strategia più sofisticata: ogni anno viene calcolato se l'interesse composto generato dal Fondo Pensione sulla quota d'investimento entro il limite di deduzione, sommato ai benefici fiscali e al contributo del datore di lavoro, superi l'interesse composto ottenibile investendo la stessa somma nel PAC. L'allocazione viene quindi determinata dinamicamente in base al rendimento atteso maggiore.</p>
+                    <p>Per garantire comunque i benefici fiscali in uscita, viene sempre effettuato un investimento minimo simbolico nel Fondo Pensione (1 euro), che permette di mantenere attiva la posizione e beneficiare della tassazione agevolata al momento del riscatto.</p>
+                    <p>Questa strategia mira a massimizzare il rendimento complessivo adattandosi alle condizioni specifiche di ciascun anno di investimento.</p>
+
+                    <h2 id="calculations">Calcoli e Tassazione</h2>
+                    
+                    <h3>Temporalità e Riferimenti</h3>
+                    <p>Nella simulazione, l'anno 0 non viene rappresentato nella tabella poiché considerato esclusivamente come anno iniziale di carico. Assumendo il 2024 come anno di partenza e una frequenza di carico annuale, il primo versamento è ipotizzato al 31-12-2024, e la riga 30 nella tabella corrisponderà alla situazione dell'investimento al 31 dicembre 2054.</p>
+                    
+                    <h3>Tassazione del Fondo Pensione</h3>
+                    <p><strong>Tassazione dei versamenti</strong>: I versamenti al Fondo Pensione godono di deducibilità fiscale fino a 5.164,57 euro annui. Questo significa che tali importi vengono sottratti dal reddito imponibile, generando un risparmio fiscale immediato pari all'aliquota marginale IRPEF applicabile. La tassazione è posticipata al momento dell'erogazione.</p>
+                    
+                    <p><strong>Tassazione delle plusvalenze</strong>: I rendimenti generati dal Fondo Pensione sono tassati annualmente con un'aliquota del 20%, ridotta al 12,5% per la quota derivante da titoli di Stato. Questa tassazione è già applicata dai fondi stessi e i rendimenti riportati dalla COVIP sono già al netto di queste imposte.</p>
+                    
+                    <p><strong>Tassazione in fase di erogazione</strong>: Al momento del pensionamento o del riscatto, il capitale accumulato viene tassato con un'aliquota agevolata del 15%, ulteriormente riducibile fino al 9% dopo 35 anni di partecipazione al fondo (riduzione dello 0,3% per ogni anno oltre il quindicesimo). La tassazione si applica solo sulla parte non già tassata, escludendo quindi i rendimenti già soggetti a imposta annuale.</p>
+                    
+                    <h3>Tassazione del PAC</h3>
+                    <p><strong>Tassazione dei versamenti</strong>: I versamenti in un Piano di Accumulo Capitale sono effettuati con capitale già tassato, quindi non godono di alcun beneficio fiscale in fase di versamento.</p>
+                    
+                    <p><strong>Tassazione delle plusvalenze</strong>: Le plusvalenze realizzate con un PAC sono soggette a un'imposta sostitutiva del 26%, ridotta al 12,5% per i titoli di Stato. La tassazione avviene solo al momento del realizzo (vendita).</p>
+                    
+                    <h3>Trattamento del TFR</h3>
+                    <p><strong>Rivalutazione del TFR in azienda</strong>: Il TFR lasciato in azienda viene rivalutato annualmente in base a un tasso fisso dell'1,5% più il 75% dell'inflazione (calcolata sull'indice ISTAT dei prezzi al consumo). Questa rivalutazione è soggetta a un'imposta sostitutiva del 17%.</p>
+                    
+                    <p><strong>Tassazione del TFR in azienda</strong>: Al momento della liquidazione, il TFR è soggetto a tassazione separata, con aliquota calcolata in base al reddito di riferimento ([TFR totale] × 12 ÷ [anni di servizio]) e alle aliquote IRPEF vigenti.</p>
+                    
+                    <p><strong>TFR nel Fondo Pensione</strong>: Se versato al Fondo Pensione, il TFR beneficia dello stesso regime fiscale degli altri versamenti, con tassazione agevolata in fase di erogazione.</p>
+                    
+                    <h3>Componente Assicurativa e Rendita</h3>
+                    <p>Il Fondo Pensione include una componente assicurativa che garantisce, al raggiungimento dei requisiti pensionistici, la possibilità di convertire il capitale accumulato in una rendita vitalizia. Questa componente assicurativa rappresenta un ulteriore vantaggio rispetto al PAC, specialmente per chi desidera un'integrazione pensionistica garantita per tutta la vita.</p>
+
+                    <h2 id="status">Stato del Progetto</h2>
+                    <p><strong>Limitazioni attuali e sviluppi futuri:</strong></p>
+                    <ul>
+                        <li><strong>Fase Beta</strong>: Il calcolatore è attualmente in fase di sviluppo beta, quindi l'accuratezza dei calcoli non può essere pienamente garantita.</li>
+                        <li><strong>Quota Minima Aderente</strong>: Nelle strategie che prevedono investimenti nel Fondo Pensione fino a saturazione, il calcolatore assume automaticamente che la quota minima aderente sia raggiunta, garantendo così il contributo datoriale. Una futura implementazione permetterà una gestione più precisa di questo parametro.</li>
+                        <li><strong>Gestione separata delle quote</strong>: È in fase di sviluppo la gestione separata della quota minima aderente e della quota volontaria nel caso di versamenti via bonifico.</li>
+                        <li><strong>Ottimizzazione del risparmio fiscale</strong>: È prevista l'implementazione di un calcolo ricorsivo del risparmio fiscale ottimale, considerando i benefici fiscali generati dal reinvestimento.</li>
+                        <li><strong>Addizionali regionali e comunali</strong>: Attualmente il calcolatore simula l'effetto delle addizionali aumentando le aliquote IRPEF. Una futura implementazione includerà un calcolo preciso delle addizionali regionali e comunali.</li>
+                        <li><strong>Reddito variabile</strong>: È prevista l'implementazione di un modulo per gestire scenari con reddito variabile o non continuativo.</li>
+                        <li><strong>Trasferibilità del TFR</strong>: È in fase di sviluppo una funzionalità per simulare il trasferimento del TFR accumulato tra diversi strumenti in caso di cambio lavorativo.</li>
+                    </ul>
+                    <p>Per qualsiasi feedback, segnalazione o suggerimento, puoi contattare lo sviluppatore all'indirizzo pippo995@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="go-to-top" id="go-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <footer class="footer">
+        <p>© 2025 Calcolatore Investimenti Finanziari | I calcoli sono basati su stime e non costituiscono consulenza finanziaria.</p>
+    </footer>
+
+    <script src="js/scripts.js"></script>
+    <script src="js/app.js" type="module"></script>
+</body>
 </html>
