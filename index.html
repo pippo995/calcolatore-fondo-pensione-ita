@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcolatore Rendimenti Fondo Pensione</title>
+    <link rel="icon" href="./favicon.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap">
     <link rel="stylesheet" href="styles.css">
@@ -391,6 +392,9 @@
                 <div class="tab" data-tab="documentation">
                     <i class="fas fa-book"></i> Guida e Informazioni
                 </div>
+                <div class="tab" data-tab="technical">
+                    <i class="fas fa-code"></i> Logica di Calcolo
+                </div>
             </div>
 
             <!-- Sezione Calcolatore -->
@@ -593,6 +597,196 @@
                         <li><strong>Trasferibilità del TFR</strong>: È in fase di sviluppo una funzionalità per simulare il trasferimento del TFR accumulato tra diversi strumenti in caso di cambio lavorativo.</li>
                     </ul>
                     <p>Per qualsiasi feedback, segnalazione o suggerimento, puoi contattare lo sviluppatore all'indirizzo pippo995@gmail.com</p>
+                </div>
+            </div>
+
+            <!-- NUOVA Sezione: Logica di Calcolo -->
+            <div class="tab-content" id="technical-content">
+                <div class="docs-nav">
+                    <div class="docs-nav-title">Indice Tecnico</div>
+                    <ul>
+                        <li><a href="#calc-overview">Panoramica delle Formule</a></li>
+                        <li><a href="#calc-model">Modello Finanziario</a></li>
+                        <li><a href="#calc-strategies">Implementazione Strategie</a></li>
+                        <li><a href="#calc-tax">Calcolo Fiscale</a></li>
+                        <li><a href="#calc-optimization">Ottimizzazione</a></li>
+                    </ul>
+                </div>
+
+                <div class="docs-section">
+                    <h2 id="calc-overview">Panoramica delle Formule di Calcolo</h2>
+                    <p>Il calcolatore utilizza un modello matematico complesso che simula l'evoluzione degli investimenti in un arco temporale definito dall'utente. La logica si basa sulla classe <code>FinancialModel</code> che implementa tutti i calcoli necessari per stimare i rendimenti delle diverse strategie di investimento.</p>
+
+                    <h3>Formule Principali</h3>
+                    <div class="formula-container">
+                        <p><strong>Calcolo del TFR annuale:</strong></p>
+                        <pre>TFR = Reddito × 0.06907</pre>
+                        
+                        <p><strong>Rivalutazione TFR in azienda:</strong></p>
+                        <pre>TFR Montante(anno) = TFR Montante(anno-1) × (1 + (Inflazione × 0.75 + 0.015) × 0.83) + TFR(anno)</pre>
+                        
+                        <p><strong>Rivalutazione TFR nel Fondo Pensione:</strong></p>
+                        <pre>TFR FP Montante(anno) = TFR FP Montante(anno-1) × (1 + Rendimento FP) + TFR(anno) × (1 + Rendimento FP × Frequenza Carico)</pre>
+                        
+                        <p><strong>Calcolo dell'accumulo nel Fondo Pensione:</strong></p>
+                        <pre>FP Montante(anno) = FP Montante(anno-1) × (1 + Rendimento FP) + Investimento FP × (1 + Rendimento FP × Frequenza Carico)</pre>
+                        
+                        <p><strong>Calcolo dell'accumulo nel PAC:</strong></p>
+                        <pre>PAC Montante(anno) = PAC Montante(anno-1) × (1 + Rendimento PAC) + Investimento PAC × (1 + Rendimento PAC × Frequenza Carico)</pre>
+                    </div>
+
+                    <h2 id="calc-model">Modello Finanziario</h2>
+                    <p>Il modello finanziario si basa su un'iterazione annuale che aggiorna progressivamente i valori economici dell'investimento. Per ogni anno del periodo di investimento, il sistema:</p>
+
+                    <ol>
+                        <li><strong>Aggiorna il reddito e l'investimento</strong> in base ai tassi di crescita configurati</li>
+                        <li><strong>Calcola il TFR</strong> come frazione del reddito (6,907%)</li>
+                        <li><strong>Determina le deduzioni fiscali</strong> disponibili considerando il limite legale (5.164,57€) e il contributo datoriale</li>
+                        <li><strong>Calcola il risparmio fiscale</strong> generato dagli investimenti nel Fondo Pensione</li>
+                        <li><strong>Simula l'andamento delle quattro strategie</strong> di investimento</li>
+                        <li><strong>Registra i risultati annuali</strong> di ciascuna strategia</li>
+                    </ol>
+
+                    <p>Per l'aggiornamento periodico dei valori (reddito e investimento), il modello utilizza la seguente formula:</p>
+
+                    <pre>
+Se (Anno > 0 E Anno % Frequenza == 0) {
+    Se (Tipo == "%") {
+        Valore = Valore Precedente + (Valore Precedente × Percentuale / 100)
+    } Altrimenti {
+        Valore = Valore Precedente + Incremento Assoluto
+    }
+}
+                    </pre>
+
+                    <h2 id="calc-strategies">Implementazione delle Strategie</h2>
+
+                    <h3>Strategia Solo Fondo Pensione</h3>
+                    <p>Questa strategia investe l'intero importo disponibile (investimento + risparmio fiscale + contributo datoriale) nel Fondo Pensione. L'accumulazione segue la formula dell'interesse composto con capitalizzazione annuale, considerando anche la frequenza di carico per i nuovi versamenti:</p>
+
+                    <pre>
+FP Versamenti += Investimento + Risparmio Fiscale + Contributo Datoriale
+FP Montante = FP Montante × (1 + Rendimento FP) + 
+              (Investimento + Risparmio Fiscale + Contributo Datoriale) × (1 + Rendimento FP × Frequenza Carico)
+                    </pre>
+
+                    <p>Il valore di uscita (Exit) tiene conto della tassazione agevolata:</p>
+
+                    <pre>
+FP Exit = FP Montante - (FP Versamenti × Tassazione FP) + TFR Exit
+                    </pre>
+
+                    <p>Dove la tassazione FP varia dal 15% al 9% in base agli anni di partecipazione.</p>
+
+                    <h3>Strategia Solo PAC</h3>
+                    <p>Questa strategia investe solo l'importo base nel Piano di Accumulo Capitale, senza beneficiare del risparmio fiscale o del contributo datoriale:</p>
+
+                    <pre>
+PAC Versamenti += Investimento
+PAC Montante = PAC Montante × (1 + Rendimento PAC) + 
+               Investimento × (1 + Rendimento PAC × Frequenza Carico)
+                    </pre>
+
+                    <p>Il valore di uscita considera la tassazione standard del 26% sulle plusvalenze:</p>
+
+                    <pre>
+PAC Exit = PAC Montante - ((PAC Montante - PAC Versamenti) × 26%) + TFR Exit
+                    </pre>
+
+                    <h3>Strategia Mix-1</h3>
+                    <p>La strategia Mix-1 suddivide l'investimento totale tra Fondo Pensione (fino al limite di deduzione) e PAC (per l'eccedenza):</p>
+
+                    <pre>
+FP Mix1 Entro Deduzione = min(Investimento Totale, Limite Deduzione)
+PAC Mix1 Oltre Deduzione = Investimento Totale - FP Mix1 Entro Deduzione
+                    </pre>
+
+                    <p>Le formule di accumulazione seguono lo stesso schema delle strategie pure, ma applicate alle quote rispettive.</p>
+
+                    <h3>Strategia Mix-2</h3>
+                    <p>La strategia Mix-2 implementa una logica di ottimizzazione dinamica che confronta i rendimenti composti attesi. Per ogni anno, calcola:</p>
+
+                    <ol>
+                        <li>Il rendimento composto atteso se si investe nel Fondo Pensione entro il limite di deduzione</li>
+                        <li>Il rendimento composto atteso se si investe nel PAC la stessa somma entro deduzione</li>
+                        <li>Il rendimento composto atteso se si investe nel Fondo Pensione oltre il limite di deduzione</li>
+                        <li>Il rendimento composto atteso se si investe nel PAC la stessa somma oltre deduzione</li>
+                    </ol>
+
+                    <p>Basandosi su questo confronto, determina la migliore allocazione per l'anno corrente, mantenendo sempre almeno 1€ nel Fondo Pensione per preservare i vantaggi fiscali.</p>
+
+                    <h2 id="calc-tax">Calcolo Fiscale</h2>
+                    <p>Il modello implementa il sistema fiscale italiano con particolare attenzione alle specificità dei fondi pensione e degli investimenti finanziari:</p>
+
+                    <h3>Calcolo dell'IRPEF</h3>
+                    <p>L'imposta sul reddito è calcolata secondo i seguenti scaglioni:</p>
+                    <pre>
+Se (Reddito ≤ 15.000€):            Imposta = Reddito × 24%
+Se (15.000€ < Reddito ≤ 28.000€):  Imposta = 3.600€ + (Reddito - 15.000€) × 26%
+Se (28.000€ < Reddito ≤ 50.000€):  Imposta = 6.980€ + (Reddito - 28.000€) × 37% 
+Se (Reddito > 50.000€):            Imposta = 15.120€ + (Reddito - 50.000€) × 45%
+                    </pre>
+
+                    <h3>Detrazioni per Lavoratori Dipendenti</h3>
+                    <p>Le detrazioni sono calcolate in base al reddito:</p>
+                    <pre>
+Se (Reddito ≤ 15.000€):            Detrazione = 1.880€
+Se (15.000€ < Reddito ≤ 28.000€):  Detrazione = 1.910€ + 1.190€ × ((28.000€ - Reddito) / 13.000€)
+Se (28.000€ < Reddito ≤ 50.000€):  Detrazione = 1.910€ × ((50.000€ - Reddito) / 22.000€)
+Se (Reddito > 50.000€):            Detrazione = 0€
+
+// Bonus aggiuntivo
+Se (25.000€ ≤ Reddito ≤ 35.000€):  Detrazione += 65€
+                    </pre>
+
+                    <h3>Tassazione Fondi Pensione</h3>
+                    <p>La tassazione al momento del riscatto è progressivamente agevolata in base alla durata della partecipazione:</p>
+                    <pre>
+Aliquota Base = 15%
+Riduzione = min((Anni Partecipazione - 15) × 0,3%, 6%)
+Aliquota Effettiva = max(Aliquota Base - Riduzione, 9%)
+                    </pre>
+
+                    <h3>Calcolo del Risparmio Fiscale</h3>
+                    <p>Il risparmio fiscale derivante dalla deduzione dei versamenti al Fondo Pensione è calcolato come:</p>
+                    <pre>
+Deduzione = min(Investimento, Limite Deduzione Effettivo)
+Reddito Dedotto = max(Reddito Imponibile - Deduzione, 0)
+Imposta Lorda Dedotta = Calcola Imposta(Reddito Dedotto)
+Imposta Netta Dedotta = max(Imposta Lorda Dedotta - Detrazione Dipendente, 0)
+Risparmio Fiscale = Imposta Netta Originale - Imposta Netta Dedotta
+                    </pre>
+
+                    <h2 id="calc-optimization">Logica di Ottimizzazione</h2>
+                    <p>Il cuore dell'ottimizzazione nella strategia Mix-2 è l'analisi comparativa dei rendimenti attesi. Per ogni anno, il sistema calcola:</p>
+
+                    <pre>
+// Rendimento composto atteso fino a fine periodo
+Rendimento Composto FP = (1 + Rendimento FP Annuale)^(Durata - Anno Corrente - 1)
+Rendimento Composto PAC = (1 + Rendimento PAC Annuale)^(Durata - Anno Corrente - 1)
+
+// Interesse composto generato da investimento entro deduzione nel FP
+Interesse FP Entro = (Investimento Entro Deduzione × Rendimento Composto FP) + 
+                     (Investimento Entro Deduzione × Rendimento FP × Frequenza Carico) -
+                     (Investimento Entro Deduzione × Tassazione FP)
+
+// Interesse composto generato da investimento entro deduzione nel PAC
+Rendimento PAC Entro = (Investimento Entro Deduzione × Rendimento Composto PAC) + 
+                        (Investimento Entro Deduzione × Rendimento PAC × Frequenza Carico)
+Interesse PAC Entro = Rendimento PAC Entro - 
+                     ((Rendimento PAC Entro - Investimento Entro Deduzione) × Tassazione PAC)
+                    </pre>
+
+                    <p>Lo stesso calcolo viene effettuato per gli investimenti oltre il limite di deduzione. Confrontando questi valori, il sistema determina in quale strumento investire per massimizzare il rendimento complessivo, tenendo conto di:</p>
+
+                    <ul>
+                        <li>I differenti regimi fiscali (deduzione iniziale per il FP vs tassazione più alta sulle plusvalenze del PAC)</li>
+                        <li>Il contributo del datore di lavoro (disponibile solo per il FP)</li>
+                        <li>Il risparmio fiscale generato dalla deduzione (che può essere reinvestito)</li>
+                        <li>I diversi rendimenti lordi dei due strumenti</li>
+                    </ul>
+
+                    <p>La strategia ottimale risultante viene tradotta in semplici indicazioni nella sezione "Strategia di Investimento Ottimale", che specifica, anno per anno, in quale strumento concentrare l'investimento, sia per la quota entro deduzione che per quella eccedente.</p>
                 </div>
             </div>
         </div>
