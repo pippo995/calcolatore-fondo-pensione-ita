@@ -2,8 +2,8 @@ import { FinancialModel } from '../models/FinancialModel.js';
 import { FinancialView } from '../views/FinancialView.js';
 
 /**
-   * FinancialController - Handles events and connects model and view
-   */
+ * FinancialController - Handles events and connects model and view
+ */
 export class FinancialController {
     constructor() {
         this.model = new FinancialModel();
@@ -21,6 +21,25 @@ export class FinancialController {
       document.getElementById("tipoAumentoRedditoN").addEventListener("change", () => this.updateTipoReddito());
       document.getElementById("tipoAumentoInvestimentoPerc").addEventListener("change", () => this.updateTipoInvestimento());
       document.getElementById("tipoAumentoInvestimentoN").addEventListener("change", () => this.updateTipoInvestimento());
+      
+      // Sync quick controls with form controls
+      document.getElementById('quick-durata').addEventListener('change', () => {
+        document.getElementById('durata').value = document.getElementById('quick-durata').value;
+        this.updateResults();
+      });
+      
+      document.getElementById('quick-inflazione').addEventListener('change', () => {
+        document.getElementById('inflazione').value = document.getElementById('quick-inflazione').value;
+        this.updateResults();
+      });
+      
+      document.getElementById('durata').addEventListener('change', () => {
+        document.getElementById('quick-durata').value = document.getElementById('durata').value;
+      });
+      
+      document.getElementById('inflazione').addEventListener('change', () => {
+        document.getElementById('quick-inflazione').value = document.getElementById('inflazione').value;
+      });
     }
   
     /**
@@ -44,17 +63,13 @@ export class FinancialController {
         aumentoInvestimento: parseFloat(document.getElementById('aumentoInvestimento').value),
         
         // Varie
-        sceltaTfr: document.getElementById('tfr').value,
+        calcolaTfr: document.getElementById('calcolaTfr').value,
         quotaDatoreFpPerc: parseFloat(document.getElementById('contribuzioneDatoreFpPerc').value) / 100,
         quotaMinAderentePerc: parseFloat(document.getElementById('quotaMinAderentePerc').value) / 100,
-        quotaEccedente: document.getElementById('quotaEccedente').value,
-        investireRisparmioFisc: document.getElementById('investireRisparmioFisc').value,
-        frequenzaDiCarico: parseFloat(document.getElementById('frequenzaDiCarico').value),
         
         // Rendimenti
         inflazioneAnnualePerc: parseFloat(document.getElementById('inflazione').value) / 100,
-        rendimentoAnnualeFpPerc: parseFloat(document.getElementById('rendimentoAnnualeFpPerc').value) / 100,
-        rendimentoAnnualePacPerc: parseFloat(document.getElementById('rendimentoAnnualePacPerc').value) / 100
+        rendimentoAnnualeFpPerc: parseFloat(document.getElementById('rendimentoAnnualeFpPerc').value) / 100
       };
   
       // Calculate results using the model
@@ -113,7 +128,7 @@ export class FinancialController {
       const url = URL.createObjectURL(blob);
       
       link.setAttribute("href", url);
-      link.setAttribute("download", "data.csv");
+      link.setAttribute("download", "fondo-pensione-risultati.csv");
       link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();

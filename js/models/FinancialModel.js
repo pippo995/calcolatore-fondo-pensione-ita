@@ -1,7 +1,7 @@
 import { FINANCIAL_CONSTANTS } from '../constants/financial-constants.js';
 
 /**
- * FinancialModel - Contains all business logic and calculations
+ * FinancialModel - Contains all business logic and calculations for the pension fund
  */
 export class FinancialModel {
     constructor() {
@@ -17,22 +17,17 @@ export class FinancialModel {
       const {
         durata, primoReddito, tipoAumentoReddito, freqAumentoReddito, aumentoReddito,
         primoInvestimento, tipoAumentoInvestimento, freqAumentoInvestimento, aumentoInvestimento,
-        sceltaTfr, quotaDatoreFpPerc, quotaMinAderentePerc, quotaEccedente, 
-        investireRisparmioFisc, frequenzaDiCarico, inflazioneAnnualePerc, 
-        rendimentoAnnualeFpPerc, rendimentoAnnualePacPerc
+        calcolaTfr, quotaDatoreFpPerc, quotaMinAderentePerc, 
+        inflazioneAnnualePerc, rendimentoAnnualeFpPerc
       } = config;
   
       let reddito = primoReddito;
       let investimento = primoInvestimento;
-      let risparmioImposta_1 = 0;
+      let risparmioImposta_prevAnno = 0;
   
       // Initialize accumulators
       const accumulators = this._initializeAccumulators();
       const results = [];
-      const entroDeduzioneFP = [];
-      const oltreDeduzioneFP = [];
-      const entroDeduzionePAC = [];
-      const oltreDeduzionePAC = [];
   
       for (let anno = 0; anno < durata; anno++) {
         // Update reddito and investimento based on frequency and type
@@ -44,15 +39,14 @@ export class FinancialModel {
           investimento, anno, freqAumentoInvestimento, tipoAumentoInvestimento, aumentoInvestimento
         );
   
-        // TFR calculation
-        const tfr = reddito * 0.06907;
-        const tfrResults = this._calculateTfr(
-          tfr, sceltaTfr, accumulators, anno, inflazioneAnnualePerc, rendimentoAnnualeFpPerc
+        // TFR calculation - simplified to yes/no
+        const tfr = calcolaTfr === 'Si' ? reddito * 0.06907 : 0;
+        const tfrMontante = this._calculateTfrFp(
+          tfr, accumulators, rendimentoAnnualeFpPerc
         );
   
         // Tax savings calculation
         const quotaDatoreFp = reddito * quotaDatoreFpPerc;
-        const quotaDatoreFpEccedente = Math.max(quotaDatoreFp - FINANCIAL_CONSTANTS.LIMITE_DEDUZIONE_FP, 0);
         const limiteDeduzioneFpEffettivo = Math.max(FINANCIAL_CONSTANTS.LIMITE_DEDUZIONE_FP - quotaDatoreFp, 0);
   
         const redditoImponibile = reddito * (1 - FINANCIAL_CONSTANTS.TASSAZIONE_INPS);
@@ -60,22 +54,26 @@ export class FinancialModel {
         const impostaLorda = this.calcolaImposta(redditoImponibile);
         const impostaNetta = Math.max(impostaLorda - detrazioneDipendente, 0);
   
-        // Tax saving calculations
-        const taxResults = this._calculateTaxSavings(
-          redditoImponibile, investimento, limiteDeduzioneFpEffettivo, 
-          detrazioneDipendente, impostaNetta, quotaEccedente, investireRisparmioFisc
+        // Tax saving calculations - always using previous year's tax savings
+        const risparmioImposta = anno === 0 ? 0 : risparmioImposta_prevAnno;
+        
+        // Calculate next year's tax savings for future use
+        const deduzione = Math.min(investimento, limiteDeduzioneFpEffettivo);
+        const redditoDedotto = Math.max(redditoImponibile - deduzione, 0);
+        const impostaLordaDedotta = this.calcolaImposta(redditoDedotto);
+        const impostaNettaDedotta = Math.max(impostaLordaDedotta - detrazioneDipendente, 0);
+        risparmioImposta_prevAnno = impostaNetta - impostaNettaDedotta;
+  
+        // Pension fund calculation - simplified with end-of-year contribution only
+        const fpExit = this._calculatePensionFund(
+          investimento, risparmioImposta, quotaDatoreFp,
+          rendimentoAnnualeFpPerc, anno,
+          accumulators, tfrMontante
         );
         
-        risparmioImposta_1 = taxResults.risparmioImposta_1;
-        const risparmioImposta = taxResults.risparmioImposta;
-  
-        // Investment strategy calculations
-        const investResults = this._calculateInvestmentStrategies(
-          investimento, risparmioImposta, quotaDatoreFp, limiteDeduzioneFpEffettivo,
-          rendimentoAnnualeFpPerc, rendimentoAnnualePacPerc, frequenzaDiCarico, durata, anno,
-          accumulators, tfrResults.tfrExit, entroDeduzioneFP, oltreDeduzioneFP,
-          entroDeduzionePAC, oltreDeduzionePAC
-        );
+        // Calculate yield percentage
+        const rendimentoPercentuale = anno === 0 ? 0 : 
+          (accumulators.fpMontante / accumulators.fpVersamenti - 1) * 100;
   
         // Store results for this year
         results.push({
@@ -85,26 +83,20 @@ export class FinancialModel {
           "TFR": Math.round(tfr),
           "Ris. Fiscale": Math.round(risparmioImposta),
           "Quota Datore": Math.round(quotaDatoreFp),
-          "Exit FP": Math.round(investResults.fpExit),
-          "Exit PAC": Math.round(investResults.pacExit),
-          "Exit Mix-1": Math.round(investResults.fpPacMix1Exit),
-          "Exit Mix-2": Math.round(investResults.fpPacMix2Exit),
+          "Montante FP": Math.round(accumulators.fpMontante),
+          "Versamenti FP": Math.round(accumulators.fpVersamenti),
+          "Rendimento %": rendimentoPercentuale.toFixed(2) + "%",
+          "Tassazione FP": (this.calcolaTassazioneFp(anno) * 100).toFixed(1) + "%",
+          "Exit FP": Math.round(fpExit)
         });
       }
   
-      // Generate strategy strings
-      const strategyInfo = this._generateStrategyText(
-        entroDeduzioneFP, entroDeduzionePAC, oltreDeduzioneFP, oltreDeduzionePAC
-      );
+      // Generate details about pension fund
+      const strategyText = this._generateDetailsText(accumulators, durata);
   
       return {
         results,
-        entroDeduzioneFP,
-        oltreDeduzioneFP,
-        entroDeduzionePAC,
-        oltreDeduzionePAC,
-        strategyText: strategyInfo.stringEntro,
-        strategyTextOltre: strategyInfo.stringOltre
+        strategyText
       };
     }
   
@@ -119,17 +111,7 @@ export class FinancialModel {
         tfrFpVersamenti: 0,
         tfrFpMontante: 0,
         fpVersamenti: 0,
-        fpMontante: 0,
-        pacVersamenti: 0,
-        pacMontante: 0,
-        fpVersamentiMix1: 0,
-        fpMontanteMix1: 0,
-        pacVersamentiMix1: 0,
-        pacMontanteMix1: 0,
-        fpVersamentiMix2: 0,
-        fpMontanteMix2: 0,
-        pacVersamentiMix2: 0,
-        pacMontanteMix2: 0
+        fpMontante: 0
       };
     }
   
@@ -154,43 +136,20 @@ export class FinancialModel {
     }
   
     /**
-     * Calculates TFR (severance pay) based on configuration
+     * Calculates TFR (severance pay) invested in pension fund
      * @param {number} tfr - TFR amount
-     * @param {string} sceltaTfr - TFR choice
      * @param {Object} accumulators - Accumulator values
-     * @param {number} anno - Current year
-     * @param {number} inflazioneAnnualePerc - Annual inflation
      * @param {number} rendimentoAnnualeFpPerc - Annual pension fund return
-     * @returns {Object} TFR calculation results
+     * @returns {number} TFR montante in pension fund
      */
-    _calculateTfr(tfr, sceltaTfr, accumulators, anno, inflazioneAnnualePerc, rendimentoAnnualeFpPerc) {
-      switch (sceltaTfr) {
-        case "Azienda":
-          accumulators.tfrAziendaVersamenti += tfr;
-          accumulators.tfrAziendaMontante = accumulators.tfrAziendaMontante * 
-            (1 + (inflazioneAnnualePerc * 0.75 + 0.015) * 0.83) + tfr;
-          break;
-        case "Fondo Pensione":
-          accumulators.tfrFpVersamenti += tfr;
-          accumulators.tfrFpMontante = accumulators.tfrFpMontante * 
-            (1 + rendimentoAnnualeFpPerc) + tfr * (1 + rendimentoAnnualeFpPerc * 0.375);
-          break;
-        default:
-          tfr = 0;
-          break;
+    _calculateTfrFp(tfr, accumulators, rendimentoAnnualeFpPerc) {
+      if (tfr > 0) {
+        accumulators.tfrFpVersamenti += tfr;
+        accumulators.tfrFpMontante = accumulators.tfrFpMontante * 
+          (1 + rendimentoAnnualeFpPerc) + tfr;
       }
-  
-      const tfrAziendaExit = accumulators.tfrAziendaMontante - 
-        accumulators.tfrAziendaMontante * this.calcolaTassazioneTfr(accumulators.tfrAziendaVersamenti, anno);
-      const tfrFpExit = accumulators.tfrFpMontante - 
-        accumulators.tfrFpVersamenti * this.calcolaTassazioneFp(anno);
-      const tfrExit = tfrAziendaExit + tfrFpExit;
-  
-      return {
-        tfrAziendaExit,
-        tfrFpExit,
-        tfrExit
-      };
+      
+      return accumulators.tfrFpMontante;
     }
   
     /**
@@ -235,7 +194,7 @@ export class FinancialModel {
       let risparmioImposta;
       switch (investireRisparmioFisc) {
         case "Anno corrente":
-          risparmioImposta = risparmioImposta_0; // This should be risparmioImpostaRic which is undefined in original code
+          risparmioImposta = risparmioImposta_0;
           break;
         case "Anno successivo":
           risparmioImposta = risparmioImposta_1;
@@ -260,182 +219,53 @@ export class FinancialModel {
     }
   
     /**
-     * Calculates different investment strategies
-     * @param {Object} params - Various parameters for investment calculations
-     * @returns {Object} Results of different investment strategies
+     * Calculates pension fund investment
+     * @param {number} investimento - Base investment amount
+     * @param {number} risparmioImposta - Tax savings
+     * @param {number} quotaDatoreFp - Employer contribution
+     * @param {number} rendimentoAnnualeFpPerc - Annual pension fund return
+     * @param {number} anno - Current year
+     * @param {Object} accumulators - Accumulator values
+     * @param {number} tfrMontante - TFR accumulated value
+     * @returns {number} Pension fund exit value
      */
-    _calculateInvestmentStrategies(
-      investimento, risparmioImposta, quotaDatoreFp, limiteDeduzioneFpEffettivo,
-      rendimentoAnnualeFpPerc, rendimentoAnnualePacPerc, frequenzaDiCarico, durata, anno,
-      accumulators, tfrExit, entroDeduzioneFP, oltreDeduzioneFP,
-      entroDeduzionePAC, oltreDeduzionePAC
+    _calculatePensionFund(
+      investimento, risparmioImposta, quotaDatoreFp,
+      rendimentoAnnualeFpPerc, anno,
+      accumulators, tfrMontante
     ) {
-      // Investment within deduction limits
-      const investimentoEntroDeduzione = Math.min(investimento, limiteDeduzioneFpEffettivo);
-      const investimentoOltreDeduzione = investimento - investimentoEntroDeduzione;
-  
-      // Pension fund investment with tax savings and employer contribution
+      // Existing capital grows with annual return
+      accumulators.fpMontante = accumulators.fpMontante * (1 + rendimentoAnnualeFpPerc);
+      
+      // Add new investments at end of year (no partial year interest)
       const investimentoFp = investimento + risparmioImposta + quotaDatoreFp;
-      const investimentoFpEntroDeduzione = Math.min(investimentoFp, limiteDeduzioneFpEffettivo);
-      const investimentoFpOltreDeduzione = investimentoFp - investimentoFpEntroDeduzione;
-  
-      // Strategy 1: Pension Fund only
       accumulators.fpVersamenti += investimentoFp;
-      accumulators.fpMontante = accumulators.fpMontante * (1 + rendimentoAnnualeFpPerc) + 
-        investimentoFp * (1 + rendimentoAnnualeFpPerc * frequenzaDiCarico);
-      const fpExit = accumulators.fpMontante - 
-        accumulators.fpVersamenti * this.calcolaTassazioneFp(anno) + tfrExit;
-  
-      // Strategy 2: PAC only
-      accumulators.pacVersamenti += investimento;
-      accumulators.pacMontante = accumulators.pacMontante * (1 + rendimentoAnnualePacPerc) + 
-        investimento * (1 + rendimentoAnnualePacPerc * frequenzaDiCarico);
-      const pacExit = accumulators.pacMontante - 
-        (accumulators.pacMontante - accumulators.pacVersamenti) * 
-        FINANCIAL_CONSTANTS.TASSAZIONE_RENDITE_PAC + tfrExit;
-  
-      // Strategy 3: Mix 1 - FP up to deduction limit, then PAC
-      accumulators.fpVersamentiMix1 += investimentoFpEntroDeduzione;
-      accumulators.fpMontanteMix1 = accumulators.fpMontanteMix1 * (1 + rendimentoAnnualeFpPerc) + 
-        investimentoFpEntroDeduzione * (1 + rendimentoAnnualeFpPerc * frequenzaDiCarico);
-      accumulators.pacVersamentiMix1 += investimentoFpOltreDeduzione;
-      accumulators.pacMontanteMix1 = accumulators.pacMontanteMix1 * (1 + rendimentoAnnualePacPerc) + 
-        investimentoFpOltreDeduzione * (1 + rendimentoAnnualePacPerc * frequenzaDiCarico);
+      accumulators.fpMontante += investimentoFp;
       
-      const fpMix1Exit = accumulators.fpMontanteMix1 - 
-        accumulators.fpVersamentiMix1 * this.calcolaTassazioneFp(anno);
-      const pacMix1Exit = accumulators.pacMontanteMix1 - 
-        (accumulators.pacMontanteMix1 - accumulators.pacVersamentiMix1) * 
-        FINANCIAL_CONSTANTS.TASSAZIONE_RENDITE_PAC;
-      const fpPacMix1Exit = fpMix1Exit + pacMix1Exit + tfrExit;
-  
-      // Strategy 4: Mix 2 - Optimized allocation based on return
-      const strategyMix2 = this._calculateOptimizedMix(
-        investimentoEntroDeduzione, investimentoOltreDeduzione,
-        investimentoFpEntroDeduzione, investimentoFpOltreDeduzione,
-        investimentoFp, investimento, quotaDatoreFp, risparmioImposta,
-        rendimentoAnnualeFpPerc, rendimentoAnnualePacPerc, frequenzaDiCarico,
-        durata, anno, accumulators, entroDeduzioneFP, oltreDeduzioneFP,
-        entroDeduzionePAC, oltreDeduzionePAC
-      );
-  
-      const fpPacMix2Exit = (accumulators.fpMontanteMix2 - 
-        accumulators.fpVersamentiMix2 * this.calcolaTassazioneFp(durata - 1)) + 
-        (accumulators.pacMontanteMix2 - (accumulators.pacMontanteMix2 - accumulators.pacVersamentiMix2) * 
-        FINANCIAL_CONSTANTS.TASSAZIONE_RENDITE_PAC) + tfrExit;
-  
-      return {
-        fpExit,
-        pacExit,
-        fpPacMix1Exit,
-        fpPacMix2Exit
-      };
+      // Calculate exit value (apply taxation)
+      const totalVersamenti = accumulators.fpVersamenti + accumulators.tfrFpVersamenti;
+      const totalMontante = accumulators.fpMontante + tfrMontante;
+      
+      const fpExit = totalMontante - totalVersamenti * this.calcolaTassazioneFp(anno);
+      
+      return fpExit;
     }
   
     /**
-     * Calculates optimal investment mix based on returns
-     * @param {Object} params - Various parameters for optimization
-     * @returns {Object} Optimal investment allocation
+     * Generates detailed text about the pension fund
+     * @param {Object} accumulators - Accumulator values
+     * @param {number} durata - Investment duration
+     * @returns {string} Details text
      */
-    _calculateOptimizedMix(
-      investimentoEntroDeduzione, investimentoOltreDeduzione,
-      investimentoFpEntroDeduzione, investimentoFpOltreDeduzione,
-      investimentoFp, investimento, quotaDatoreFp, risparmioImposta,
-      rendimentoAnnualeFpPerc, rendimentoAnnualePacPerc, frequenzaDiCarico,
-      durata, anno, accumulators, entroDeduzioneFP, oltreDeduzioneFP,
-      entroDeduzionePAC, oltreDeduzionePAC
-    ) {
-      // Calculate compound returns for comparison
-      const rendimentoCompostoFPPerc = (1 + rendimentoAnnualeFpPerc) ** (durata - anno - 1);
-      const rendimentoCompostoPACPerc = (1 + rendimentoAnnualePacPerc) ** (durata - anno - 1);
-  
-      const investimentoAvanzo = investimentoEntroDeduzione + quotaDatoreFp + risparmioImposta - investimentoFpEntroDeduzione;
+    _generateDetailsText(accumulators, durata) {
+      const totalContributions = Math.round(accumulators.fpVersamenti + accumulators.tfrFpVersamenti);
+      const totalValue = Math.round(accumulators.fpMontante + accumulators.tfrFpMontante);
+      const profits = Math.round(totalValue - totalContributions);
+      const taxRate = (this.calcolaTassazioneFp(durata - 1) * 100).toFixed(1);
+      const taxAmount = Math.round(totalContributions * this.calcolaTassazioneFp(durata - 1));
+      const rendimentoPercentuale = ((totalValue / totalContributions - 1) * 100).toFixed(2);
       
-      // Within deduction limit comparison
-      const interesseCompostoFPFPEntro = investimentoFpEntroDeduzione * rendimentoCompostoFPPerc + 
-        (investimentoFpEntroDeduzione * rendimentoAnnualeFpPerc * frequenzaDiCarico) - 
-        (investimentoFpEntroDeduzione * this.calcolaTassazioneFp(durata - 1));
-      
-      const rendimentoCompostoFPPACEntro = investimentoAvanzo * rendimentoCompostoPACPerc + 
-        (investimentoAvanzo * rendimentoAnnualePacPerc * frequenzaDiCarico);
-      const interesseCompostoFPPACEntro = rendimentoCompostoFPPACEntro - 
-        ((rendimentoCompostoFPPACEntro - investimentoAvanzo) * FINANCIAL_CONSTANTS.TASSAZIONE_RENDITE_PAC);
-      const interesseCompostoFPEntro = interesseCompostoFPFPEntro + interesseCompostoFPPACEntro;
-  
-      const rendimentoCompostoPACEntro = investimentoEntroDeduzione * rendimentoCompostoPACPerc + 
-        (investimentoEntroDeduzione * rendimentoAnnualePacPerc * frequenzaDiCarico);
-      const interesseCompostoPACEntro = rendimentoCompostoPACEntro - 
-        ((rendimentoCompostoPACEntro - investimentoEntroDeduzione) * FINANCIAL_CONSTANTS.TASSAZIONE_RENDITE_PAC);
-  
-      // Beyond deduction limit comparison
-      const interesseCompostoFPOltre = investimentoOltreDeduzione * rendimentoCompostoFPPerc + 
-        (investimentoOltreDeduzione * rendimentoAnnualeFpPerc * frequenzaDiCarico) - 
-        (investimentoOltreDeduzione * this.calcolaTassazioneFp(durata - 1));
-  
-      const rendimentoCompostoPACOltre = investimentoOltreDeduzione * rendimentoCompostoPACPerc + 
-        (investimentoOltreDeduzione * rendimentoAnnualePacPerc * frequenzaDiCarico);
-      const interesseCompostoPACOltre = rendimentoCompostoPACOltre - 
-        ((rendimentoCompostoPACOltre - investimentoOltreDeduzione) * FINANCIAL_CONSTANTS.TASSAZIONE_RENDITE_PAC);
-  
-      // Choose the best strategy based on return comparison
-      if (interesseCompostoPACEntro > interesseCompostoFPEntro) {
-        accumulators.fpVersamentiMix2 += 1;
-        accumulators.fpMontanteMix2 = accumulators.fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + 
-          1 * (1 + rendimentoAnnualeFpPerc * frequenzaDiCarico);
-        accumulators.pacVersamentiMix2 += investimento - 1;
-        accumulators.pacMontanteMix2 = accumulators.pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + 
-          (investimento - 1) * (1 + rendimentoAnnualePacPerc * frequenzaDiCarico);
-        entroDeduzionePAC.push(anno);
-        if (interesseCompostoPACOltre > 0) {
-          oltreDeduzionePAC.push(anno);
-        }
-      } else {
-        if (interesseCompostoPACOltre > interesseCompostoFPOltre) {
-          accumulators.fpVersamentiMix2 += investimentoFpEntroDeduzione;
-          accumulators.fpMontanteMix2 = accumulators.fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + 
-            investimentoFpEntroDeduzione * (1 + rendimentoAnnualeFpPerc * frequenzaDiCarico);
-          accumulators.pacVersamentiMix2 += investimentoFpOltreDeduzione;
-          accumulators.pacMontanteMix2 = accumulators.pacMontanteMix2 * (1 + rendimentoAnnualePacPerc) + 
-            investimentoFpOltreDeduzione * (1 + rendimentoAnnualePacPerc * frequenzaDiCarico);
-          entroDeduzioneFP.push(anno);
-          oltreDeduzionePAC.push(anno);
-        } else {
-          accumulators.fpVersamentiMix2 += investimentoFp;
-          accumulators.fpMontanteMix2 = accumulators.fpMontanteMix2 * (1 + rendimentoAnnualeFpPerc) + 
-            investimentoFp * (1 + rendimentoAnnualeFpPerc * frequenzaDiCarico);
-          accumulators.pacVersamentiMix2 = accumulators.pacVersamentiMix2;
-          accumulators.pacMontanteMix2 = accumulators.pacMontanteMix2 * (1 + rendimentoAnnualePacPerc);
-          entroDeduzioneFP.push(anno);
-          if (interesseCompostoPACOltre > 0) {
-            oltreDeduzioneFP.push(anno);
-          }
-        }
-      }
-    }
-  
-    /**
-     * Generates strategy text from year arrays
-     * @param {Array} entroDeduzioneFP - Years to invest in pension fund within deduction limit
-     * @param {Array} entroDeduzionePAC - Years to invest in PAC within deduction limit
-     * @param {Array} oltreDeduzioneFP - Years to invest in pension fund beyond deduction limit
-     * @param {Array} oltreDeduzionePAC - Years to invest in PAC beyond deduction limit
-     * @returns {Object} Strategy text for both scenarios
-     */
-    _generateStrategyText(entroDeduzioneFP, entroDeduzionePAC, oltreDeduzioneFP, oltreDeduzionePAC) {
-      const fpRangesEntro = this.getRanges(entroDeduzioneFP, 'Fondo Pensione');
-      const pacRangesEntro = this.getRanges(entroDeduzionePAC, 'PAC');
-      const resultStringEntro = [...pacRangesEntro, ...fpRangesEntro].join(', ');
-      const stringEntro = "Per la quota entro deduzione: " + resultStringEntro + ".";
-  
-      const fpRangesOltre = this.getRanges(oltreDeduzioneFP, 'Fondo Pensione');
-      const pacRangesOltre = this.getRanges(oltreDeduzionePAC, 'PAC');
-      const resultStringOltre = [...pacRangesOltre, ...fpRangesOltre].join(', ');
-      const stringOltre = "Per la quota oltre deduzione: " + resultStringOltre + ".";
-  
-      return {
-        stringEntro,
-        stringOltre
-      };
+      return `Alla fine del periodo di investimento (${durata} anni), il fondo pensione avrà accumulato un capitale lordo di ${this.formatMoney(totalValue)} a fronte di versamenti totali di ${this.formatMoney(totalContributions)}, generando un profitto di ${this.formatMoney(profits)} (rendimento del ${rendimentoPercentuale}%). La tassazione applicata al momento del riscatto sarà del ${taxRate}%, pari a ${this.formatMoney(taxAmount)}.`;
     }
   
     /**
@@ -509,30 +339,12 @@ export class FinancialModel {
     }
   
     /**
-     * Finds year ranges for investment strategies
-     * @param {Array} arr - Array of years
-     * @param {string} name - Strategy name
-     * @returns {Array} Formatted range strings
+     * Formats money values with thousand separators and currency symbol
+     * @param {number} number - Amount to format
+     * @returns {string} Formatted money string
      */
-    getRanges(arr, name) {
-      if (!arr.length) return [];
-      
-      let ranges = [];
-      let start = arr[0];
-  
-      for (let i = 1; i <= arr.length; i++) {
-        if (arr[i] !== arr[i - 1] + 1 || i === arr.length) {
-          let end = arr[i - 1];
-          if (start === end) {
-            ranges.push(`nell'anno ${start} investire in ${name}`);
-          } else {
-            ranges.push(`dall'anno ${start} all'anno ${end} investire in ${name}`);
-          }
-          start = arr[i];
-        }
-      }
-  
-      return ranges;
+    formatMoney(number) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
     }
   
     /**
