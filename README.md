@@ -1,15 +1,18 @@
-# Calcolatore di Finanza Personale - Italia
+# Calcolatore Fondo Pensione - Italia
 
 https://pippo995.github.io/calcolatore-fondo-pensione-ita/
 
-Questo progetto è un calcolatore di finanza personale focalizzato sul contesto fiscale italiano. Permette agli utenti di confrontare due strumenti di investimento a lungo termine: il Fondo Pensione (FP) e il Piano di Accumulo Capitale (PAC).
+Questo progetto è un calcolatore finanziario focalizzato sul contesto fiscale italiano, specificamente progettato per simulare e analizzare i rendimenti del Fondo Pensione.
 
-Entrambi gli strumenti presentano caratteristiche e vantaggi distinti:
+Il **Fondo Pensione (FP)** è uno strumento di investimento a lungo termine progettato per accumulare risparmi destinati alla pensione, con significativi vantaggi fiscali e una crescita graduale del capitale.
 
-- **Fondo Pensione (FP):** Progettato per accumulare risparmi destinati alla pensione, offre vantaggi fiscali e una crescita graduale del capitale.
-- **Piano di Accumulo Capitale (PAC):** Consente di accumulare capitale attraverso versamenti regolari, con l'obiettivo di ottenere rendimenti nel lungo periodo.
+Il calcolatore tiene conto di diverse variabili fiscali complesse per fornire stime precise dei risultati potenziali del fondo pensione. Gli utenti possono inserire i rendimenti attesi e ottenere una panoramica dettagliata dei risultati previsti, considerando:
 
-Il calcolatore tiene conto di diverse variabili fiscali complesse per fornire stime precise dei risultati potenziali di entrambi gli strumenti. Gli utenti possono inserire i rendimenti attesi e ottenere una panoramica dettagliata dei risultati previsti.
+- Deduzioni fiscali sui versamenti
+- Contribuzione del datore di lavoro
+- Gestione del TFR
+- Tassazione agevolata in fase di erogazione
+- Rivalutazione del capitale nel tempo
 
 ## Avvio in Locale
 
@@ -46,6 +49,15 @@ Per eseguire il progetto in locale, è possibile utilizzare Visual Studio Code (
    In alternativa, è possibile cliccare su "Go Live" nella barra di stato in basso a destra di VS Code.
 
 Una volta completati questi passaggi, il calcolatore sarà disponibile nel browser per l'uso locale.
+
+## Caratteristiche Principali
+
+- **Simulazione a lungo termine:** Calcola l'evoluzione del capitale investito nel fondo pensione per periodi fino a 50 anni
+- **Vantaggi fiscali:** Tiene conto delle deduzioni fiscali sui versamenti e della tassazione agevolata in fase di erogazione
+- **Rivalutazione del TFR:** Simula la rivalutazione del TFR sia in azienda che nel fondo pensione
+- **Contributo datoriale:** Calcola l'effetto del contributo del datore di lavoro sul montante finale
+- **Analisi dettagliata:** Fornisce una tabella completa con i risultati anno per anno
+- **Esportazione dati:** Permette di esportare i risultati in formato CSV per ulteriori analisi
 
 ## Ulteriori Informazioni
 

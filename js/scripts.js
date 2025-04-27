@@ -1,32 +1,27 @@
 /**
- * Calcolatore Investimenti Finanziari - Scripts
- * Versione con sidebar riprogettata
+ * Calcolatore Fondo Pensione - Scripts
+ * Versione moderna e reattiva
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Calcola il numero di colonne nella tabella per il corretto dimensionamento
+    // Imposta il numero di colonne per il corretto dimensionamento
     document.documentElement.style.setProperty('--total-columns', '10');
     
-    // Gestione delle sezioni collassabili nella sidebar
-    setupCollapsibleSections();
+    // Inizializza tutti i componenti dell'interfaccia
+    initCollapsibleSections();
+    initSidebar();
+    initTabs();
+    initScrolling();
+    initQuickControls();
     
-    // Gestione della sidebar
-    setupSidebar();
-    
-    // Gestione dei tab
-    setupTabs();
-    
-    // Gestione dello scrolling
-    setupScrolling();
-    
-    // Sincronizzazione dei controlli rapidi
-    setupQuickControls();
+    // Aggiungi animazioni al caricamento della pagina
+    animatePageLoad();
 });
 
 /**
  * Configura il comportamento delle sezioni collassabili nella sidebar
  */
-function setupCollapsibleSections() {
+function initCollapsibleSections() {
     document.querySelectorAll('.section-header').forEach(header => {
         header.addEventListener('click', function() {
             this.parentElement.classList.toggle('collapsed');
@@ -50,9 +45,9 @@ function updateSectionIcon(header) {
 }
 
 /**
- * Configura il comportamento della sidebar riprogettata
+ * Configura il comportamento della sidebar
  */
-function setupSidebar() {
+function initSidebar() {
     // Apertura sidebar
     document.getElementById('toggle-sidebar').addEventListener('click', function() {
         openSidebar();
@@ -68,42 +63,58 @@ function setupSidebar() {
         closeSidebar();
     });
 
-    // Gestione del tap su elementi sidebaar nel mobile (per evitare che il tap chiuda la sidebar)
+    // Prevenire che i click nella sidebar chiudano il menu
     document.querySelector('.sidebar').addEventListener('click', function(e) {
-        e.stopPropagation(); // Evita che i click nella sidebar arrivino all'overlay
+        e.stopPropagation();
+    });
+    
+    // Gestione tasto escape per chiudere la sidebar
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.querySelector('.sidebar').classList.contains('active')) {
+            closeSidebar();
+        }
     });
 }
 
 /**
- * Apre la sidebar e mostra l'overlay
+ * Apre la sidebar e mostra l'overlay con animazione
  */
 function openSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
     
-    sidebar.classList.add('active');
+    // Attiva l'overlay per primo (migliora l'esperienza visiva)
     overlay.classList.add('active');
-    document.body.classList.add('sidebar-active');
-    document.body.style.overflow = 'hidden'; // Blocca lo scrolling del body quando la sidebar è aperta
+    
+    // Piccolo ritardo per migliorare l'animazione
+    setTimeout(() => {
+        sidebar.classList.add('active');
+        document.body.classList.add('sidebar-active');
+        document.body.style.overflow = 'hidden'; // Blocca lo scrolling del body
+    }, 50);
 }
 
 /**
- * Chiude la sidebar e nasconde l'overlay
+ * Chiude la sidebar e nasconde l'overlay con animazione
  */
 function closeSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
     
     sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.classList.remove('sidebar-active');
-    document.body.style.overflow = ''; // Ripristina lo scrolling del body
+    
+    // Piccolo ritardo prima di rimuovere l'overlay (migliora l'esperienza visiva)
+    setTimeout(() => {
+        overlay.classList.remove('active');
+        document.body.classList.remove('sidebar-active');
+        document.body.style.overflow = ''; // Ripristina lo scrolling del body
+    }, 300); // Corrisponde alla durata dell'animazione della sidebar
 }
 
 /**
  * Configura i tab per navigare tra le sezioni
  */
-function setupTabs() {
+function initTabs() {
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', function() {
             // Rimuovi la classe active da tutti i tab
@@ -113,9 +124,14 @@ function setupTabs() {
             
             // Nascondi tutti i contenuti
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            // Mostra il contenuto corrispondente
+            // Mostra il contenuto corrispondente con animazione
             const tabId = this.getAttribute('data-tab');
-            document.getElementById(`${tabId}-content`).classList.add('active');
+            const tabContent = document.getElementById(`${tabId}-content`);
+            
+            // Trigger reflow for animation
+            void tabContent.offsetWidth;
+            
+            tabContent.classList.add('active');
         });
     });
 }
@@ -123,7 +139,7 @@ function setupTabs() {
 /**
  * Configura lo scrolling fluido per i link della documentazione e il pulsante "Torna in alto"
  */
-function setupScrolling() {
+function initScrolling() {
     // Scrolling fluido per i link della documentazione
     document.querySelectorAll('.docs-nav a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -137,11 +153,15 @@ function setupScrolling() {
                     top: targetElement.offsetTop - 20,
                     behavior: 'smooth'
                 });
+                
+                // Evidenzia visivamente la sezione cliccata
+                document.querySelectorAll('.docs-nav a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
             }
         });
     });
 
-    // Pulsante "Torna in alto"
+    // Pulsante "Torna in alto" con controllo visibilità
     const goToTopButton = document.getElementById('go-to-top');
     
     window.addEventListener('scroll', function() {
@@ -164,35 +184,48 @@ function setupScrolling() {
 /**
  * Configura la sincronizzazione tra i controlli rapidi e gli input nel form
  */
-function setupQuickControls() {
-    // Sincronizzazione dal controllo rapido al form
-    document.getElementById('quick-durata').addEventListener('change', function() {
+function initQuickControls() {
+    // Sincronizzazione dai controlli rapidi al form
+    document.getElementById('quick-durata').addEventListener('input', function() {
         document.getElementById('durata').value = this.value;
+        
         // Trigger the input event to update the results
         const event = new Event('input', { bubbles: true });
         document.getElementById('durata').dispatchEvent(event);
     });
     
-    document.getElementById('quick-inflazione').addEventListener('change', function() {
+    document.getElementById('quick-inflazione').addEventListener('input', function() {
         document.getElementById('inflazione').value = this.value;
+        
         // Trigger the input event to update the results
         const event = new Event('input', { bubbles: true });
         document.getElementById('inflazione').dispatchEvent(event);
     });
     
     // Sincronizzazione dal form ai controlli rapidi
-    document.getElementById('durata').addEventListener('change', function() {
+    document.getElementById('durata').addEventListener('input', function() {
         document.getElementById('quick-durata').value = this.value;
     });
     
-    document.getElementById('inflazione').addEventListener('change', function() {
+    document.getElementById('inflazione').addEventListener('input', function() {
         document.getElementById('quick-inflazione').value = this.value;
     });
 }
 
 /**
+ * Aggiunge animazioni di ingresso agli elementi al caricamento della pagina
+ */
+function animatePageLoad() {
+    // Aggiungi una classe per animare gli elementi principali
+    document.querySelectorAll('.card, .tabs, .button-container').forEach((element, index) => {
+        setTimeout(() => {
+            element.classList.add('animated');
+        }, 100 * index);
+    });
+}
+
+/**
  * Funzione ausiliaria per creare un evento di download del CSV
- * Nota: questa funzione verrà chiamata dal modulo app.js
  */
 function downloadCSV(csvContent, filename) {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
